@@ -8,25 +8,28 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Very Good Blog App'),
-            TextButton(
-              child: const Text('Đăng nhập'),
-              onPressed: () {},
-            ),
-          ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Very Good Blog App'),
+              TextButton(
+                child: const Text('Đăng nhập'),
+                onPressed: () {},
+              ),
+            ],
+          ),
         ),
-      ),
-      body: BlocProvider<LoginBloc>(
-        create: (context) => LoginBloc(
-          authenticationRepository: context.read<AuthenticationRepository>(),
+        body: BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(
+            authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+          child: const LoginForm(),
         ),
-        child: const LoginForm(),
       ),
     );
   }
