@@ -1,8 +1,10 @@
 import 'package:very_good_blog_app/models/models.dart';
 
 class UserRepository {
-  User getUser() {
-    return const User.new(name: 'Dungngminh');
-    
+  Future<User?> getUser() async {
+    return Future.delayed(
+      const Duration(seconds: 2),
+      () => const User.new(name: 'dungngminh'),
+    );
   }
 }
