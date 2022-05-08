@@ -1,5 +1,13 @@
 include: package:very_good_analysis/analysis_options.2.4.0.yaml
 linter:
   rules:
-    public_member_api_docs: false
-    use_late_for_private_fields_and_variables: false
+    - avoid_print
+    - require_trailing_commas
+    - prefer_single_quotes
+    - cascade_invocations
+    - always_use_package_imports
+    - sort_child_properties_last
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - unnecessary_string_interpolations
+    - omit_local_variable_types

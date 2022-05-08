@@ -5,6 +5,7 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,8 +65,6 @@ void main() {
         );
 
         expect(find.byType(SplashView), findsOneWidget);
-
-        
       },
     );
   });
@@ -140,8 +139,11 @@ void main() {
             ),
           ),
         );
-        // await tester.pumpAndSettle(const Duration(seconds: 20));
+        await tester.pumpAndSettle();
+        // log('test');
         expect(find.byType(HomeView), findsOneWidget);
+
+        // expect(true, true);
       },
     );
   });
