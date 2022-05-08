@@ -158,6 +158,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   formz:
     dependency: "direct main"
     description:
@@ -185,7 +190,7 @@ packages:
       name: go_router
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1"
+    version: "3.1.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -473,4 +478,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.16.0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=2.0.0"

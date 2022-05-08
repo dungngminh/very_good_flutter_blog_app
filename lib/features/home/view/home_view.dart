@@ -7,14 +7,12 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final username =
-        context.select((AuthenticationBloc bloc) => bloc.state.user.name);
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Aloha $username'),
+            const Text('Aloha'),
             TextButton(
               child: const Text('Logout'),
               onPressed: () {
