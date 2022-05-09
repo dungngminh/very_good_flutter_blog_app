@@ -7,8 +7,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:very_good_blog_app/features/login/login.dart';
+import 'package:very_good_blog_app/config/route/router.dart';
+import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/repository/authentication_repository.dart';
+import 'package:very_good_blog_app/repository/user_repository.dart';
 
 class VeryGoodBlogApp extends StatelessWidget {
   const VeryGoodBlogApp({Key? key}) : super(key: key);
@@ -19,7 +21,10 @@ class VeryGoodBlogApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthenticationRepository>(
           create: (_) => AuthenticationRepository(),
-        )
+        ),
+        RepositoryProvider<UserRepository>(
+          create: (_) => UserRepository(),
+        ),
       ],
       child: const VeryGoodBlogAppView(),
     );
@@ -31,14 +36,28 @@ class VeryGoodBlogAppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: const Color(0xFF13B9FF),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc(
+            authenticationRepository: context.read<AuthenticationRepository>(),
+            userRepository: context.read<UserRepository>(),
+          ),
+        ),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routeInformationParser: RouteManager.route.routeInformationParser,
+        routerDelegate: RouteManager.route.routerDelegate,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+          colorScheme: ColorScheme.fromSwatch(
+            accentColor: const Color(0xFF13B9FF),
+          ),
+          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+          fontFamily: 'DM Sans',
         ),
       ),
-      home: const LoginView(),
     );
   }
 }

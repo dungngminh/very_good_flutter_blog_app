@@ -7,13 +7,13 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/counter/counter.dart';
 
 void main() {
-  group('App', () {
-    testWidgets('renders CounterPage', (tester) async {
+  group('VeryGoodBlogApp', () {
+    testWidgets('renders VeryGoodBlogAppView', (tester) async {
       await tester.pumpWidget(const VeryGoodBlogApp());
-      expect(find.byType(CounterPage), findsOneWidget);
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+      expect(find.byType(VeryGoodBlogAppView), findsOneWidget);
     });
   });
 }
