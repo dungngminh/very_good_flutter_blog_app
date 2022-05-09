@@ -33,7 +33,7 @@ void main() {
               username: 'username',
               password: 'password',
             ),
-          // ignore: void_checks
+            // ignore: void_checks
           ).thenAnswer((_) => Future.value('user'));
         },
         build: () => LoginBloc(

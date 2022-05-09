@@ -75,9 +75,7 @@ class LoginView extends StatelessWidget {
                           color: Palette.primaryColor,
                           fontWeight: FontWeight.w700,
                         ),
-                        recognizer: TapGestureRecognizer()..onTap =() {
-                          
-                        },
+                        recognizer: TapGestureRecognizer()..onTap = () {},
                       )
                     ],
                   ),
