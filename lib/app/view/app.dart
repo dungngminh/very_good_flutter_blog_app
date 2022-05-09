@@ -9,9 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_blog_app/config/route/router.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
-import 'package:very_good_blog_app/features/home/view/home_view.dart';
-import 'package:very_good_blog_app/features/login/login.dart';
-import 'package:very_good_blog_app/features/splash/splash.dart';
 import 'package:very_good_blog_app/repository/authentication_repository.dart';
 import 'package:very_good_blog_app/repository/user_repository.dart';
 
@@ -37,7 +34,6 @@ class VeryGoodBlogApp extends StatelessWidget {
 class VeryGoodBlogAppView extends StatelessWidget {
   const VeryGoodBlogAppView({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -57,8 +53,8 @@ class VeryGoodBlogAppView extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
             accentColor: const Color(0xFF13B9FF),
           ),
+          fontFamily: 'DM Sans',
         ),
-      
       ),
     );
   }

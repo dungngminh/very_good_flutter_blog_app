@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:very_good_blog_app/config/config.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
 
 class LoginForm extends StatelessWidget {
@@ -18,13 +19,30 @@ class LoginForm extends StatelessWidget {
             );
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            const Text(
+              'Tên người dùng',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
+              ),
+            ),
             _UsernameInput(),
             const Padding(padding: EdgeInsets.all(12)),
+            const Text(
+              'Mật khẩu',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
+              ),
+            ),
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _LoginButton(),
@@ -89,7 +107,6 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.status.isValidated
                     ? () {
                         context.read<LoginBloc>().add(const LoginSubmitted());
-                        
                       }
                     : null,
                 child: const Text('Login'),

@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Aloha'),
+            const Text('Aloha', style: TextStyle(fontWeight: FontWeight.w500)),
             TextButton(
               child: const Text('Logout'),
               onPressed: () {
