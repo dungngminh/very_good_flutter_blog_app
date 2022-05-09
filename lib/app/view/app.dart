@@ -46,6 +46,7 @@ class VeryGoodBlogAppView extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routeInformationParser: RouteManager.route.routeInformationParser,
         routerDelegate: RouteManager.route.routerDelegate,
         theme: ThemeData(
@@ -53,6 +54,7 @@ class VeryGoodBlogAppView extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
             accentColor: const Color(0xFF13B9FF),
           ),
+          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
           fontFamily: 'DM Sans',
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,13 +25,15 @@ class LoginView extends StatelessWidget {
         child: Scaffold(
           body: Column(
             children: [
-              const Spacer(),
+              SizedBox(
+                height: context.screenHeight * 0.06,
+              ),
               Flexible(
-                flex: 3,
+                flex: 2,
                 child: Center(
                   child: Container(
-                    width: 200,
-                    height: 200,
+                    width: 180,
+                    height: 180,
                     decoration: const BoxDecoration(
                       color: Palette.purpleSupportColor,
                       borderRadius: BorderRadius.only(
@@ -39,15 +42,19 @@ class LoginView extends StatelessWidget {
                         bottomLeft: Radius.circular(90),
                       ),
                     ),
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/images/very_good.svg',
+                    child: FittedBox(
+                      child: SvgPicture.asset(
+                        'assets/images/very_good.svg',
+                      ),
                     ),
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 24,
+              ),
               Flexible(
-                flex: 4,
+                flex: 3,
                 child: BlocProvider<LoginBloc>(
                   create: (context) => LoginBloc(
                     authenticationRepository:
@@ -56,7 +63,33 @@ class LoginView extends StatelessWidget {
                   child: const LoginForm(),
                 ),
               ),
-              const Expanded(child: CircleAvatar()),
+              const Spacer(),
+              Center(
+                child: Text.rich(
+                  TextSpan(
+                    text: 'Chưa có tài khoản? ',
+                    children: [
+                      TextSpan(
+                        text: 'Đăng ký',
+                        style: const TextStyle(
+                          color: Palette.primaryColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap =() {
+                          
+                        },
+                      )
+                    ],
+                  ),
+                  style: const TextStyle(
+                    color: Palette.descriptionTextColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: context.screenHeight * 0.02,
+              )
             ],
           ),
         ),

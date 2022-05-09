@@ -21,32 +21,48 @@ class LoginForm extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Tên người dùng',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Tên người dùng',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.primaryTextColor,
+                ),
               ),
-            ),
-            _UsernameInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            const Text(
-              'Mật khẩu',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+              _UsernameInput(),
+              const Padding(padding: EdgeInsets.all(12)),
+              const Text(
+                'Mật khẩu',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.primaryTextColor,
+                ),
               ),
-            ),
-            _PasswordInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _LoginButton(),
-          ],
+              _PasswordInput(),
+              const SizedBox(
+                height: 24,
+              ),
+              const Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Quên mật khẩu',
+                  style: TextStyle(
+                    color: Palette.primaryColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const Padding(padding: EdgeInsets.all(12)),
+              Center(
+                child: _LoginButton(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -59,16 +75,43 @@ class _UsernameInput extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_usernameInput_textField'),
-          onChanged: (username) =>
-              context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-          decoration: InputDecoration(
-            labelText: 'username',
-            errorText: state.username.invalid ? 'invalid username' : null,
+        return _TextFieldDecoration(
+          child: TextField(
+            key: const Key('loginForm_usernameInput_textField'),
+            onChanged: (username) =>
+                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16, right: 16),
+              border: InputBorder.none,
+              hintText: 'Nhập vào tên người dùng',
+              errorText:
+                  state.username.invalid ? 'Tên người dùng không hợp lệ' : null,
+            ),
           ),
         );
       },
+    );
+  }
+}
+
+class _TextFieldDecoration extends StatelessWidget {
+  const _TextFieldDecoration({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      width: context.screenWidth,
+      decoration: BoxDecoration(
+        color: Palette.fieldColor,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: child,
     );
   }
 }
@@ -79,14 +122,19 @@ class _PasswordInput extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: 'password',
-            errorText: state.password.invalid ? 'invalid password' : null,
+        return _TextFieldDecoration(
+          child: TextField(
+            key: const Key('loginForm_passwordInput_textField'),
+            onChanged: (password) =>
+                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+            obscureText: true,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16, right: 16),
+              border: InputBorder.none,
+              hintText: 'Nhập vào mật khẩu',
+              errorText:
+                  state.username.invalid ? 'Mật khẩu không hợp lệ' : null,
+            ),
           ),
         );
       },
@@ -109,7 +157,20 @@ class _LoginButton extends StatelessWidget {
                         context.read<LoginBloc>().add(const LoginSubmitted());
                       }
                     : null,
-                child: const Text('Login'),
+                style: ElevatedButton.styleFrom(
+                  primary: Palette.primaryColor,
+                  fixedSize: const Size(130, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+                child: const Text(
+                  'Đăng nhập',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
               );
       },
     );
