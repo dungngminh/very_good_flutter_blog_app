@@ -25,7 +25,7 @@ class RouteManager {
         },
       ),
     ],
-    // initialLocation: '/splash',
+    initialLocation: '/splash',
     debugLogDiagnostics: true,
     urlPathStrategy: UrlPathStrategy.path,
   );
