@@ -6,7 +6,7 @@ class ConfirmedPassword
     extends FormzInput<String, ConfirmedPasswordValidationError> {
   const ConfirmedPassword.pure({this.password = ''}) : super.pure('');
   const ConfirmedPassword.dirty({
-    required this.password,
+    this.password = '',
     String value = '',
   }) : super.dirty(value);
 

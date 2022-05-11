@@ -7,7 +7,7 @@ void main() {
   const password = Password.dirty('password');
   group('LoginState', () {
     test('supports value comparisons', () {
-      expect(const LoginState(), const LoginState());
+      expect(const LoginState(), const LoginState()); 
     });
 
     test('returns same object when no properties are passed', () {
