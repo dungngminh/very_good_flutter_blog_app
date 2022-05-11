@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/config/config.dart';
-import 'package:very_good_blog_app/features/login/login.dart';
+import 'package:very_good_blog_app/features/register/register.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class ResigterForm extends StatelessWidget {
+  const ResigterForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
+              const SnackBar(content: Text('Register Failure')),
             );
         }
       },
@@ -60,7 +60,7 @@ class LoginForm extends StatelessWidget {
               ),
               const Padding(padding: EdgeInsets.all(12)),
               Center(
-                child: _LoginButton(),
+                child: _RegisterButton(),
               ),
             ],
           ),
@@ -73,14 +73,18 @@ class LoginForm extends StatelessWidget {
 class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return TextFieldDecoration(
           child: TextField(
-            key: const Key('loginForm_usernameInput_textField'),
-            onChanged: (username) =>
-                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+            key: const Key('registerForm_usernameInput_textField'),
+            onChanged: (username) => context.read<RegisterBloc>().add(
+                  RegisterEvent(
+                    RegisterEventType.userNameChanged,
+                    input: username,
+                  ),
+                ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
@@ -98,14 +102,18 @@ class _UsernameInput extends StatelessWidget {
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextFieldDecoration(
           child: TextField(
-            key: const Key('loginForm_passwordInput_textField'),
-            onChanged: (password) =>
-                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+            key: const Key('registerForm_passwordInput_textField'),
+            onChanged: (password) => context.read<RegisterBloc>().add(
+                  RegisterEvent(
+                    RegisterEventType.passwordChanged,
+                    input: password,
+                  ),
+                ),
             obscureText: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
@@ -121,19 +129,81 @@ class _PasswordInput extends StatelessWidget {
   }
 }
 
-class _LoginButton extends StatelessWidget {
+class _FirstnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      buildWhen: (previous, current) => previous.firstname != current.firstname,
+      builder: (context, state) {
+        return TextFieldDecoration(
+          child: TextField(
+            key: const Key('registerForm_firstnameInput_textField'),
+            onChanged: (firstname) => context.read<RegisterBloc>().add(
+                  RegisterEvent(
+                    RegisterEventType.firstNameChanged,
+                    input: firstname,
+                  ),
+                ),
+            obscureText: true,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16, right: 16),
+              border: InputBorder.none,
+              hintText: 'Nhập vào họ của bạn',
+              errorText:
+                  state.username.invalid ? 'Họ của bạn không hợp lệ' : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LastnameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      buildWhen: (previous, current) => previous.password != current.password,
+      builder: (context, state) {
+        return TextFieldDecoration(
+          child: TextField(
+            key: const Key('registerForm_passwordInput_textField'),
+            onChanged: (password) => context.read<RegisterBloc>().add(
+                  RegisterEvent(
+                    RegisterEventType.userNameChanged,
+                    input: password,
+                  ),
+                ),
+            obscureText: true,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16, right: 16),
+              border: InputBorder.none,
+              hintText: 'Nhập vào tên của bạn',
+              errorText:
+                  state.username.invalid ? 'Tên của bạn không hợp lệ' : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _RegisterButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
+                key: const Key('registerForm_continue_raisedButton'),
                 onPressed: state.status.isValidated
                     ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
+                        context.read<RegisterBloc>().add(
+                              const RegisterEvent(RegisterEventType.submitted),
+                            );
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
@@ -144,7 +214,7 @@ class _LoginButton extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Đăng nhập',
+                  'Đăng ký',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,

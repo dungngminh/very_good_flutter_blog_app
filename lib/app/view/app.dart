@@ -44,6 +44,7 @@ class VeryGoodBlogAppView extends StatelessWidget {
             userRepository: context.read<UserRepository>(),
           ),
         ),
+        
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
