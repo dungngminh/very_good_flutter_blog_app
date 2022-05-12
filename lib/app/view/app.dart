@@ -13,7 +13,7 @@ import 'package:very_good_blog_app/repository/authentication_repository.dart';
 import 'package:very_good_blog_app/repository/user_repository.dart';
 
 class VeryGoodBlogApp extends StatelessWidget {
-  const VeryGoodBlogApp({Key? key}) : super(key: key);
+  const VeryGoodBlogApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class VeryGoodBlogApp extends StatelessWidget {
 }
 
 class VeryGoodBlogAppView extends StatelessWidget {
-  const VeryGoodBlogAppView({Key? key}) : super(key: key);
+  const VeryGoodBlogAppView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class VeryGoodBlogAppView extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
             accentColor: const Color(0xFF13B9FF),
           ),
+          useMaterial3: true,
           fontFamily: 'DM Sans',
         ),
       ),
