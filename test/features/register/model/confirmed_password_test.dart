@@ -22,7 +22,7 @@ void main() {
     test('return empty error when no input', () {
       const password = ConfirmedPassword.dirty();
       expect(password.pure, false);
-      expect(password.error, ConfirmedPasswordValidationError.empty);
+      expect(password.error, ConfirmedPasswordValidationError.notMatch);
     });
 
     test(
