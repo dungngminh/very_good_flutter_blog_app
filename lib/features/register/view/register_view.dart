@@ -23,8 +23,7 @@ class RegisterView extends StatelessWidget {
               flex: 2,
               child: Center(
                 child: Container(
-                  width: 180,
-                  height: 180,
+                  height: 120,
                   decoration: const BoxDecoration(
                     color: Palette.purpleSupportColor,
                     borderRadius: BorderRadius.only(
@@ -45,7 +44,7 @@ class RegisterView extends StatelessWidget {
               height: 24,
             ),
             Expanded(
-              flex: 5,
+              flex: 10,
               child: BlocProvider<RegisterBloc>(
                 create: (_) => RegisterBloc(
                   authenticationRepository:
@@ -53,7 +52,10 @@ class RegisterView extends StatelessWidget {
                 ),
                 child: const ResigterForm(),
               ),
-            )
+            ),
+            SizedBox(
+              height: context.screenHeight * 0.02,
+            ),
           ],
         ),
       ),

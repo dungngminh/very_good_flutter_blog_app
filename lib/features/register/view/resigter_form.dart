@@ -27,6 +27,30 @@ class ResigterForm extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
+                'Họ của bạn',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.primaryTextColor,
+                ),
+              ),
+              _FirstnameInput(),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Tên của bạn',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.primaryTextColor,
+                ),
+              ),
+              _LastnameInput(),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
                 'Tên người dùng',
                 style: TextStyle(
                   fontSize: 16,
@@ -35,7 +59,9 @@ class ResigterForm extends StatelessWidget {
                 ),
               ),
               _UsernameInput(),
-              const Padding(padding: EdgeInsets.all(12)),
+              const SizedBox(
+                height: 16,
+              ),
               const Text(
                 'Mật khẩu',
                 style: TextStyle(
@@ -46,18 +72,17 @@ class ResigterForm extends StatelessWidget {
               ),
               _PasswordInput(),
               const SizedBox(
-                height: 24,
+                height: 16,
               ),
-              const Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  'Quên mật khẩu',
-                  style: TextStyle(
-                    color: Palette.primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
+              const Text(
+                'Xác nhận mật khẩu',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Palette.primaryTextColor,
                 ),
               ),
+              _ConfirmedPasswordInput(),
               const Padding(padding: EdgeInsets.all(12)),
               Center(
                 child: _RegisterButton(),
@@ -120,12 +145,53 @@ class _PasswordInput extends StatelessWidget {
               border: InputBorder.none,
               hintText: 'Nhập vào mật khẩu',
               errorText:
-                  state.username.invalid ? 'Mật khẩu không hợp lệ' : null,
+                  state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
           ),
         );
       },
     );
+  }
+}
+
+class _ConfirmedPasswordInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      buildWhen: (previous, current) =>
+          previous.confirmedPassword != current.confirmedPassword,
+      builder: (context, state) {
+        return TextFieldDecoration(
+          child: TextField(
+            key: const Key('registerForm_confirmedPass_textField'),
+            onChanged: (confirmedPassword) => context.read<RegisterBloc>().add(
+                  RegisterEvent(
+                    RegisterEventType.confirmedPasswordChanged,
+                    input: confirmedPassword,
+                  ),
+                ),
+            obscureText: true,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16, right: 16),
+              border: InputBorder.none,
+              hintText: 'Nhập lại mật khẩu',
+              errorText: state.confirmedPassword.invalid
+                  ? errorText(state.confirmedPassword.error!)
+                  : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String errorText(ConfirmedPasswordValidationError error) {
+    switch (error) {
+      case ConfirmedPasswordValidationError.empty:
+        return 'Giá trị không được để trống';
+      case ConfirmedPasswordValidationError.notMatch:
+        return 'Mật khẩu không trùng';
+    }
   }
 }
 
@@ -144,13 +210,12 @@ class _FirstnameInput extends StatelessWidget {
                     input: firstname,
                   ),
                 ),
-            obscureText: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào họ của bạn',
               errorText:
-                  state.username.invalid ? 'Họ của bạn không hợp lệ' : null,
+                  state.firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
             ),
           ),
         );
@@ -163,24 +228,23 @@ class _LastnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterBloc, RegisterState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      buildWhen: (previous, current) => previous.lastname != current.lastname,
       builder: (context, state) {
         return TextFieldDecoration(
           child: TextField(
             key: const Key('registerForm_passwordInput_textField'),
-            onChanged: (password) => context.read<RegisterBloc>().add(
+            onChanged: (lastname) => context.read<RegisterBloc>().add(
                   RegisterEvent(
-                    RegisterEventType.userNameChanged,
-                    input: password,
+                    RegisterEventType.lastNameChanged,
+                    input: lastname,
                   ),
                 ),
-            obscureText: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào tên của bạn',
               errorText:
-                  state.username.invalid ? 'Tên của bạn không hợp lệ' : null,
+                  state.lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
             ),
           ),
         );

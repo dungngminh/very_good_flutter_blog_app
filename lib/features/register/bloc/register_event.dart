@@ -11,11 +11,11 @@ enum RegisterEventType {
 
  class RegisterEvent extends Equatable {
   const RegisterEvent(
-    this.type, {
+    this.type,{
     this.input = '',
   });
 
-  final RegisterEventType type;
+  final RegisterEventType? type;
   final String input;
   @override
   List<Object?> get props => [type, input];

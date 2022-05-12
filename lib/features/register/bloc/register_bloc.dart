@@ -12,7 +12,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       : _authenticationRepository = authenticationRepository,
         super(const RegisterState()) {
     on<RegisterEvent>((event, emit) {
-      switch (event.type) {
+      switch (event.type!) {
         case RegisterEventType.lastNameChanged:
           _onLastnameChanged(event.input, emit);
           break;
@@ -155,6 +155,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         await _authenticationRepository.logIn(
           username: state.username.value,
           password: state.password.value,
+        );
+
+        emit(
+          state.copyWith(
+            status: FormzStatus.submissionSuccess,
+          ),
         );
       } catch (e) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
