@@ -112,7 +112,7 @@ class _PasswordInput extends StatelessWidget {
               border: InputBorder.none,
               hintText: 'Nhập vào mật khẩu',
               errorText:
-                  state.username.invalid ? 'Mật khẩu không hợp lệ' : null,
+                  state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
           ),
         );

@@ -51,6 +51,12 @@ class AuthenticationBloc
             : emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.unauthenticated:
         return emit(const AuthenticationState.unauthenticated());
+      case AuthenticationStatus.successfullyRegistered:
+        return emit(const AuthenticationState.successfullyRegistered());
+      case AuthenticationStatus.existed:
+        return emit(const AuthenticationState.existed());
+      case AuthenticationStatus.unsuccessfullyRegistered:
+        return emit(const AuthenticationState.unsuccessfullyRegistered());
     }
   }
 

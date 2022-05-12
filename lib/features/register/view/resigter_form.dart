@@ -10,85 +10,74 @@ class ResigterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterBloc, RegisterState>(
-      listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Register Failure')),
-            );
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Họ của bạn',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Họ của bạn',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
               ),
-              _FirstnameInput(),
-              const SizedBox(
-                height: 16,
+            ),
+            _FirstnameInput(),
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              'Tên của bạn',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
               ),
-              const Text(
-                'Tên của bạn',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
-                ),
+            ),
+            _LastnameInput(),
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              'Tên người dùng',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
               ),
-              _LastnameInput(),
-              const SizedBox(
-                height: 16,
+            ),
+            _UsernameInput(),
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              'Mật khẩu',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
               ),
-              const Text(
-                'Tên người dùng',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
-                ),
+            ),
+            _PasswordInput(),
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              'Xác nhận mật khẩu',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryTextColor,
               ),
-              _UsernameInput(),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
-                'Mật khẩu',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
-                ),
-              ),
-              _PasswordInput(),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
-                'Xác nhận mật khẩu',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
-                ),
-              ),
-              _ConfirmedPasswordInput(),
-              const Padding(padding: EdgeInsets.all(12)),
-              Center(
-                child: _RegisterButton(),
-              ),
-            ],
-          ),
+            ),
+            _ConfirmedPasswordInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            Center(
+              child: _RegisterButton(),
+            ),
+          ],
         ),
       ),
     );
@@ -133,12 +122,13 @@ class _PasswordInput extends StatelessWidget {
         return TextFieldDecoration(
           child: TextField(
             key: const Key('registerForm_passwordInput_textField'),
-            onChanged: (password) => context.read<RegisterBloc>().add(
-                  RegisterEvent(
-                    RegisterEventType.passwordChanged,
-                    input: password,
-                  ),
+            onChanged: (password) => context.read<RegisterBloc>()
+              ..add(
+                RegisterEvent(
+                  RegisterEventType.passwordChanged,
+                  input: password,
                 ),
+              ),
             obscureText: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
@@ -159,6 +149,7 @@ class _ConfirmedPasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) =>
+          previous.password != current.password ||
           previous.confirmedPassword != current.confirmedPassword,
       builder: (context, state) {
         return TextFieldDecoration(
@@ -176,22 +167,13 @@ class _ConfirmedPasswordInput extends StatelessWidget {
               border: InputBorder.none,
               hintText: 'Nhập lại mật khẩu',
               errorText: state.confirmedPassword.invalid
-                  ? errorText(state.confirmedPassword.error!)
+                  ? 'Mật khẩu không trùng'
                   : null,
             ),
           ),
         );
       },
     );
-  }
-
-  String errorText(ConfirmedPasswordValidationError error) {
-    switch (error) {
-      case ConfirmedPasswordValidationError.empty:
-        return 'Giá trị không được để trống';
-      case ConfirmedPasswordValidationError.notMatch:
-        return 'Mật khẩu không trùng';
-    }
   }
 }
 

@@ -17,7 +17,6 @@ class LoginView extends StatelessWidget {
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
           context.go('/');
-          return;
         }
       },
       child: GestureDetector(

@@ -11,7 +11,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         super(const RegisterState()) {
-    on<RegisterEvent>((event, emit) {
+    on<RegisterEvent>((event, emit) async {
       switch (event.type!) {
         case RegisterEventType.lastNameChanged:
           _onLastnameChanged(event.input, emit);
@@ -29,7 +29,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           _onPasswordChanged(event.input, emit);
           break;
         case RegisterEventType.submitted:
-          _onSubmitted(emit);
+          await _onSubmitted(emit);
           break;
       }
     });
@@ -128,18 +128,22 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   void _onPasswordChanged(String input, Emitter<RegisterState> emit) {
     final password = Password.dirty(input);
+    final confirmedPassword = ConfirmedPassword.dirty(
+      password: password.value,
+      value: state.confirmedPassword.value,
+    );
     emit(
       state.copyWith(
         username: state.username,
         password: password,
-        confirmedPassword: state.confirmedPassword,
+        confirmedPassword: confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
         status: Formz.validate(
           [
             state.username,
             password,
-            state.confirmedPassword,
+            confirmedPassword,
             state.lastname,
             state.firstname,
           ],
@@ -152,11 +156,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       try {
-        await _authenticationRepository.logIn(
+        await _authenticationRepository.register(
           username: state.username.value,
           password: state.password.value,
+          firstname: state.firstname.value,
+          lastname: state.lastname.value,
         );
-
         emit(
           state.copyWith(
             status: FormzStatus.submissionSuccess,
