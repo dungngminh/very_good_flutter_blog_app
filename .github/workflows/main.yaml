@@ -1,6 +1,6 @@
 name: very_good_blog_app
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   build:
