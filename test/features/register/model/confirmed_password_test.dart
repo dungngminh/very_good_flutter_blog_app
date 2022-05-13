@@ -19,11 +19,6 @@ void main() {
       expect(confirmedPassword.pure, false);
     });
 
-    test('return empty error when no input', () {
-      const password = ConfirmedPassword.dirty();
-      expect(password.pure, false);
-      expect(password.error, ConfirmedPasswordValidationError.notMatch);
-    });
 
     test(
       'return not match error '
