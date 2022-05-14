@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:very_good_blog_app/config/config.dart';
+import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
+import 'package:very_good_blog_app/repository/repository.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -25,73 +29,111 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: const [
-          HomeView(),
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Palette.whiteBackgroundColor,
+    final isKeyBoardShowing = MediaQuery.of(context).viewInsets.bottom != 0;
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state.status == AuthenticationStatus.unauthenticated) {
+          context.go('/login');
+        }
+      },
+      child: Scaffold(
+        body: IndexedStack(
+          index: _currentIndex,
+          children: const [
+            HomeView(),
+            
+          ],
+        ),
+        floatingActionButton: Visibility(
+          visible: !isKeyBoardShowing,
+          child: SizedBox.square(
+            dimension: 60,
+            child: FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: Palette.primaryColor,
+              shape: const CircleBorder(),
+              child: const Icon(
+                PhosphorIcons.plus,
+                color: Palette.whiteBackgroundColor,
+              ),
+            ),
           ),
-          child: SizedBox(
-            height: 70,
-            child: Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => _onPageChanged(0),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      child: _currentIndex == 0
-                          ? const Icon(
-                              PhosphorIcons.houseFill,
-                              size: 32,
-                              color: Palette.primaryColor,
-                            )
-                          : const Icon(
-                              PhosphorIcons.houseFill,
-                              size: 28,
-                              color: Palette.unSelectedColor,
-                            ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          clipBehavior: Clip.hardEdge,
+          shape: const CircularNotchedRectangle(),
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              color: Palette.whiteBackgroundColor,
+            ),
+            child: SizedBox(
+              height: 70,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: IconButton(
+                      icon: Icon(
+                        _currentIndex == 0
+                            ? PhosphorIcons.houseFill
+                            : PhosphorIcons.house,
+                      ),
+                      iconSize: _currentIndex == 0 ? 30 : 26,
+                      color: _currentIndex == 0
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      onPressed: () => _onPageChanged(0),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => _onPageChanged(1),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      child: _currentIndex == 1
-                          ? const Icon(
-                              PhosphorIcons.houseFill,
-                              size: 32,
-                              color: Palette.primaryColor,
-                            )
-                          : const Icon(
-                              PhosphorIcons.houseFill,
-                              size: 28,
-                              color: Palette.unSelectedColor,
-                            ),
+                  Expanded(
+                    flex: 2,
+                    child: IconButton(
+                      icon: Icon(
+                        _currentIndex == 1
+                            ? PhosphorIcons.bellFill
+                            : PhosphorIcons.bell,
+                      ),
+                      iconSize: _currentIndex == 1 ? 30 : 26,
+                      color: _currentIndex == 1
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      onPressed: () => _onPageChanged(1),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: const Icon(PhosphorIcons.houseFill),
+                  const Spacer(),
+                  Expanded(
+                    flex: 2,
+                    child: IconButton(
+                      icon: Icon(
+                        _currentIndex == 2
+                            ? PhosphorIcons.bookmarkFill
+                            : PhosphorIcons.bookmark,
+                      ),
+                      iconSize: _currentIndex == 2 ? 30 : 26,
+                      color: _currentIndex == 2
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      onPressed: () => _onPageChanged(2),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: const Icon(PhosphorIcons.houseFill),
+                  Expanded(
+                    flex: 2,
+                    child: IconButton(
+                      icon: Icon(
+                        _currentIndex == 3
+                            ? PhosphorIcons.userFill
+                            : PhosphorIcons.user,
+                      ),
+                      iconSize: _currentIndex == 3 ? 30 : 26,
+                      color: _currentIndex == 3
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      onPressed: () => _onPageChanged(3),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

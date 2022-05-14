@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/config/config.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
-import 'package:very_good_blog_app/repository/authentication_repository.dart';
+import 'package:very_good_blog_app/repository/repository.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -31,8 +31,8 @@ class LoginView extends StatelessWidget {
                 flex: 2,
                 child: Center(
                   child: Container(
-                    width: 180,
-                    height: 180,
+                    width: 120,
+                    height: 120,
                     decoration: const BoxDecoration(
                       color: Palette.purpleSupportColor,
                       borderRadius: BorderRadius.only(

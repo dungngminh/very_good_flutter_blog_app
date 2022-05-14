@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/features/register/register.dart';
-import 'package:very_good_blog_app/repository/authentication_repository.dart';
+import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';

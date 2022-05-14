@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:very_good_blog_app/config/config.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 

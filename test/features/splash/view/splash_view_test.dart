@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart';
-import 'package:very_good_blog_app/repository/authentication_repository.dart';
+import 'package:very_good_blog_app/repository/repository.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}

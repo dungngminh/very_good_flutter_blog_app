@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/features/home/home.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
-import 'package:very_good_blog_app/features/main/view/main_view.dart';
+import 'package:very_good_blog_app/features/main/main.dart';
 import 'package:very_good_blog_app/features/register/register.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart';
 

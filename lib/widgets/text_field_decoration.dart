@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:very_good_blog_app/config/config.dart';
+import 'package:very_good_blog_app/app/app.dart';
 
 class TextFieldDecoration extends StatelessWidget {
   const TextFieldDecoration({

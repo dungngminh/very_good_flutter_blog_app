@@ -7,10 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:very_good_blog_app/config/route/router.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
-import 'package:very_good_blog_app/repository/authentication_repository.dart';
-import 'package:very_good_blog_app/repository/user_repository.dart';
+import 'package:very_good_blog_app/repository/repository.dart';
 
 class VeryGoodBlogApp extends StatelessWidget {
   const VeryGoodBlogApp({super.key});
@@ -56,6 +55,9 @@ class VeryGoodBlogAppView extends StatelessWidget {
           ),
           useMaterial3: !true,
           fontFamily: 'DM Sans',
+          inputDecorationTheme: const InputDecorationTheme(
+            border: InputBorder.none,
+          ),
         ),
       ),
     );
