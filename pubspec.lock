@@ -146,13 +146,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.1"
-  flutter_quill:
-    dependency: "direct main"
-    description:
-      name: flutter_quill
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -475,7 +468,7 @@ packages:
       name: very_good_analysis
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.0"
+    version: "3.0.0"
   vm_service:
     dependency: transitive
     description:

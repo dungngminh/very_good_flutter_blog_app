@@ -53,8 +53,7 @@ class VeryGoodBlogAppView extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
             accentColor: const Color(0xFF13B9FF),
           ),
-          useMaterial3: !true,
-          fontFamily: 'DM Sans',
+          fontFamily: 'Nunito',
           inputDecorationTheme: const InputDecorationTheme(
             border: InputBorder.none,
           ),

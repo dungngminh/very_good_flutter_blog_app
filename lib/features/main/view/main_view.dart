@@ -41,13 +41,12 @@ class _MainViewState extends State<MainView> {
           index: _currentIndex,
           children: const [
             HomeView(),
-            
           ],
         ),
         floatingActionButton: Visibility(
           visible: !isKeyBoardShowing,
           child: SizedBox.square(
-            dimension: 60,
+            dimension: 65,
             child: FloatingActionButton(
               onPressed: () {},
               backgroundColor: Palette.primaryColor,
@@ -61,79 +60,75 @@ class _MainViewState extends State<MainView> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
+          color: Palette.whiteBackgroundColor,
           clipBehavior: Clip.hardEdge,
           shape: const CircularNotchedRectangle(),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: Palette.whiteBackgroundColor,
-            ),
-            child: SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                      icon: Icon(
-                        _currentIndex == 0
-                            ? PhosphorIcons.houseFill
-                            : PhosphorIcons.house,
-                      ),
-                      iconSize: _currentIndex == 0 ? 30 : 26,
-                      color: _currentIndex == 0
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
-                      onPressed: () => _onPageChanged(0),
+          child: SizedBox(
+            height: 70,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: IconButton(
+                    icon: Icon(
+                      _currentIndex == 0
+                          ? PhosphorIcons.houseFill
+                          : PhosphorIcons.house,
                     ),
+                    iconSize: _currentIndex == 0 ? 30 : 26,
+                    color: _currentIndex == 0
+                        ? Palette.primaryColor
+                        : Palette.unSelectedColor,
+                    onPressed: () => _onPageChanged(0),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                      icon: Icon(
-                        _currentIndex == 1
-                            ? PhosphorIcons.bellFill
-                            : PhosphorIcons.bell,
-                      ),
-                      iconSize: _currentIndex == 1 ? 30 : 26,
-                      color: _currentIndex == 1
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
-                      onPressed: () => _onPageChanged(1),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: IconButton(
+                    icon: Icon(
+                      _currentIndex == 1
+                          ? PhosphorIcons.bellFill
+                          : PhosphorIcons.bell,
                     ),
+                    iconSize: _currentIndex == 1 ? 30 : 26,
+                    color: _currentIndex == 1
+                        ? Palette.primaryColor
+                        : Palette.unSelectedColor,
+                    onPressed: () => _onPageChanged(1),
                   ),
-                  const Spacer(),
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                      icon: Icon(
-                        _currentIndex == 2
-                            ? PhosphorIcons.bookmarkFill
-                            : PhosphorIcons.bookmark,
-                      ),
-                      iconSize: _currentIndex == 2 ? 30 : 26,
-                      color: _currentIndex == 2
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
-                      onPressed: () => _onPageChanged(2),
+                ),
+                const Spacer(),
+                Expanded(
+                  flex: 2,
+                  child: IconButton(
+                    icon: Icon(
+                      _currentIndex == 2
+                          ? PhosphorIcons.bookmarkFill
+                          : PhosphorIcons.bookmark,
                     ),
+                    iconSize: _currentIndex == 2 ? 30 : 26,
+                    color: _currentIndex == 2
+                        ? Palette.primaryColor
+                        : Palette.unSelectedColor,
+                    onPressed: () => _onPageChanged(2),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                      icon: Icon(
-                        _currentIndex == 3
-                            ? PhosphorIcons.userFill
-                            : PhosphorIcons.user,
-                      ),
-                      iconSize: _currentIndex == 3 ? 30 : 26,
-                      color: _currentIndex == 3
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
-                      onPressed: () => _onPageChanged(3),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: IconButton(
+                    icon: Icon(
+                      _currentIndex == 3
+                          ? PhosphorIcons.userFill
+                          : PhosphorIcons.user,
                     ),
+                    iconSize: _currentIndex == 3 ? 30 : 26,
+                    color: _currentIndex == 3
+                        ? Palette.primaryColor
+                        : Palette.unSelectedColor,
+                    onPressed: () => _onPageChanged(3),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
