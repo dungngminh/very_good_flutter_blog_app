@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class MainView extends StatefulWidget {
@@ -41,6 +42,9 @@ class _MainViewState extends State<MainView> {
           index: _currentIndex,
           children: const [
             HomeView(),
+            HomeView(),
+            HomeView(),
+            ProfileView(),
           ],
         ),
         floatingActionButton: Visibility(

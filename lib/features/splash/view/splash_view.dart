@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
@@ -21,9 +21,7 @@ class SplashView extends StatelessWidget {
       },
       child: Scaffold(
         body: Center(
-          child: SvgPicture.asset(
-            'assets/images/very_good.svg',
-          ),
+          child: Assets.images.veryGood.svg(),
         ),
       ),
     );

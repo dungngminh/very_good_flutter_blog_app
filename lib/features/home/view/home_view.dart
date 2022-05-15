@@ -110,9 +110,8 @@ class _PopularBlogList extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/komkat.png'),
+                          CircleAvatar(
+                            backgroundImage: Assets.images.komkat.image().image,
                           ),
                           const SizedBox(
                             width: 12,
@@ -200,9 +199,9 @@ class _Header extends StatelessWidget {
               )
             ],
           ),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 24,
-            backgroundImage: AssetImage('assets/images/komkat.png'),
+            backgroundImage: Assets.images.komkat.image().image,
           ),
         ],
       ),
