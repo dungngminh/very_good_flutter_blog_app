@@ -3,9 +3,9 @@ import 'package:very_good_blog_app/app/app.dart';
 
 class TextFieldDecoration extends StatelessWidget {
   const TextFieldDecoration({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final TextField child;
 

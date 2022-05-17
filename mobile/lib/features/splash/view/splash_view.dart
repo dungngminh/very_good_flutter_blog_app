@@ -6,7 +6,7 @@ import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class SplashView extends StatelessWidget {
-  const SplashView({Key? key}) : super(key: key);
+  const SplashView({super.key});
 
   @override
   Widget build(BuildContext context) {

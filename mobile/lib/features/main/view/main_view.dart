@@ -9,7 +9,7 @@ import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({Key? key}) : super(key: key);
+  const MainView({super.key});
 
   @override
   State<MainView> createState() => _MainViewState();

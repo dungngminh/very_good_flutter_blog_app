@@ -6,7 +6,7 @@ import 'package:very_good_blog_app/features/login/login.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {

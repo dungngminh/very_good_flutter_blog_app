@@ -6,7 +6,7 @@ import 'package:very_good_blog_app/features/register/register.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class ResigterForm extends StatelessWidget {
-  const ResigterForm({Key? key}) : super(key: key);
+  const ResigterForm({super.key});
 
   @override
   Widget build(BuildContext context) {

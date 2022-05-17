@@ -3,7 +3,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +41,7 @@ class HomeView extends StatelessWidget {
 }
 
 class _PopularBlogList extends StatelessWidget {
-  const _PopularBlogList({
-    Key? key,
-  }) : super(key: key);
-
+  const _PopularBlogList();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -77,11 +74,11 @@ class _PopularBlogList extends StatelessWidget {
                       color: Colors.transparent,
                       child: IconButton(
                         splashRadius: 20,
-                        icon: Container(
-                          decoration: const BoxDecoration(
+                        icon: const DecoratedBox(
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
-                          child: const FittedBox(
+                          child: FittedBox(
                             fit: BoxFit.fill,
                             child: Icon(
                               PhosphorIcons.bookmarkFill,
@@ -159,9 +156,7 @@ class _PopularBlogList extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({
-    Key? key,
-  }) : super(key: key);
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
@@ -210,9 +205,7 @@ class _Header extends StatelessWidget {
 }
 
 class _CategoryChoiceBar extends StatelessWidget {
-  const _CategoryChoiceBar({
-    Key? key,
-  }) : super(key: key);
+  const _CategoryChoiceBar();
 
   @override
   Widget build(BuildContext context) {
@@ -259,9 +252,7 @@ class _CategoryChoiceBar extends StatelessWidget {
 }
 
 class _SearchField extends StatelessWidget {
-  const _SearchField({
-    Key? key,
-  }) : super(key: key);
+  const _SearchField();
 
   @override
   Widget build(BuildContext context) {

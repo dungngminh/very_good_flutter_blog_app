@@ -8,7 +8,7 @@ import 'package:very_good_blog_app/features/login/login.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {

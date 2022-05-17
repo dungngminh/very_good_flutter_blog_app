@@ -9,7 +9,7 @@ import 'package:very_good_blog_app/features/register/view/resigter_form.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class RegisterView extends StatelessWidget {
-  const RegisterView({Key? key}) : super(key: key);
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
