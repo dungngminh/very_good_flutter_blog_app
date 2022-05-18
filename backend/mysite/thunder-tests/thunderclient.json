@@ -1,0 +1,74 @@
+[
+  {
+    "_id": "8ae77a38-6196-4031-9042-1686c3b1d349",
+    "colId": "844063d3-da1d-4533-b6e2-8dea64ec90e9",
+    "containerId": "",
+    "name": "Get book ",
+    "url": "http://localhost:8000/book",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-05-06T23:19:47.132Z",
+    "modified": "2022-05-06T23:19:47.132Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "5d8668b7-9be3-4740-a6a3-84915dea67fc",
+    "colId": "844063d3-da1d-4533-b6e2-8dea64ec90e9",
+    "containerId": "",
+    "name": "Create Book",
+    "url": "http://localhost:8000/book",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2022-05-06T23:45:14.981Z",
+    "modified": "2022-05-06T23:45:14.981Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"title\" :\"fsdf\",\n    \"photourl\" : \"asda\",\n    \"genres\" : [\n        {\n            \"id\" : 5\n        },{\n            \"id\" : 6\n        }\n        ]\n    \n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "7a05a892-eccf-475a-b26c-451df9ea0d4e",
+    "colId": "844063d3-da1d-4533-b6e2-8dea64ec90e9",
+    "containerId": "",
+    "name": "Delete",
+    "url": "http://localhost:8000/book?id=10",
+    "method": "DELETE",
+    "sortNum": 30000,
+    "created": "2022-05-07T00:10:41.032Z",
+    "modified": "2022-05-07T00:10:41.032Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "id",
+        "value": "10",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "9e06fd6b-d4d6-4f37-9361-7f6ea7b30be9",
+    "colId": "844063d3-da1d-4533-b6e2-8dea64ec90e9",
+    "containerId": "",
+    "name": "Update book",
+    "url": "http://localhost:8000/book/3",
+    "method": "PATCH",
+    "sortNum": 40000,
+    "created": "2022-05-07T02:35:45.426Z",
+    "modified": "2022-05-07T02:35:45.426Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"title\" :\"fsdf\",\n    \"photourl\" : \"asda\",\n    \"genres\" : [\n        {\n            \"id\" : 5\n        }\n        ]\n    \n}",
+      "form": []
+    },
+    "tests": []
+  }
+]
