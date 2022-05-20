@@ -43,6 +43,28 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/add_user.svg
+  SvgGenImage get addUser => const SvgGenImage('assets/icons/add_user.svg');
+
+  /// File path: assets/icons/bell.svg
+  SvgGenImage get bell => const SvgGenImage('assets/icons/bell.svg');
+
+  /// File path: assets/icons/bookmark.svg
+  SvgGenImage get bookmark => const SvgGenImage('assets/icons/bookmark.svg');
+
+  /// File path: assets/icons/camera.svg
+  SvgGenImage get camera => const SvgGenImage('assets/icons/camera.svg');
+
+  /// File path: assets/icons/circle_arrow_left.svg
+  SvgGenImage get circleArrowLeft =>
+      const SvgGenImage('assets/icons/circle_arrow_left.svg');
+
+  /// File path: assets/icons/heart.svg
+  SvgGenImage get heart => const SvgGenImage('assets/icons/heart.svg');
+
+  /// File path: assets/icons/home.svg
+  SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
+
   /// File path: assets/icons/setting.svg
   SvgGenImage get setting => const SvgGenImage('assets/icons/setting.svg');
 

@@ -5,7 +5,9 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
+import 'package:very_good_blog_app/features/notification/notification.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/features/reading_list/reading_list.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class MainView extends StatefulWidget {
@@ -42,8 +44,8 @@ class _MainViewState extends State<MainView> {
           index: _currentIndex,
           children: const [
             HomeView(),
-            HomeView(),
-            HomeView(),
+            NotificationView(),
+            ReadingListView(),
             ProfileView(),
           ],
         ),
@@ -74,30 +76,24 @@ class _MainViewState extends State<MainView> {
                 Expanded(
                   flex: 2,
                   child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 0
-                          ? PhosphorIcons.houseFill
-                          : PhosphorIcons.house,
+                    icon: Assets.icons.home.svg(
+                      color: _currentIndex == 0
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      height: _currentIndex == 0 ? 30 : 26,
                     ),
-                    iconSize: _currentIndex == 0 ? 30 : 26,
-                    color: _currentIndex == 0
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
                     onPressed: () => _onPageChanged(0),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 1
-                          ? PhosphorIcons.bellFill
-                          : PhosphorIcons.bell,
+                    icon: Assets.icons.bell.svg(
+                      color: _currentIndex == 1
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      height: _currentIndex == 1 ? 30 : 26,
                     ),
-                    iconSize: _currentIndex == 1 ? 30 : 26,
-                    color: _currentIndex == 1
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
                     onPressed: () => _onPageChanged(1),
                   ),
                 ),
@@ -105,30 +101,24 @@ class _MainViewState extends State<MainView> {
                 Expanded(
                   flex: 2,
                   child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 2
-                          ? PhosphorIcons.bookmarkFill
-                          : PhosphorIcons.bookmark,
+                    icon: Assets.icons.bookmark.svg(
+                      color: _currentIndex == 2
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      height: _currentIndex == 2 ? 30 : 26,
                     ),
-                    iconSize: _currentIndex == 2 ? 30 : 26,
-                    color: _currentIndex == 2
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
                     onPressed: () => _onPageChanged(2),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 3
-                          ? PhosphorIcons.userFill
-                          : PhosphorIcons.user,
+                    icon: Assets.icons.user.svg(
+                      color: _currentIndex == 3
+                          ? Palette.primaryColor
+                          : Palette.unSelectedColor,
+                      height: _currentIndex == 3 ? 30 : 26,
                     ),
-                    iconSize: _currentIndex == 3 ? 30 : 26,
-                    color: _currentIndex == 3
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
                     onPressed: () => _onPageChanged(3),
                   ),
                 ),

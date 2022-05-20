@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/home/widget/widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -45,104 +46,15 @@ class _PopularBlogList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: context.screenHeight * 0.3,
+      height: context.screenHeight * 0.35,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
         itemCount: 3,
         itemBuilder: (context, index) {
-          return Container(
-            width: context.screenHeight * 0.3,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Palette.primaryColor,
-              image: DecorationImage(
-                image: Image.network(
-                  'https://vissaihotel.vn/photo/trang-an-ha-long-bay-on-land.png',
-                ).image,
-                fit: BoxFit.cover,
-              ),
-            ),
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ClipOval(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: IconButton(
-                        splashRadius: 20,
-                        icon: const DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Icon(
-                              PhosphorIcons.bookmarkFill,
-                              size: 26,
-                              color: Palette.whiteBackgroundColor,
-                            ),
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Palette.whiteBackgroundColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: Assets.images.komkat.image().image,
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
-                                Text(
-                                  'dungngminh',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Palette.primaryTextColor,
-                                  ),
-                                ),
-                                Text(
-                                  '20 phút trước',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Palette.primaryTextColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          return const BlogCard(
+            title: 'Thời tiết đang chuyển biến phức tạp.',
+            username: 'dungngminh',
           );
         },
         separatorBuilder: (context, index) {
