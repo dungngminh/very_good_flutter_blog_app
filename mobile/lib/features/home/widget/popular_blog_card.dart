@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/widgets/ink_response_widget.dart';
+import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class PopularBlogCard extends StatelessWidget {
   const PopularBlogCard({
@@ -34,10 +33,9 @@ class PopularBlogCard extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: InkEffectWidget(
-              child: const Icon(
-                PhosphorIcons.bookmarkFill,
-                size: 26,
+              child: Assets.icons.bookmark.svg(
                 color: Palette.whiteBackgroundColor,
+                height: 24,
               ),
               onTapEvent: () {},
             ),

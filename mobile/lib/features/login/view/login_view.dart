@@ -72,7 +72,7 @@ class LoginView extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push('/register'),
+                          ..onTap = () => context.push(RouteManager.register),
                       )
                     ],
                   ),

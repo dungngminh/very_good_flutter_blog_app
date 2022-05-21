@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_blog_app/app/app.dart';
 
-class OwnBlogCard extends StatelessWidget {
-  const OwnBlogCard({
+/// This setting for order of content display from top to bottom
+///
+/// For Default : `CardType.titleAuthorTime` that means content order is
+/// title is first, then author, last is Time (Date, Month, Year)
+///
+/// See also:
+///
+///  * `CardType.titleStatsTime` that means content order is
+/// title is first, then Stats (Like Count), last is Time (Date, Month, Year)
+///  * `CardType.titleStatsAuthor` that means content order is
+/// title is first, then Stats (Like Count), last is Time (Date, Month, Year)
+enum CardType {
+  titleAuthorTime,
+  titleStatsTime,
+  titleStatsAuthor,
+}
+
+// TODO(dungngminh): implement dynamic BlogCard
+class BlogCard extends StatelessWidget {
+  const BlogCard({
     super.key,
     required this.title,
     required this.imageUrl,
@@ -62,7 +80,7 @@ class OwnBlogCard extends StatelessWidget {
                     children: [
                       Assets.icons.heart.svg(
                         height: 22,
-                        color: Palette.primaryTextColor,
+                        color: Palette.pinkColor,
                       ),
                       const SizedBox(
                         width: 4,
@@ -70,6 +88,7 @@ class OwnBlogCard extends StatelessWidget {
                       const Text(
                         '300',
                         style: TextStyle(
+                          fontWeight: FontWeight.w500,
                           color: Palette.primaryTextColor,
                         ),
                       ),

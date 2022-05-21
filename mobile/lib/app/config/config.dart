@@ -1,5 +1,5 @@
-export 'extensions/context_x.dart';
+export 'extensions/context_extension.dart';
 export 'gen/assets.gen.dart';
 export 'gen/fonts.gen.dart';
-export 'route/router.dart';
+export 'route/router_manager.dart';
 export 'theme/palette.dart';

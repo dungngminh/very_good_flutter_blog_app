@@ -80,7 +80,7 @@ class _MainViewState extends State<MainView> {
                       color: _currentIndex == 0
                           ? Palette.primaryColor
                           : Palette.unSelectedColor,
-                      height: _currentIndex == 0 ? 30 : 26,
+                      height: _currentIndex == 0 ? 26 : 24,
                     ),
                     onPressed: () => _onPageChanged(0),
                   ),
@@ -92,7 +92,7 @@ class _MainViewState extends State<MainView> {
                       color: _currentIndex == 1
                           ? Palette.primaryColor
                           : Palette.unSelectedColor,
-                      height: _currentIndex == 1 ? 30 : 26,
+                      height: _currentIndex == 1 ? 26 : 24,
                     ),
                     onPressed: () => _onPageChanged(1),
                   ),
@@ -105,7 +105,7 @@ class _MainViewState extends State<MainView> {
                       color: _currentIndex == 2
                           ? Palette.primaryColor
                           : Palette.unSelectedColor,
-                      height: _currentIndex == 2 ? 30 : 26,
+                      height: _currentIndex == 2 ? 26 : 24,
                     ),
                     onPressed: () => _onPageChanged(2),
                   ),
@@ -117,7 +117,7 @@ class _MainViewState extends State<MainView> {
                       color: _currentIndex == 3
                           ? Palette.primaryColor
                           : Palette.unSelectedColor,
-                      height: _currentIndex == 3 ? 30 : 26,
+                      height: _currentIndex == 3 ? 26 : 24,
                     ),
                     onPressed: () => _onPageChanged(3),
                   ),

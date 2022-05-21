@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -17,8 +18,11 @@ class ProfileView extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
-                  icon: Assets.icons.setting.svg(color: Palette.primaryColor),
-                  onPressed: () {},
+                  icon: Assets.icons.setting.svg(
+                    color: Palette.primaryColor,
+                    height: 24,
+                  ),
+                  onPressed: () => context.push(RouteManager.setting),
                 ),
               ),
             ),
@@ -81,7 +85,7 @@ class _PostPanelState extends State<_PostPanel> {
                 padding: const EdgeInsets.only(bottom: 40),
                 itemCount: 3,
                 itemBuilder: (context, index) {
-                  return const OwnBlogCard(
+                  return const BlogCard(
                     title: 'How i hack Google, Microsoft,dadadadad,..',
                     imageUrl: 'https://i.kym-cdn.com/'
                         'photos/images/facebook/001/839/197/2ad.png',
@@ -302,9 +306,9 @@ class _AvatarDecoration extends StatelessWidget {
                   child: Align(
                     child: IconButton(
                       splashRadius: 20,
-                      padding: const EdgeInsets.all(6),
                       icon: Assets.icons.camera.svg(
                         color: Palette.primaryColor,
+                        height: 24,
                       ),
                       onPressed: () {},
                     ),
