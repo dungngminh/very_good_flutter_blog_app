@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/widgets/ink_response_widget.dart';
 
-class BlogCard extends StatelessWidget {
-  const BlogCard({
+class PopularBlogCard extends StatelessWidget {
+  const PopularBlogCard({
     super.key,
     required this.username,
     required this.title,
@@ -32,27 +33,13 @@ class BlogCard extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: ClipOval(
-              child: Material(
-                color: Colors.transparent,
-                child: IconButton(
-                  splashRadius: 20,
-                  icon: const DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: Icon(
-                        PhosphorIcons.bookmarkFill,
-                        size: 26,
-                        color: Palette.whiteBackgroundColor,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {},
-                ),
+            child: InkEffectWidget(
+              child: const Icon(
+                PhosphorIcons.bookmarkFill,
+                size: 26,
+                color: Palette.whiteBackgroundColor,
               ),
+              onTapEvent: () {},
             ),
           ),
           const Spacer(),

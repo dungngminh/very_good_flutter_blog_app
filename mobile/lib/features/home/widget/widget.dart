@@ -1,1 +1,1 @@
-export 'blog_card.dart';
+export 'popular_blog_card.dart';

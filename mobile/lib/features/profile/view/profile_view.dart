@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -41,19 +42,107 @@ class _PostPanel extends StatefulWidget {
 }
 
 class _PostPanelState extends State<_PostPanel> {
+  late ValueNotifier<int> _currentTabIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTabIndex = ValueNotifier(0);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return  const Expanded(
+    return Expanded(
       flex: 5,
       child: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Palette.whiteBackgroundColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
         ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 32, 24, 8),
+              child: Row(
+                children: [
+                  _buildTab(index: 0, nameTab: 'Tất cả'),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  _buildTab(index: 1, nameTab: 'Đã thích'),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.only(bottom: 40),
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return const OwnBlogCard(
+                    title: 'How i hack Google, Microsoft,dadadadad,..',
+                    imageUrl: 'https://i.kym-cdn.com/'
+                        'photos/images/facebook/001/839/197/2ad.png',
+                    likeCount: 300,
+                    dateAdded: '20 tháng 9, 2022',
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    height: 16,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildTab({required int index, required String nameTab}) {
+    return ValueListenableBuilder<int>(
+      valueListenable: _currentTabIndex,
+      builder: (context, currentValue, child) {
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => _currentTabIndex.value = index,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  AnimatedDefaultTextStyle(
+                    style: TextStyle(
+                      color: currentValue == index
+                          ? Palette.primaryColor
+                          : Palette.primaryTextColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    duration: const Duration(milliseconds: 200),
+                    child: Text(nameTab),
+                  ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: 6,
+                    width: 6,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: currentValue == index
+                          ? Palette.primaryColor
+                          : Colors.transparent,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

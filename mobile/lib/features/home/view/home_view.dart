@@ -52,7 +52,7 @@ class _PopularBlogList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: 3,
         itemBuilder: (context, index) {
-          return const BlogCard(
+          return const PopularBlogCard(
             title: 'Thời tiết đang chuyển biến phức tạp.',
             username: 'dungngminh',
           );
@@ -126,7 +126,7 @@ class _CategoryChoiceBar extends StatelessWidget {
       'Kinh tế',
       'Khoa học',
       'Văn hóa',
-      'Mghệ thuật'
+      'Nghệ thuật'
     ];
     return SizedBox(
       height: context.screenHeight * 0.06,
@@ -186,7 +186,6 @@ class _SearchField extends StatelessWidget {
             size: 26,
           ),
           hintText: 'Tìm kiếm',
-          hintStyle: TextStyle(fontWeight: FontWeight.w500),
           contentPadding: EdgeInsets.only(right: 16),
         ),
         style: TextStyle(

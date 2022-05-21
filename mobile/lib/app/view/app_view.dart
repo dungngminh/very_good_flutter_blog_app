@@ -45,14 +45,11 @@ class VeryGoodBlogAppView extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
+        title: 'Very Good Blog App',
         debugShowCheckedModeBanner: false,
         routeInformationParser: RouteManager.route.routeInformationParser,
         routerDelegate: RouteManager.route.routerDelegate,
         theme: ThemeData(
-          appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
-          colorScheme: ColorScheme.fromSwatch(
-            accentColor: const Color(0xFF13B9FF),
-          ),
           useMaterial3: true,
           fontFamily: 'Nunito',
           inputDecorationTheme: const InputDecorationTheme(

@@ -15,4 +15,5 @@ class Palette {
 
   static const pinkColor = Color(0xFFFC4A71);
   static const mintColor = Color(0xFF157E72);
+  static const deepPurpleColor = Color(0xFF200E32);
 }
