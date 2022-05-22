@@ -28,3 +28,4 @@ bcrypt==3.2.2
 requests
 bson
 pyjwt
+django-rest-swagger
