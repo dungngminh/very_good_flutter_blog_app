@@ -1,0 +1,206 @@
+swagger: "2.0"
+info:
+  description: "This is a sample api documenttation"
+  version: "1.0.0"
+  title: "Swagger UI"
+
+host: "localhost:8080"
+basePath: "/api/v1/"
+tags:
+- name: "authentication"
+  description: "Operations about authentication"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+    
+schemes:
+- "http"
+paths:
+  /auth/login:
+    post:
+      tags:
+      - "authentication"
+      summary: "Login"
+      description: "This can only be done by the logged in user."
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        default:
+          description: "successful operation"
+  /auth/register:
+    post:
+      tags:
+      - "authentication"
+      summary: "Register"
+      description: "This can only be done by the logged in user."
+      operationId: "register"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Register"
+      responses:
+        default:
+          description: "successful operation"
+  /users:
+    get:
+        tags:
+        - "user"
+        summary: "Get all users"
+        description: "This can only be done by the logged in user."
+        operationId: "get all users"
+        produces:
+        - "application/json"
+        responses:
+          default:
+            description: "successful operation"
+  /users/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by id"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+        
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+      email:
+        type: "string"
+      last_name:
+        type: "string"
+      first_name:
+        type: "string"
+      _id:
+        type: "string"
+        
+  Login:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+        
+  Register:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      last_name:
+        type: "string"
+      first_name:
+        type: "string"
+      username:
+        type: "string"
+      password:
+        type: "string"
+        
+    
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
