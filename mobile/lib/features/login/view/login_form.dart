@@ -88,6 +88,8 @@ class _UsernameInput extends StatelessWidget {
               errorText:
                   state.username.invalid ? 'Tên người dùng không hợp lệ' : null,
             ),
+            cursorColor: Palette.primaryColor,
+
           ),
         );
       },
@@ -110,10 +112,12 @@ class _PasswordInput extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
+            
               hintText: 'Nhập vào mật khẩu',
               errorText:
                   state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
+            cursorColor: Palette.primaryColor,
           ),
         );
       },

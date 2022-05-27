@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
@@ -54,12 +53,12 @@ class _MainViewState extends State<MainView> {
           child: SizedBox.square(
             dimension: 65,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () => context.push(RouteManager.addBlog),
               backgroundColor: Palette.primaryColor,
               shape: const CircleBorder(),
-              child: const Icon(
-                PhosphorIcons.plus,
+              child: Assets.icons.plus.svg(
                 color: Palette.whiteBackgroundColor,
+                height: 24,
               ),
             ),
           ),

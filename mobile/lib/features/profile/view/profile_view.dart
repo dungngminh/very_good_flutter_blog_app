@@ -82,7 +82,7 @@ class _PostPanelState extends State<_PostPanel> {
             ),
             Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.only(bottom: 40),
+                padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
                 itemCount: 3,
                 itemBuilder: (context, index) {
                   return const BlogCard(
@@ -91,6 +91,7 @@ class _PostPanelState extends State<_PostPanel> {
                         'photos/images/facebook/001/839/197/2ad.png',
                     likeCount: 300,
                     dateAdded: '20 tháng 9, 2022',
+                    cardType: CardType.titleStatsTime,
                   );
                 },
                 separatorBuilder: (context, index) {
@@ -305,7 +306,6 @@ class _AvatarDecoration extends StatelessWidget {
                   radius: 18,
                   child: Align(
                     child: IconButton(
-                      splashRadius: 20,
                       icon: Assets.icons.camera.svg(
                         color: Palette.primaryColor,
                         height: 24,

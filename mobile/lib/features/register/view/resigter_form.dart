@@ -106,6 +106,7 @@ class _UsernameInput extends StatelessWidget {
               errorText:
                   state.username.invalid ? 'Tên người dùng không hợp lệ' : null,
             ),
+            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -137,6 +138,7 @@ class _PasswordInput extends StatelessWidget {
               errorText:
                   state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
+            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -170,6 +172,7 @@ class _ConfirmedPasswordInput extends StatelessWidget {
                   ? 'Mật khẩu không trùng'
                   : null,
             ),
+            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -199,6 +202,7 @@ class _FirstnameInput extends StatelessWidget {
               errorText:
                   state.firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
             ),
+            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -228,6 +232,7 @@ class _LastnameInput extends StatelessWidget {
               errorText:
                   state.lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
             ),
+            cursorColor: Palette.primaryColor,
           ),
         );
       },

@@ -10,10 +10,12 @@ class Palette {
   static const unSelectedTextChipColor = Color(0xFF9A9A9A);
   static const purpleSupportColor = Color(0xFFEBE0FF);
   static const whiteBackgroundColor = Color(0xFFFFFFFF);
-  static const pinkSupportColor = Color(0xFFFFECF0);
+  static const purple700SupportColor = Color(0xFFC4B0E0);
+  static const pink500SupportColor = Color(0xFFFFC7D3);
   static const mintSupportColor = Color(0xFFD2EBE8);
 
-  static const pinkColor = Color(0xFFFC4A71);
+  static const pink500Color = Color(0xFFFC4A71);
+  static const purple700Color = Color(0xFF23005c);
   static const mintColor = Color(0xFF157E72);
   static const deepPurpleColor = Color(0xFF200E32);
 }
