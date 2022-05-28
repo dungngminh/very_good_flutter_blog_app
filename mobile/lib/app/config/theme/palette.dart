@@ -4,6 +4,7 @@ class Palette {
   static const primaryColor = Color(0xFF864AFC);
   static const fieldColor = Color(0xFFF6F6F6);
   static const primaryTextColor = Color(0xFF585858);
+  static const primaryDarkTextColor = Color(0xFF3E3E3E);
   static const smallTextColor = Color(0xFF797979);
   static const descriptionTextColor = Color(0xFF888888);
   static const unSelectedColor = Color(0xFF757377);

@@ -18,7 +18,6 @@ class PopularBlogCard extends StatelessWidget {
       width: context.screenHeight * 0.35,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Palette.primaryColor,
         image: DecorationImage(
           image: Image.network(
             'https://vissaihotel.vn/photo/trang-an-ha-long-bay-on-land.png',
@@ -67,18 +66,13 @@ class PopularBlogCard extends StatelessWidget {
                         children: [
                           Text(
                             username,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: Palette.primaryTextColor,
-                            ),
+                            style: AppTextTheme.titleTextStyle
+                                .copyWith(fontSize: 14),
                           ),
-                          const Text(
+                          Text(
                             '20 phút trước',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Palette.primaryTextColor,
-                            ),
+                            style: AppTextTheme.regularTextStyle
+                                .copyWith(fontSize: 12),
                           ),
                         ],
                       ),
@@ -88,11 +82,7 @@ class PopularBlogCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Palette.primaryTextColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: AppTextTheme.titleTextStyle.copyWith(fontSize: 15),
                 ),
               ],
             ),

@@ -51,10 +51,14 @@ class VeryGoodBlogAppView extends StatelessWidget {
         routerDelegate: RouteManager.route.routerDelegate,
         theme: ThemeData(
           useMaterial3: true,
-          fontFamily: 'Nunito',
+          fontFamily: FontFamily.nunito,
           inputDecorationTheme: const InputDecorationTheme(
             border: InputBorder.none,
           ),
+          primaryColorDark: Palette.primaryColor,
+          primaryColor: Palette.primaryColor,
+          textSelectionTheme:
+              const TextSelectionThemeData(cursorColor: Palette.primaryColor),
         ),
       ),
     );

@@ -20,7 +20,7 @@ class ProfileView extends StatelessWidget {
                 child: IconButton(
                   icon: Assets.icons.setting.svg(
                     color: Palette.primaryColor,
-                    height: 24,
+                    height: 26,
                   ),
                   onPressed: () => context.push(RouteManager.setting),
                 ),
@@ -125,7 +125,6 @@ class _PostPanelState extends State<_PostPanel> {
                           ? Palette.primaryColor
                           : Palette.primaryTextColor,
                       fontSize: 15,
-                      fontWeight: FontWeight.w500,
                     ),
                     duration: const Duration(milliseconds: 200),
                     child: Text(nameTab),
@@ -199,65 +198,47 @@ class _BasicUserInformation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
-              children: const [
+              children: [
                 Text(
                   '4',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22,
-                    color: Palette.primaryTextColor,
-                  ),
+                  style: AppTextTheme.titleTextStyle.copyWith(fontSize: 22),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
-                Text(
+                const Text(
                   'Bài viết',
-                  style: TextStyle(
-                    color: Palette.primaryTextColor,
-                  ),
+                  style: AppTextTheme.regularTextStyle,
                 ),
               ],
             ),
             Column(
-              children: const [
+              children: [
                 Text(
                   '100',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22,
-                    color: Palette.primaryTextColor,
-                  ),
+                  style: AppTextTheme.titleTextStyle.copyWith(fontSize: 22),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
-                Text(
+                const Text(
                   'Người t.dõi',
-                  style: TextStyle(
-                    color: Palette.primaryTextColor,
-                  ),
+                  style: AppTextTheme.regularTextStyle,
                 ),
               ],
             ),
             Column(
-              children: const [
+              children: [
                 Text(
                   '58',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22,
-                    color: Palette.primaryTextColor,
-                  ),
+                  style: AppTextTheme.titleTextStyle.copyWith(fontSize: 22),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
-                Text(
+                const Text(
                   'Đang t.dõi',
-                  style: TextStyle(
-                    color: Palette.primaryTextColor,
-                  ),
+                  style: AppTextTheme.regularTextStyle,
                 ),
               ],
             ),
@@ -308,8 +289,8 @@ class _AvatarDecoration extends StatelessWidget {
                     child: IconButton(
                       icon: Assets.icons.camera.svg(
                         color: Palette.primaryColor,
-                        height: 24,
                       ),
+                      splashRadius: 24,
                       onPressed: () {},
                     ),
                   ),

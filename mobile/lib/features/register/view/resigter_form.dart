@@ -106,7 +106,6 @@ class _UsernameInput extends StatelessWidget {
               errorText:
                   state.username.invalid ? 'Tên người dùng không hợp lệ' : null,
             ),
-            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -138,7 +137,6 @@ class _PasswordInput extends StatelessWidget {
               errorText:
                   state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
-            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -172,7 +170,6 @@ class _ConfirmedPasswordInput extends StatelessWidget {
                   ? 'Mật khẩu không trùng'
                   : null,
             ),
-            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -202,7 +199,6 @@ class _FirstnameInput extends StatelessWidget {
               errorText:
                   state.firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
             ),
-            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -232,7 +228,6 @@ class _LastnameInput extends StatelessWidget {
               errorText:
                   state.lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
             ),
-            cursorColor: Palette.primaryColor,
           ),
         );
       },
@@ -258,11 +253,11 @@ class _RegisterButton extends StatelessWidget {
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  primary: Palette.primaryColor,
                   fixedSize: const Size(130, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
+                  primary: Theme.of(context).primaryColor,
                 ),
                 child: const Text(
                   'Đăng ký',

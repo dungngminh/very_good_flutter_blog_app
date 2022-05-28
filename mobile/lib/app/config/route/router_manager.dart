@@ -7,8 +7,8 @@ import 'package:very_good_blog_app/features/setting/setting.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart';
 
 class RouteManager {
-  static const home = '/';
-  static const splash = '/splash';
+  static const splash = '/';
+  static const home = '/home';
   static const login = '/login';
   static const register = '/register';
   static const setting = '/setting';
@@ -46,14 +46,14 @@ class RouteManager {
           return const SettingView();
         },
       ),
-       GoRoute(
+      GoRoute(
         path: addBlog,
         builder: (context, state) {
           return const AddBlogView();
         },
       ),
     ],
-    initialLocation: splash,
+    // initialLocation: home,
     debugLogDiagnostics: true,
     urlPathStrategy: UrlPathStrategy.path,
   );

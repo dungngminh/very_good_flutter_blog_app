@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/widgets/ink_response_widget.dart';
 
 enum CardType {
   titleAuthorTime,
@@ -7,7 +8,6 @@ enum CardType {
   titleStatsAuthor,
 }
 
-// TODO(dungngminh): implement dynamic BlogCard
 class BlogCard extends StatelessWidget {
   const BlogCard({
     super.key,
@@ -41,30 +41,38 @@ class BlogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      // height: 135,
+      padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: Palette.fieldColor,
       ),
       child: Row(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: AspectRatio(
-                aspectRatio: 1.1,
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           _buildCardContent(cardType),
           if (cardType == CardType.titleAuthorTime)
-            IconButton(
-              icon: Assets.icons.bookmark.svg(color: Palette.deepPurpleColor),
-              onPressed: () {},
+            InkEffectWidget(
+              child: Assets.icons.bookmark.svg(color: Palette.deepPurpleColor),
+              onTapEvent: () {},
             )
           else
             const SizedBox(),
@@ -79,39 +87,31 @@ class BlogCard extends StatelessWidget {
         return Expanded(
           flex: 2,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.only(left: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Palette.primaryTextColor,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
+                  style: AppTextTheme.titleTextStyle.copyWith(fontSize: 16),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Text(
+                  author!,
+                  style:
+                      AppTextTheme.decriptionTextStyle.copyWith(fontSize: 13),
                 ),
                 const SizedBox(
                   height: 8,
                 ),
                 Text(
-                  author!,
-                  style: const TextStyle(
-                    color: Palette.descriptionTextColor,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
                   dateAdded,
-                  style: const TextStyle(
-                    color: Palette.descriptionTextColor,
-                    fontSize: 12,
-                  ),
+                  style:
+                      AppTextTheme.decriptionTextStyle.copyWith(fontSize: 12),
                 )
               ],
             ),
@@ -127,11 +127,7 @@ class BlogCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Palette.primaryTextColor,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
+                  style: AppTextTheme.titleTextStyle.copyWith(fontSize: 16),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -149,10 +145,7 @@ class BlogCard extends StatelessWidget {
                     ),
                     const Text(
                       '300',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Palette.primaryTextColor,
-                      ),
+                      style: AppTextTheme.mediumTextStyle,
                     ),
                   ],
                 ),
@@ -161,10 +154,8 @@ class BlogCard extends StatelessWidget {
                 ),
                 Text(
                   dateAdded,
-                  style: const TextStyle(
-                    color: Palette.descriptionTextColor,
-                    fontSize: 12,
-                  ),
+                  style:
+                      AppTextTheme.decriptionTextStyle.copyWith(fontSize: 12),
                 )
               ],
             ),
@@ -194,18 +185,16 @@ class BlogCard extends StatelessWidget {
                 Row(
                   children: [
                     Assets.icons.heart.svg(
-                      height: 22,
+                      height: 20,
                       color: Palette.pink500Color,
                     ),
                     const SizedBox(
                       width: 4,
                     ),
-                    const Text(
+                    Text(
                       '300',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Palette.primaryTextColor,
-                      ),
+                      style:
+                          AppTextTheme.mediumTextStyle.copyWith(fontSize: 12),
                     ),
                   ],
                 ),
@@ -213,10 +202,9 @@ class BlogCard extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  dateAdded,
-                  style: const TextStyle(
-                    color: Palette.descriptionTextColor,
-                    fontSize: 12,
+                  author!,
+                  style: AppTextTheme.decriptionTextStyle.copyWith(
+                    fontSize: 14,
                   ),
                 )
               ],

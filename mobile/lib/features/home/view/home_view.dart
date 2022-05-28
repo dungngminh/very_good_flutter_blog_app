@@ -16,22 +16,18 @@ class HomeView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                _Header(),
-                _SearchField(),
-                _CategoryChoiceBar(),
+              children: [
+                const _Header(),
+                const _SearchField(),
+                const _CategoryChoiceBar(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(24, 32, 0, 16),
+                  padding: const EdgeInsets.fromLTRB(24, 32, 0, 16),
                   child: Text(
                     'Phổ biến',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Palette.primaryTextColor,
-                    ),
+                    style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 18),
                   ),
                 ),
-                _PopularBlogList()
+                const _PopularBlogList()
               ],
             ),
           ),
@@ -82,26 +78,19 @@ class _Header extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Expanded(
                 flex: 2,
                 child: Text(
                   'Xin chào, Dũng',
-                  style: TextStyle(
-                    color: Palette.smallTextColor,
-                    fontSize: 15,
-                  ),
+                  style: AppTextTheme.lightTextStyle.copyWith(fontSize: 15),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 flex: 3,
                 child: Text(
                   'Chào mừng bạn!',
-                  style: TextStyle(
-                    color: Palette.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextTheme.titleTextStyle,
                 ),
               )
             ],
@@ -137,7 +126,9 @@ class _CategoryChoiceBar extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             decoration: BoxDecoration(
-              color: index == 0 ? Palette.primaryColor : Palette.fieldColor,
+              color: index == 0
+                  ? Theme.of(context).primaryColor
+                  : Palette.fieldColor,
               borderRadius: BorderRadius.circular(20),
             ),
             alignment: Alignment.center,
@@ -177,9 +168,9 @@ class _SearchField extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       alignment: Alignment.center,
-      child: const TextField(
+      child: TextField(
         textAlignVertical: TextAlignVertical.center,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             PhosphorIcons.magnifyingGlassFill,
             color: Palette.primaryColor,
@@ -188,10 +179,7 @@ class _SearchField extends StatelessWidget {
           hintText: 'Tìm kiếm',
           contentPadding: EdgeInsets.only(right: 16),
         ),
-        style: TextStyle(
-          fontSize: 16,
-          color: Palette.primaryTextColor,
-        ),
+        style: AppTextTheme.regularTextStyle.copyWith(fontSize: 16),
       ),
     );
   }

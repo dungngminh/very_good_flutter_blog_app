@@ -15,7 +15,7 @@ class AuthenticationRepository {
   //action
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
-    yield AuthenticationStatus.unauthenticated;
+    yield AuthenticationStatus.authenticated;
     yield* _controller.stream;
   }
 

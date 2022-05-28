@@ -21,11 +21,7 @@ class ReadingListView extends StatelessWidget {
             children: [
               const Text(
                 'Danh sách bài viết đã lưu',
-                style: TextStyle(
-                  color: Palette.primaryTextColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: AppTextTheme.titleTextStyle,
               ),
               const SizedBox(
                 height: 16,
@@ -37,9 +33,7 @@ class ReadingListView extends StatelessWidget {
                     return const Slidable(
                       endActionPane: ActionPane(
                         motion: ScrollMotion(),
-                        children: [
-                          
-                        ],
+                        children: [],
                       ),
                       child: BlogCard(
                         dateAdded: '20 tháng 9, 2022',
