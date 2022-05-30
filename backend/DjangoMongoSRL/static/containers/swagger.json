@@ -5,7 +5,7 @@
         "version": "1.0.0",
         "title": "Swagger UI"
     },
-    "host": "localhost:8080",
+    "host": "52.147.34.119",
     "basePath": "/api/v1/",
     "tags": [
         {

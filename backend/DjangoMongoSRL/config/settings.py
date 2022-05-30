@@ -26,7 +26,11 @@ SECRET_KEY = 'irlnskjv2oypv)b5t#-l7xk=vnl@3q1k7b8m(4%nj6_9%$13b$'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+	'52.147.34.119',
+    'lequocthinh.com',
+    'localhost',
+]
 
 APPEND_SLASH = False
 
