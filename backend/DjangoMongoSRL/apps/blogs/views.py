@@ -4,10 +4,10 @@ from http.client import BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from .serializers import BlogSerializer
-from users import serializers
+from ..users import serializers
 from rest_framework.response import Response
 from rest_framework import status
-from blogs import models
+from ..blogs import models
 from ..users.models import User
 # Create your views here.
 

@@ -1,6 +1,6 @@
 from attr import field
 from rest_framework import serializers
-from blogs import models
+from ..blogs import models
 
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
