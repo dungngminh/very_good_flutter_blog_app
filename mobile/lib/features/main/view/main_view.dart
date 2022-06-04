@@ -53,11 +53,11 @@ class _MainViewState extends State<MainView> {
           child: SizedBox.square(
             dimension: 65,
             child: FloatingActionButton(
-              onPressed: () => context.push(RouteManager.addBlog),
-              backgroundColor: Palette.primaryColor,
+              onPressed: () => context.push(AppRoute.addBlog),
+              backgroundColor: AppPalette.primaryColor,
               shape: const CircleBorder(),
               child: Assets.icons.plus.svg(
-                color: Palette.whiteBackgroundColor,
+                color: AppPalette.whiteBackgroundColor,
                 height: 24,
               ),
             ),
@@ -65,7 +65,7 @@ class _MainViewState extends State<MainView> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
-          color: Palette.whiteBackgroundColor,
+          color: AppPalette.whiteBackgroundColor,
           clipBehavior: Clip.hardEdge,
           shape: const CircularNotchedRectangle(),
           child: SizedBox(
@@ -77,8 +77,8 @@ class _MainViewState extends State<MainView> {
                   child: IconButton(
                     icon: Assets.icons.home.svg(
                       color: _currentIndex == 0
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
+                          ? AppPalette.primaryColor
+                          : AppPalette.unSelectedColor,
                       height: _currentIndex == 0 ? 28 : 26,
                     ),
                     onPressed: () => _onPageChanged(0),
@@ -89,8 +89,8 @@ class _MainViewState extends State<MainView> {
                   child: IconButton(
                     icon: Assets.icons.bell.svg(
                       color: _currentIndex == 1
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
+                          ? AppPalette.primaryColor
+                          : AppPalette.unSelectedColor,
                       height: _currentIndex == 1 ? 28 : 26,
                     ),
                     onPressed: () => _onPageChanged(1),
@@ -102,8 +102,8 @@ class _MainViewState extends State<MainView> {
                   child: IconButton(
                     icon: Assets.icons.bookmark.svg(
                       color: _currentIndex == 2
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
+                          ? AppPalette.primaryColor
+                          : AppPalette.unSelectedColor,
                       height: _currentIndex == 2 ? 28 : 26,
                     ),
                     onPressed: () => _onPageChanged(2),
@@ -114,8 +114,8 @@ class _MainViewState extends State<MainView> {
                   child: IconButton(
                     icon: Assets.icons.user.svg(
                       color: _currentIndex == 3
-                          ? Palette.primaryColor
-                          : Palette.unSelectedColor,
+                          ? AppPalette.primaryColor
+                          : AppPalette.unSelectedColor,
                       height: _currentIndex == 3 ? 28 : 26,
                     ),
                     onPressed: () => _onPageChanged(3),

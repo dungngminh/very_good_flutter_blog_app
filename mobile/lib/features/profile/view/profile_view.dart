@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
+// TODO(dungngminh): Implement DraggableScrollSheet
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
@@ -19,10 +20,10 @@ class ProfileView extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: IconButton(
                   icon: Assets.icons.setting.svg(
-                    color: Palette.primaryColor,
-                    height: 26,
+                    color: AppPalette.primaryColor,
+                    height: 30,
                   ),
-                  onPressed: () => context.push(RouteManager.setting),
+                  onPressed: () => context.push(AppRoute.setting),
                 ),
               ),
             ),
@@ -60,7 +61,7 @@ class _PostPanelState extends State<_PostPanel> {
       flex: 5,
       child: DecoratedBox(
         decoration: const BoxDecoration(
-          color: Palette.whiteBackgroundColor,
+          color: AppPalette.whiteBackgroundColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
@@ -122,8 +123,8 @@ class _PostPanelState extends State<_PostPanel> {
                   AnimatedDefaultTextStyle(
                     style: TextStyle(
                       color: currentValue == index
-                          ? Palette.primaryColor
-                          : Palette.primaryTextColor,
+                          ? AppPalette.primaryColor
+                          : AppPalette.primaryTextColor,
                       fontSize: 15,
                     ),
                     duration: const Duration(milliseconds: 200),
@@ -137,7 +138,7 @@ class _PostPanelState extends State<_PostPanel> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: currentValue == index
-                          ? Palette.primaryColor
+                          ? AppPalette.primaryColor
                           : Colors.transparent,
                     ),
                   )
@@ -191,7 +192,7 @@ class _BasicUserInformation extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
-            color: Palette.primaryTextColor,
+            color: AppPalette.primaryTextColor,
           ),
         ),
         Row(
@@ -264,7 +265,7 @@ class _AvatarDecoration extends StatelessWidget {
             builder: (context, constraints) {
               return Container(
                 height: constraints.maxHeight,
-                color: Palette.primaryColor,
+                color: AppPalette.primaryColor,
               );
             },
           ),
@@ -283,12 +284,12 @@ class _AvatarDecoration extends StatelessWidget {
                 bottom: -4,
                 right: -4,
                 child: CircleAvatar(
-                  backgroundColor: Palette.purpleSupportColor,
+                  backgroundColor: AppPalette.purpleSupportColor,
                   radius: 18,
                   child: Align(
                     child: IconButton(
                       icon: Assets.icons.camera.svg(
-                        color: Palette.primaryColor,
+                        color: AppPalette.primaryColor,
                       ),
                       splashRadius: 24,
                       onPressed: () {},

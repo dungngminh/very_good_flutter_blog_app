@@ -31,11 +31,11 @@
       "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
     },
     {
-      "name": "Launch development profile",
+      "name": "Launch production profile",
       "request": "launch",
       "type": "dart",
       "program": "lib/main_production.dart",
-      "args": ["--profile","--flavor", "production", "--target", "lib/main_development.dart"]
+      "args": ["--profile","--flavor", "production", "--target", "lib/main_production.dart"]
     }
   ]
 }

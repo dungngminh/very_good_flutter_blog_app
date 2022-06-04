@@ -1,18 +1,20 @@
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/features/add_blog/add_blog.dart';
+import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
 import 'package:very_good_blog_app/features/main/main.dart';
 import 'package:very_good_blog_app/features/register/register.dart';
 import 'package:very_good_blog_app/features/setting/setting.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart';
 
-class RouteManager {
+class AppRoute {
   static const splash = '/';
   static const home = '/home';
   static const login = '/login';
   static const register = '/register';
   static const setting = '/setting';
   static const addBlog = '/add';
+  static const blog = '/blog';
 
   static final route = GoRouter(
     routes: [
@@ -52,6 +54,12 @@ class RouteManager {
           return const AddBlogView();
         },
       ),
+      GoRoute(
+        path: blog,
+        builder: (context, state) {
+          return const BlogView();
+        },
+      )
     ],
     // initialLocation: home,
     debugLogDiagnostics: true,

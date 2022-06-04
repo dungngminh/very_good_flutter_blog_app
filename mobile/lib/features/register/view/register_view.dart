@@ -51,7 +51,7 @@ class RegisterView extends StatelessWidget {
                   child: Container(
                     height: 120,
                     decoration: const BoxDecoration(
-                      color: Palette.purpleSupportColor,
+                      color: AppPalette.purpleSupportColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(90),
                         topRight: Radius.circular(90),

@@ -72,7 +72,7 @@ class NotificationTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Palette.fieldColor,
+        color: AppPalette.fieldColor,
       ),
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       child: Row(
@@ -132,8 +132,9 @@ class NotificationTile extends StatelessWidget {
             InkEffectWidget(
               child: Assets.icons.addUser.svg(
                 height: 24,
-                color: Palette.primaryColor,
+                color: AppPalette.primaryColor,
               ),
+              onTapEvent: () {},
             ),
         ],
       ),

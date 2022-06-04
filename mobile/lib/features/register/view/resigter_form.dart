@@ -21,7 +21,7 @@ class ResigterForm extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+                color: AppPalette.primaryTextColor,
               ),
             ),
             _FirstnameInput(),
@@ -33,7 +33,7 @@ class ResigterForm extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+                color: AppPalette.primaryTextColor,
               ),
             ),
             _LastnameInput(),
@@ -45,7 +45,7 @@ class ResigterForm extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+                color: AppPalette.primaryTextColor,
               ),
             ),
             _UsernameInput(),
@@ -57,7 +57,7 @@ class ResigterForm extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+                color: AppPalette.primaryTextColor,
               ),
             ),
             _PasswordInput(),
@@ -69,7 +69,7 @@ class ResigterForm extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
+                color: AppPalette.primaryTextColor,
               ),
             ),
             _ConfirmedPasswordInput(),

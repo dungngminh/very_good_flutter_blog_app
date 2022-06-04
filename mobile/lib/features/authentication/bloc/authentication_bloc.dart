@@ -59,11 +59,11 @@ class AuthenticationBloc
     }
   }
 
-  void _onAuthenticationLogoutRequested(
+  Future<void> _onAuthenticationLogoutRequested(
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
-  ) {
-    _authenticationRepository.logOut();
+  ) async {
+    await _authenticationRepository.logOut();
   }
 
   Future<User?> getUser() async {

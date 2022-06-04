@@ -15,7 +15,7 @@ class TextFieldDecoration extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10),
       width: context.screenWidth,
       decoration: BoxDecoration(
-        color: Palette.fieldColor,
+        color: AppPalette.fieldColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: child,

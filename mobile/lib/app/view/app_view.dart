@@ -47,18 +47,19 @@ class VeryGoodBlogAppView extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Very Good Blog App',
         debugShowCheckedModeBanner: false,
-        routeInformationParser: RouteManager.route.routeInformationParser,
-        routerDelegate: RouteManager.route.routerDelegate,
+        routeInformationParser: AppRoute.route.routeInformationParser,
+        routerDelegate: AppRoute.route.routerDelegate,
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: FontFamily.nunito,
           inputDecorationTheme: const InputDecorationTheme(
             border: InputBorder.none,
           ),
-          primaryColorDark: Palette.primaryColor,
-          primaryColor: Palette.primaryColor,
-          textSelectionTheme:
-              const TextSelectionThemeData(cursorColor: Palette.primaryColor),
+          primaryColorDark: AppPalette.primaryColor,
+          primaryColor: AppPalette.primaryColor,
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: AppPalette.primaryColor,
+          ),
         ),
       ),
     );

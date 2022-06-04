@@ -122,13 +122,14 @@ class _CategoryChoiceBar extends StatelessWidget {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
         itemBuilder: (context, index) {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             decoration: BoxDecoration(
               color: index == 0
                   ? Theme.of(context).primaryColor
-                  : Palette.fieldColor,
+                  : AppPalette.fieldColor,
               borderRadius: BorderRadius.circular(20),
             ),
             alignment: Alignment.center,
@@ -137,8 +138,8 @@ class _CategoryChoiceBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 color: index == 0
-                    ? Palette.whiteBackgroundColor
-                    : Palette.unSelectedTextChipColor,
+                    ? AppPalette.whiteBackgroundColor
+                    : AppPalette.unSelectedTextChipColor,
               ),
             ),
           );
@@ -164,7 +165,7 @@ class _SearchField extends StatelessWidget {
       height: context.screenHeight * 0.07,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Palette.fieldColor,
+        color: AppPalette.fieldColor,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       alignment: Alignment.center,
@@ -173,7 +174,7 @@ class _SearchField extends StatelessWidget {
         decoration: const InputDecoration(
           prefixIcon: Icon(
             PhosphorIcons.magnifyingGlassFill,
-            color: Palette.primaryColor,
+            color: AppPalette.primaryColor,
             size: 26,
           ),
           hintText: 'Tìm kiếm',

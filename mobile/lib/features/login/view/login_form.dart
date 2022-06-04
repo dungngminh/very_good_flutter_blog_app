@@ -31,7 +31,7 @@ class LoginForm extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
+                  color: AppPalette.primaryTextColor,
                 ),
               ),
               _UsernameInput(),
@@ -41,7 +41,7 @@ class LoginForm extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Palette.primaryTextColor,
+                  color: AppPalette.primaryTextColor,
                 ),
               ),
               _PasswordInput(),
@@ -53,7 +53,7 @@ class LoginForm extends StatelessWidget {
                 child: Text(
                   'Quên mật khẩu',
                   style: TextStyle(
-                    color: Palette.primaryColor,
+                    color: AppPalette.primaryColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -129,7 +129,7 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator(
-                color: Palette.primaryColor,
+                color: AppPalette.primaryColor,
               )
             : ElevatedButton(
                 key: const Key('loginForm_continue_raisedButton'),
@@ -150,7 +150,7 @@ class _LoginButton extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: Palette.whiteBackgroundColor,
+                    color: AppPalette.whiteBackgroundColor,
                   ),
                 ),
               );

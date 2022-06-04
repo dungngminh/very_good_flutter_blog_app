@@ -17,6 +17,7 @@ class BlogCard extends StatelessWidget {
     this.author,
     required this.dateAdded,
     this.cardType = CardType.titleAuthorTime,
+    this.needMargin = false,
   });
 
   final String title;
@@ -24,6 +25,7 @@ class BlogCard extends StatelessWidget {
   final int? likeCount;
   final String? author;
   final String dateAdded;
+  final bool needMargin;
 
   /// This setting for order of content display from top to bottom
   ///
@@ -42,10 +44,11 @@ class BlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 135,
+      margin: needMargin ? const EdgeInsets.symmetric(horizontal: 24) : null,
       padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Palette.fieldColor,
+        color: AppPalette.fieldColor,
       ),
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,7 +74,8 @@ class BlogCard extends StatelessWidget {
           _buildCardContent(cardType),
           if (cardType == CardType.titleAuthorTime)
             InkEffectWidget(
-              child: Assets.icons.bookmark.svg(color: Palette.deepPurpleColor),
+              child:
+                  Assets.icons.bookmark.svg(color: AppPalette.deepPurpleColor),
               onTapEvent: () {},
             )
           else
@@ -138,7 +142,7 @@ class BlogCard extends StatelessWidget {
                   children: [
                     Assets.icons.heart.svg(
                       height: 22,
-                      color: Palette.pink500Color,
+                      color: AppPalette.pink500Color,
                     ),
                     const SizedBox(
                       width: 4,
@@ -172,7 +176,7 @@ class BlogCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Palette.primaryTextColor,
+                    color: AppPalette.primaryTextColor,
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
                   ),
@@ -186,7 +190,7 @@ class BlogCard extends StatelessWidget {
                   children: [
                     Assets.icons.heart.svg(
                       height: 20,
-                      color: Palette.pink500Color,
+                      color: AppPalette.pink500Color,
                     ),
                     const SizedBox(
                       width: 4,

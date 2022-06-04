@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/authentication/authentication.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({super.key});
@@ -21,11 +23,13 @@ class SettingView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    alignment: Alignment.centerLeft,
+                    // alignment: Alignment.centerLeft,
                     padding: EdgeInsets.zero,
                     icon: Assets.icons.circleArrowLeft.svg(
-                      color: Palette.primaryColor,
+                      color: AppPalette.primaryColor,
+                      height: 36,
                     ),
+                    splashRadius: 24,
                     onPressed: () => context.pop(),
                   ),
                   const Text(
@@ -33,7 +37,7 @@ class SettingView extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 18,
-                      color: Palette.primaryTextColor,
+                      color: AppPalette.primaryTextColor,
                     ),
                   ),
                   const Padding(
@@ -51,29 +55,31 @@ class SettingView extends StatelessWidget {
                 iconPath: Assets.icons.profile.path,
                 onTapAction: () {},
                 title: 'Thông tin cá nhân',
-                primaryColor: Palette.purple700Color,
-                supportBackgroundColor: Palette.purple700SupportColor,
+                primaryColor: AppPalette.purple700Color,
+                supportBackgroundColor: AppPalette.purple700SupportColor,
               ),
               _SettingTile(
                 iconPath: Assets.icons.filter.path,
                 onTapAction: () {},
                 title: 'Tùy chọn',
-                primaryColor: Palette.pink500Color,
-                supportBackgroundColor: Palette.pink500SupportColor,
+                primaryColor: AppPalette.pink500Color,
+                supportBackgroundColor: AppPalette.pink500SupportColor,
               ),
               _SettingTile(
                 iconPath: Assets.icons.info.path,
                 onTapAction: () {},
                 title: 'Về Very Good Blog App',
-                primaryColor: Palette.mintColor,
-                supportBackgroundColor: Palette.mintSupportColor,
+                primaryColor: AppPalette.mintColor,
+                supportBackgroundColor: AppPalette.mintSupportColor,
               ),
               _SettingTile(
                 iconPath: Assets.icons.logOut.path,
-                onTapAction: () {},
+                onTapAction: () => context
+                    .read<AuthenticationBloc>()
+                    .add(AuthenticationLogoutRequested()),
                 title: 'Đăng xuất',
-                primaryColor: Palette.primaryColor,
-                supportBackgroundColor: Palette.purpleSupportColor,
+                primaryColor: AppPalette.primaryColor,
+                supportBackgroundColor: AppPalette.purpleSupportColor,
               )
             ],
           ),
@@ -102,35 +108,38 @@ class _SettingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Container(
-            height: 50,
-            width: 50,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: supportBackgroundColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: SvgPicture.asset(
-              iconPath,
-              color: primaryColor,
-            ),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Palette.primaryTextColor,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+      child: GestureDetector(
+        onTap: onTapAction,
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: supportBackgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: SvgPicture.asset(
+                iconPath,
+                color: primaryColor,
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: AppPalette.primaryTextColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

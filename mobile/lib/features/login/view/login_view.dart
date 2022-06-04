@@ -15,7 +15,7 @@ class LoginView extends StatelessWidget {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
-          context.go(RouteManager.home);
+          context.go(AppRoute.home);
         }
       },
       child: GestureDetector(
@@ -33,7 +33,7 @@ class LoginView extends StatelessWidget {
                     width: 120,
                     height: 120,
                     decoration: const BoxDecoration(
-                      color: Palette.purpleSupportColor,
+                      color: AppPalette.purpleSupportColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(90),
                         topRight: Radius.circular(90),
@@ -68,16 +68,16 @@ class LoginView extends StatelessWidget {
                       TextSpan(
                         text: 'Đăng ký',
                         style: const TextStyle(
-                          color: Palette.primaryColor,
+                          color: AppPalette.primaryColor,
                           fontWeight: FontWeight.w700,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push(RouteManager.register),
+                          ..onTap = () => context.push(AppRoute.register),
                       )
                     ],
                   ),
                   style: const TextStyle(
-                    color: Palette.descriptionTextColor,
+                    color: AppPalette.descriptionTextColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
