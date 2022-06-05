@@ -42,45 +42,47 @@ class BlogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // height: 135,
-      margin: needMargin ? const EdgeInsets.symmetric(horizontal: 24) : null,
-      padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: AppPalette.fieldColor,
-      ),
-      child: Row(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
+    return InkWell(
+      child: Container(
+        // height: 135,
+        margin: needMargin ? const EdgeInsets.symmetric(horizontal: 24) : null,
+        padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: AppPalette.fieldColor,
+        ),
+        child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          _buildCardContent(cardType),
-          if (cardType == CardType.titleAuthorTime)
-            InkEffectWidget(
-              child:
-                  Assets.icons.bookmark.svg(color: AppPalette.deepPurpleColor),
-              onTapEvent: () {},
-            )
-          else
-            const SizedBox(),
-        ],
+            _buildCardContent(cardType),
+            if (cardType == CardType.titleAuthorTime)
+              InkEffectWidget(
+                child: Assets.icons.bookmark
+                    .svg(color: AppPalette.deepPurpleColor),
+                onTapEvent: () {},
+              )
+            else
+              const SizedBox(),
+          ],
+        ),
       ),
     );
   }

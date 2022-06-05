@@ -17,17 +17,13 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  late int _currentIndex;
+  late ValueNotifier<int> _currentIndex;
 
   @override
   void initState() {
     super.initState();
-    _currentIndex = 0;
+    _currentIndex = ValueNotifier(0);
   }
-
-  void _onPageChanged(int newIndex) => setState(() {
-        _currentIndex = newIndex;
-      });
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +35,19 @@ class _MainViewState extends State<MainView> {
         }
       },
       child: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: const [
-            HomeView(),
-            NotificationView(),
-            ReadingListView(),
-            ProfileView(),
-          ],
+        body: ValueListenableBuilder<int>(
+          valueListenable: _currentIndex,
+          builder: (context, value, child) {
+            return IndexedStack(
+              index: value,
+              children: const [
+                HomeView(),
+                NotificationView(),
+                ReadingListView(),
+                ProfileView(),
+              ],
+            );
+          },
         ),
         floatingActionButton: Visibility(
           visible: !isKeyBoardShowing,
@@ -72,59 +73,38 @@ class _MainViewState extends State<MainView> {
             height: 70,
             child: Row(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Assets.icons.home.svg(
-                      color: _currentIndex == 0
-                          ? AppPalette.primaryColor
-                          : AppPalette.unSelectedColor,
-                      height: _currentIndex == 0 ? 28 : 26,
-                    ),
-                    onPressed: () => _onPageChanged(0),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Assets.icons.bell.svg(
-                      color: _currentIndex == 1
-                          ? AppPalette.primaryColor
-                          : AppPalette.unSelectedColor,
-                      height: _currentIndex == 1 ? 28 : 26,
-                    ),
-                    onPressed: () => _onPageChanged(1),
-                  ),
-                ),
+                _buildBottomBarItem(index: 0, icon: Assets.icons.home),
+                _buildBottomBarItem(index: 1, icon: Assets.icons.bell),
                 const Spacer(),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Assets.icons.bookmark.svg(
-                      color: _currentIndex == 2
-                          ? AppPalette.primaryColor
-                          : AppPalette.unSelectedColor,
-                      height: _currentIndex == 2 ? 28 : 26,
-                    ),
-                    onPressed: () => _onPageChanged(2),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Assets.icons.user.svg(
-                      color: _currentIndex == 3
-                          ? AppPalette.primaryColor
-                          : AppPalette.unSelectedColor,
-                      height: _currentIndex == 3 ? 28 : 26,
-                    ),
-                    onPressed: () => _onPageChanged(3),
-                  ),
-                ),
+                _buildBottomBarItem(index: 2, icon: Assets.icons.bookmark),
+                _buildBottomBarItem(index: 3, icon: Assets.icons.user),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Expanded _buildBottomBarItem({
+    required int index,
+    required SvgGenImage icon,
+  }) {
+    return Expanded(
+      flex: 2,
+      child: IconButton(
+        icon: ValueListenableBuilder<int>(
+          valueListenable: _currentIndex,
+          builder: (context, value, child) {
+            return icon.svg(
+              color: value == index
+                  ? AppPalette.primaryColor
+                  : AppPalette.unSelectedColor,
+              height: value == index ? 28 : 26,
+            );
+          },
+        ),
+        onPressed: () => _currentIndex.value = index,
       ),
     );
   }
