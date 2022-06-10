@@ -1,9 +1,9 @@
 from django.urls import include, path
 from rest_framework import routers
-from .views import BlogManage
+from . import views
 
 router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
-    path('/blogs', BlogManage.as_view()),
+    path('bookmarks', views.BookmarksView.as_view()),
 ]

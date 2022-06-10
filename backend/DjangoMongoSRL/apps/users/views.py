@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import status
+from bson.objectid import ObjectId
 from .models import User
 from .serializers import UserViewSerializer
-from .response import HttpResponse
+from apps.utils.response import HttpResponse
 
 
 class UserView(APIView):
@@ -18,7 +19,7 @@ class UserView(APIView):
 
         try:
             if id:
-                user = User.objects.get(_id=id)
+                user = User.objects.get(_id = ObjectId(id))
                 data = (UserViewSerializer(user).data)
 
                 return HttpResponse.response(
@@ -34,7 +35,8 @@ class UserView(APIView):
                     message='error',
                     status=status.HTTP_200_OK,
                 )
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponse.response(
                     data={},
                     message='error',
@@ -65,7 +67,6 @@ class UserView(APIView):
 
                     user.first_name = serialize.data['first_name']
                     user.last_name = serialize.data['last_name']
-                    user.email = serialize.data['email']
                     user.username = serialize.data['username']
 
                     print(user, 'ad')

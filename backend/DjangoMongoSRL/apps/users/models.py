@@ -1,10 +1,16 @@
-from django.db import models
+from djongo import models
+from apps.blogs.models import Blog
 
 # Create your models here.
 class User(models.Model):
-    _id = models.CharField(primary_key=True, help_text="International identification number assigned to the right owner.", max_length=50)
-    username = models.CharField(max_length=200, help_text="username", null=False)
-    password = models.CharField(max_length=200, help_text="password", null=False)
-    last_name = models.CharField(max_length=200, null=False, help_text="International identification number assigned to the right owner.")
-    first_name = models.CharField(max_length=200, null=False, help_text="International identification number assigned to the right owner.")
-    email = models.CharField(max_length=200, null=False, help_text="International identification number assigned to the right owner.")
+    _id = models.ObjectIdField(null=False)
+    username = models.CharField(max_length=200, null=False)
+    password = models.CharField(max_length=200, null=False)
+    following_count = models.IntegerField(default=0)
+    follower_count = models.IntegerField(default=0)
+    first_name = models.CharField(max_length=500)
+    last_name = models.CharField(max_length=100)
+    avatar = models.CharField(max_length=1000)
+    num_blog = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
