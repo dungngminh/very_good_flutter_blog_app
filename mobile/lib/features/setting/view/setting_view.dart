@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/features/authentication/authentication.dart';
+import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({super.key});
@@ -75,8 +75,8 @@ class SettingView extends StatelessWidget {
               _SettingTile(
                 iconPath: Assets.icons.logOut.path,
                 onTapAction: () => context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested()),
+                    .read<ProfileBloc>()
+                    .add(ProfileUserLogoutRequested()),
                 title: 'Đăng xuất',
                 primaryColor: AppPalette.primaryColor,
                 supportBackgroundColor: AppPalette.purpleSupportColor,

@@ -108,6 +108,10 @@ class BlogView extends StatelessWidget {
                     )
                   ],
                 ),
+              ),
+              const Text(
+                'dadadadadadadaddadada dadadada dadadad '
+                'dasdadad dadadad dadadada dadadadadada dadadda',
               )
             ],
           ),

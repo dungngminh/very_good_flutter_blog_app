@@ -85,7 +85,6 @@ class _PostPanelState extends State<_PostPanel> {
               child: ListView.separated(
                 padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
                 itemCount: 3,
-                
                 itemBuilder: (context, index) {
                   return const BlogCard(
                     title: 'How i hack Google, Microsoft,dadadadad,..',

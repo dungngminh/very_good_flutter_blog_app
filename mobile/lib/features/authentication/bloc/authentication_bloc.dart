@@ -16,7 +16,6 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     _authenticationSubcription = _authenticationRepository.status
         .listen((status) => add(AuthenticationStatusChanged(status)));
@@ -59,16 +58,10 @@ class AuthenticationBloc
     }
   }
 
-  Future<void> _onAuthenticationLogoutRequested(
-    AuthenticationLogoutRequested event,
-    Emitter<AuthenticationState> emit,
-  ) async {
-    await _authenticationRepository.logOut();
-  }
 
   Future<User?> getUser() async {
     try {
-      final user = await _userRepository.getUser();
+      final user = await _userRepository.getUserInformation();
       return user;
     } catch (_) {
       return null;

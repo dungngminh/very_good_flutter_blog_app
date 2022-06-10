@@ -22,7 +22,7 @@ class ProfileView extends StatelessWidget {
         ),
       ],
       headerWidget: const _ProfilePanel(),
-      headerExpandedHeight: 0.52,
+      headerExpandedHeight: 0.56,
       curvedBodyRadius: 40,
       appBarColor: AppPalette.primaryColor,
       body: const [
