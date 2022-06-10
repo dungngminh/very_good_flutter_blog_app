@@ -18,6 +18,7 @@ class BlogManage(APIView):
     
     def get(self, request, *args, **kwargs):
         blog_model = models.Blog.objects
+        
         try:
             if "id" in request.query_params:
                 blog_model = blog_model.filter(id=request.query_params["id"])
@@ -43,8 +44,13 @@ class BlogManage(APIView):
             if "date_added" in request.query_params:
                 blog_model = blog_model.filter(category=request.query_params["date_added"])
                 
-            serializer = BlogSerializer(blog_model, many = True)
+            if "offset" in request.query_params and "limit" in request.query_params:
+                offset = int(request.query_params["offset"])
+                limit = int(request.query_params["limit"])
+                blog_model = blog_model.all()[offset:offset+limit]
             
+                
+            serializer = BlogSerializer(blog_model, many=True)
             return Response(serializer.data)
             
         except Exception as e:

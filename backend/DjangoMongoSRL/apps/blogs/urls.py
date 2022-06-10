@@ -7,6 +7,6 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('blog', views.BlogManage.as_view()),
-    path('blog/<int:id>', views.BlogManage.as_view()),
-    path('blog/<int:id_user>', views.BlogManage.as_view())
+    # path('blog/<int:id>', views.BlogManage.as_view()),
+    # path('blog/<int:id_user>', views.BlogManage.as_view())
 ]

@@ -13,6 +13,6 @@ class Blog(models.Model):
     like_count = models.IntegerField(default=0)
     photourl = models.CharField(max_length=500)
     category = models.JSONField()
-    date_added = models.DateTimeField(default=timezone.now)
+    date_added = models.DateTimeField(auto_now_add=True)
     
 
