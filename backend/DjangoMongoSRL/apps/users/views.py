@@ -78,14 +78,11 @@ class UserView(APIView):
                 serialize = UserViewSerializer(data = request.data)
 
                 if serialize.is_valid(raise_exception=False):
-                    print(serialize.data)
-                    user = User.objects.get(_id = serialize.data['_id'])
+                    user = User.objects.get(_id = ObjectId(serialize.data['_id']))
 
                     user.first_name = serialize.data['first_name']
                     user.last_name = serialize.data['last_name']
-                    user.username = serialize.data['username']
-
-                    print(user, 'ad')
+                    user.avatar = serialize.data['avatar']
 
                     user.save()
 
@@ -102,7 +99,11 @@ class UserView(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             except Exception as e:
-                print(str(e))
+                return HttpResponse.response(
+                    data={},
+                    message='error',
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
 
     def delete(self, request, *args, **kwargs):
         try:
@@ -126,14 +127,14 @@ class UserView(APIView):
                     )
 
             else:
-                user = User.objects.get(_id = id)
+                user = User.objects.get(_id = ObjectId(id))
                 user.delete()
                 return HttpResponse.response(
                     data={},
                     message='success',
                     status=status.HTTP_200_OK,
                 )   
-        except:
+        except Exception as e:
             return HttpResponse.response(
                 data={},
                 message='error',
