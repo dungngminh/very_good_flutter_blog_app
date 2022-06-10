@@ -36,4 +36,4 @@ class UserViewSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=False)
     first_name = serializers.CharField(required=False)
     _id = serializers.CharField(required=True)
-    email = serializers.CharField(required=False)
+    avatar = serializers.CharField()
