@@ -1,8 +1,7 @@
-from attr import field
 from rest_framework import serializers
-from blogs import models
+from .models import Blog
 
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Blog
+        model = Blog
         field = ('id', 'content', 'id_user', 'category')

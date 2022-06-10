@@ -4,14 +4,58 @@ from rest_framework import status
 
 from apps.utils.jwt import JsonWebTokenHelper
 from apps.users.models import User
-from apps.users.serializers import UserSerializer, LoginSerializer, RegisterSerializer, UserViewSerializer
-from apps.users.response import ResponseMessage, HttpResponse
+from apps.users.serializers import UserSerializer, LoginSerializer, RegisterSerializer, UserViewSerializer, UpdatePasswordSerializer
+from apps.utils.response import ResponseMessage, HttpResponse
 from apps.utils.hashing import HashingHelper
 from bson.objectid import ObjectId
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class UserView(APIView):
     permission_classes = (AllowAny, )
+
+    # Changing password
+    def put(self, request):
+        print('HTTP:// - password changing')
+        try:
+            serialize = UpdatePasswordSerializer(data=request.data)
+            if serialize.is_valid():
+                plain_password = serialize.data['password']
+                user = User.objects.get(username = serialize.data['username'])
+                data = (UserSerializer(user).data)
+
+                if serialize.data['new_password'] != serialize.data['new_password_confirmation']:
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.PASSWORD_NOT_MATCH,
+                        status = status.HTTP_400_BAD_REQUEST,
+                    )
+
+                if not HashingHelper.compare(data['password'], plain_password):
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.LOGIN_FAILED,
+                        status = status.HTTP_401_UNAUTHORIZED,
+                    )
+                
+                user.password = HashingHelper.encrypt(serialize.data['new_password'])
+                user.save()
+                return HttpResponse.response(
+                    data = {},
+                    message = ResponseMessage.PASSWORD_CHANGED,
+                    status = status.HTTP_200_OK,
+                )
+
+            return HttpResponse.response(
+                data = {},
+                message = '',
+                status = status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception as e:
+            return HttpResponse.response(
+                data={},
+                message='',
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     def post(self, request):
         path = request.path_info
@@ -34,13 +78,15 @@ class UserView(APIView):
 
                 # Return token
                 now = datetime.now()
+                expired_at = now + timedelta(days=10)
+
                 payload = {
                     '_id': data['_id'],
                     'issued_at': now.strftime("%m/%d/%Y %H:%M:%S"),
+                    'expired_at': expired_at.strftime("%m/%d/%Y %H:%M:%S"),
                     'username': data['username'],
                     'first_name': data['first_name'],
                     'last_name': data['last_name'],
-                    'email': data['email'],
                 }
 
                 token = JsonWebTokenHelper.generate(payload)
@@ -54,8 +100,14 @@ class UserView(APIView):
         if 'register' in path:
             serialize = RegisterSerializer(data = request.data)
             if serialize.is_valid():
+                print('Serilizer valid')
                 # Validate
-                
+                if serialize.data['password'] != serialize.data['confirmation_password']:
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.REGISTER_FAILED,
+                        status = status.HTTP_400_BAD_REQUEST,
+                    )
 
                 # Hash password
                 hashed_password = HashingHelper.encrypt(serialize.data['password'])
@@ -67,7 +119,6 @@ class UserView(APIView):
                     password = hashed_password,
                     last_name = serialize.data['last_name'],
                     first_name = serialize.data['first_name'],
-                    email = serialize.data['email'],
                 )
 
                 new_user.save()

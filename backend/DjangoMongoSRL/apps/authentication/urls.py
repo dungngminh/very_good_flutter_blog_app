@@ -6,4 +6,5 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('login', views.UserView.as_view()),
     path('register', views.UserView.as_view()),
+    path('account', views.UserView.as_view()),
 ]

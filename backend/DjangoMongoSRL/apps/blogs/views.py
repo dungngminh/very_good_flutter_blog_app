@@ -1,15 +1,17 @@
-from unicodedata import category
-from django.shortcuts import render
 from http.client import BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from apps.utils.response import HttpResponse
+
+from apps.utils.jwt import JsonWebTokenHelper
 from .serializers import BlogSerializer
-from users import serializers
+from apps.users import serializers
 from rest_framework.response import Response
 from rest_framework import status
-from blogs import models
+from . import models
 from ..users.models import User
 # Create your views here.
+
 
 
 class BlogManage(APIView):
@@ -40,18 +42,8 @@ class BlogManage(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
     def post(self, request):
-        data = request.data
-        new_blog = models.Blog.objects.create(
-            content = data['content'],
-            category = data['category'],         
-        )
-        new_blog.save()
-        serialize_user = serializers.UserViewSerializer(data = request.data)
-        id_user_obj = User.objects.get(_id = serialize_user.data['_id'])
-        new_blog.id_user.add(id_user_obj)
-        
-        serializer = BlogSerializer(new_blog)
-        return Response(serializer.data)
+        print(request.META)
+        return HttpResponse.response({}, "ok", status.HTTP_200_OK)
     
     def delete(self, request):
         try:

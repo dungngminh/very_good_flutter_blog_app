@@ -5,8 +5,8 @@ class ResponseMessage:
     LOGIN_FAILED = 'authentication_failed'
     REGISTER_SUCCESS = 'successfully_registered'
     REGISTER_FAILED = 'register_failed'
-
-
+    PASSWORD_NOT_MATCH = 'password_not_match'
+    PASSWORD_CHANGED = 'password_changed_successfully'
 
 class HttpResponse:
     @staticmethod

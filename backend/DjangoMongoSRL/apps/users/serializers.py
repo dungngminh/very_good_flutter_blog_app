@@ -1,4 +1,3 @@
-from pkg_resources import require
 from rest_framework import serializers
 from .models import User
 
@@ -6,16 +5,18 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
 
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            'username',
-            'password',
-            'last_name',
-            'first_name',
-            'email',
-        ]
+class UpdatePasswordSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    new_password_confirmation = serializers.CharField(required=True)
+
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    confirmation_password = serializers.CharField(required=True)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,7 +27,8 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'last_name',
             'first_name',
-            'email',
+            'following_count',
+            'follower_count',
         ]
 
 class UserViewSerializer(serializers.Serializer):

@@ -1,0 +1,48 @@
+MODEL
+blog:
+ id: 
+ title: string
+ author_id: string
+ date_added: timestamp
+ category: String
+ imageUrl: String
+ like_count: default 0
+ content: return json
+
+user:
+ id_user:
+ displayName: firstname + " " + lastname
+ username:
+ password:
+ imageUrl: string
+ blog_count: int
+ follower_count: int
+ following_count: int
+ list_book_mark: array<blog>
+ 
+
+follow:
+ id_follow:
+ follow:
+ followed:
+ 
+notification: optional pending
+
+
+FEATURES
+blog:
+
+ - get all blogs có pagination
+ - search blog (theo title)
+
+ - CRUD blog
+
+user:
+ - login
+ - register
+ - get information
+ - edit information
+ - delete blog book_mark
+ - like blog
+ - follow user
+ - search by username
