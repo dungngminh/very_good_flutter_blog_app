@@ -2,9 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from bson.objectid import ObjectId
+from apps.utils.response import ResponseMessage
 from .models import User
 from .serializers import UserViewSerializer
 from apps.utils.response import HttpResponse
+from .middleware import UserMiddleware
 
 
 class UserView(APIView):
@@ -19,6 +21,13 @@ class UserView(APIView):
 
         try:
             if id:
+                if not UserMiddleware.authorization(request.META['HTTP_AUTHORIZATION'], id):
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.UNAUTHORIZED,
+                        status = status.HTTP_401_UNAUTHORIZED
+                    )
+
                 user = User.objects.get(_id = ObjectId(id))
                 data = (UserViewSerializer(user).data)
 
@@ -59,6 +68,13 @@ class UserView(APIView):
 
         else:
             try:
+                if not UserMiddleware.authorization(request.META['HTTP_AUTHORIZATION'], id):
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.UNAUTHORIZED,
+                        status = status.HTTP_401_UNAUTHORIZED
+                    )
+
                 serialize = UserViewSerializer(data = request.data)
 
                 if serialize.is_valid(raise_exception=False):
@@ -101,6 +117,14 @@ class UserView(APIView):
                     message='error',
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+            if not UserMiddleware.authorization(request.META['HTTP_AUTHORIZATION'], id):
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.UNAUTHORIZED,
+                        status = status.HTTP_401_UNAUTHORIZED
+                    )
+
             else:
                 user = User.objects.get(_id = id)
                 user.delete()
