@@ -22,14 +22,26 @@ class BlogManage(APIView):
             if "id" in request.query_params:
                 blog_model = blog_model.filter(id=request.query_params["id"])
                 
+            if "title" in request.query_params:
+                blog_model = blog_model.filter(category=request.query_params["title"])
+                
             if "content" in request.query_params:
                 blog_model = blog_model.filter(content=request.query_params["content"])
                 
             if "id_user" in request.query_params:
                 blog_model = blog_model.filter(id_user=request.query_params["id_user"])
                 
+            if "like_count" in request.query_params:
+                blog_model = blog_model.filter(id_user=request.query_params["like_count"])
+                
+            if "photourl" in request.query_params:
+                blog_model = blog_model.filter(id_user=request.query_params["photourl"])
+                
             if "category" in request.query_params:
                 blog_model = blog_model.filter(category=request.query_params["category"])
+                
+            if "date_added" in request.query_params:
+                blog_model = blog_model.filter(category=request.query_params["date_added"])
                 
             serializer = BlogSerializer(blog_model, many = True)
             
@@ -43,7 +55,9 @@ class BlogManage(APIView):
         data = request.data
         new_blog = models.Blog.objects.create(
             content = data['content'],
-            category = data['category'],         
+            title = data['title'],
+            photourl = data['photourl'],       
+            category = data['category']         
         )
         new_blog.save()
         serialize_user = serializers.UserViewSerializer(data = request.data)
@@ -70,9 +84,13 @@ class BlogManage(APIView):
     
     def patch(self, request, id=None):
         item = models.Blog.objects.get(id = id)
+        
+        item.title = request.data["title"]
         item.content = request.data["content"]
+        item.photourl = request.data["photourl"]
         item.category = request.data["category"]
-        item.save(update_fields=["content", "category"])
+        
+        item.save(update_fields=["title", "content", "photourl", "category"])
         
         serializer = BlogSerializer(item)
         return Response(serializer.data)
