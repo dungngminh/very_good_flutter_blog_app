@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
@@ -12,25 +13,39 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({
     required UserRepository userRepository,
     required AuthenticationRepository authenticationRepository,
+    required AuthenticationBloc authenticationBloc,
   })  : _userRepository = userRepository,
         _authenticationRepository = authenticationRepository,
+        _authenticationBloc = authenticationBloc,
         super(const ProfileState()) {
-    on<ProfileGetUserInformation>(_onGetUserInformation);
+    on<ProfileGetUserInformation>(_onGetOrRefreshUserInformation);
     on<ProfileUserLogoutRequested>(_onUserRequestedLogout);
     on<ProfileConfirmEditUserInformation>(_onConfirmEditUserInformation);
+    _authenticationStateStream = _authenticationBloc.stream.listen((state) {
+      if (state.status == AuthenticationStatus.authenticated) {
+        add(ProfileGetUserInformation(user: state.user));
+      }
+    });
   }
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
+  final AuthenticationBloc _authenticationBloc;
 
-  Future<void> _onGetUserInformation(
+  late final StreamSubscription<AuthenticationState> _authenticationStateStream;
+
+  Future<void> _onGetOrRefreshUserInformation(
     ProfileGetUserInformation event,
     Emitter<ProfileState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: ProfileStatus.loading));
-      final user = await _userRepository.getUserInformation();
-      emit(state.copyWith(user: user, status: ProfileStatus.done));
+      if (event.user != null) {
+        emit(state.copyWith(user: event.user, status: ProfileStatus.done));
+      } else if (event.isForRefreshing) {
+        emit(state.copyWith(status: ProfileStatus.loading));
+        final user = await _userRepository.getUserInformation();
+        emit(state.copyWith(user: user, status: ProfileStatus.done));
+      }
     } catch (e) {
       emit(
         state.copyWith(messageError: e.toString(), status: ProfileStatus.error),
@@ -45,8 +60,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     return _authenticationRepository.logOut();
   }
 
-  FutureOr<void> _onConfirmEditUserInformation(
+  Future<FutureOr<void>> _onConfirmEditUserInformation(
     ProfileConfirmEditUserInformation event,
     Emitter<ProfileState> emit,
-  ) {}
+  ) async {
+    await _authenticationRepository.logOut();
+  }
+
+  @override
+  Future<void> close() {
+    _authenticationStateStream.cancel();
+    _authenticationBloc.close();
+    return super.close();
+  }
 }

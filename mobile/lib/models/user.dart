@@ -14,10 +14,11 @@ class User extends Equatable {
     this.lastName = '',
     this.followingCount = 0,
     this.followerCount = 0,
-    this.blogCount = 0, 
+    this.blogCount = 0,
     this.avatarUrl,
     this.blogs,
   });
+
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   @JsonKey(name: '_id')
@@ -44,6 +45,7 @@ class User extends Equatable {
       lastName,
       followingCount,
       followerCount,
+      blogCount,
       avatarUrl,
       blogs,
     ];

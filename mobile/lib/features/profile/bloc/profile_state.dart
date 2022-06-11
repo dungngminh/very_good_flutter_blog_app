@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 part of 'profile_bloc.dart';
 
 enum ProfileStatus { initial, loading, done, error }
@@ -7,7 +5,7 @@ enum ProfileStatus { initial, loading, done, error }
 class ProfileState extends Equatable {
   const ProfileState({
     this.user,
-    this.messageError,
+    this.messageError = '',
     this.status = ProfileStatus.initial,
   });
 

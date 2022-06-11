@@ -27,14 +27,6 @@ class AuthenticationBloc
   late final StreamSubscription<AuthenticationStatus>
       _authenticationSubcription;
 
-  @override
-  Future<void> close() {
-    _authenticationSubcription.cancel();
-    _authenticationRepository.dispose();
-
-    return super.close();
-  }
-
   Future<void> _onAuthenticationStatusChanged(
     AuthenticationStatusChanged event,
     Emitter<AuthenticationState> emit,
@@ -58,7 +50,6 @@ class AuthenticationBloc
     }
   }
 
-
   Future<User?> getUser() async {
     try {
       final user = await _userRepository.getUserInformation();
@@ -66,5 +57,13 @@ class AuthenticationBloc
     } catch (_) {
       return null;
     }
+  }
+
+  @override
+  Future<void> close() {
+    _authenticationSubcription.cancel();
+    _authenticationRepository.dispose();
+
+    return super.close();
   }
 }

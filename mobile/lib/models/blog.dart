@@ -9,24 +9,32 @@ class Blog extends Equatable {
     required this.id,
     required this.title,
     required this.authorId,
-    required this.likeCount,
+    this.likeCount = 0,
     required this.imageUrl,
+    required this.category,
     required this.content,
-    required this.createAt,
+    required this.createdAt,
   });
+
   factory Blog.fromJson(Map<String, dynamic> json) => _$BlogFromJson(json);
 
-  @JsonKey(name:'_id')
+  @JsonKey(name: '_id')
   final String id;
   final String title;
   final String authorId;
   @JsonKey(name: 'likes')
   final int likeCount;
   final String imageUrl;
+  final String category;
   final String content;
-  final String createAt;
+  @JsonKey(fromJson: _fromJson, toJson: _toJson)
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() => _$BlogToJson(this);
+
+  static DateTime _fromJson(int int) =>
+      DateTime.fromMillisecondsSinceEpoch(int);
+  static int _toJson(DateTime time) => time.millisecondsSinceEpoch;
 
   @override
   List<Object?> get props {
@@ -37,7 +45,8 @@ class Blog extends Equatable {
       likeCount,
       imageUrl,
       content,
-      createAt,
+      category,
+      createdAt,
     ];
   }
 

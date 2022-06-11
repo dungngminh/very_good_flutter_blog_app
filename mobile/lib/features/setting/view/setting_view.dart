@@ -110,6 +110,7 @@ class _SettingTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: GestureDetector(
         onTap: onTapAction,
+        behavior: HitTestBehavior.opaque,
         child: Row(
           children: [
             Container(

@@ -1,7 +1,9 @@
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class ProfileView extends StatelessWidget {
@@ -21,6 +23,24 @@ class ProfileView extends StatelessWidget {
           onPressed: () => context.push(AppRoute.setting),
         ),
       ],
+      leading: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            icon: Assets.icons.refresh.svg(
+              color: AppPalette.whiteBackgroundColor,
+              height: 28,
+            ),
+            splashRadius: 24,
+            onPressed: () => context.read<ProfileBloc>().add(
+                  const ProfileGetUserInformation(
+                    isForRefreshing: true,
+                  ),
+                ),
+          ),
+        ),
+      ),
       headerWidget: const _ProfilePanel(),
       headerExpandedHeight: 0.56,
       curvedBodyRadius: 40,
@@ -45,18 +65,32 @@ class _TitleTile extends StatelessWidget {
           backgroundColor: AppPalette.purpleSupportColor,
           child: Padding(
             padding: const EdgeInsets.all(2),
-            child: CircleAvatar(
-              backgroundImage: Assets.images.komkat.image().image,
+            child: BlocBuilder<ProfileBloc, ProfileState>(
+              buildWhen: (previous, current) =>
+                  previous.user?.avatarUrl != current.user?.avatarUrl,
+              builder: (context, state) {
+                return CircleAvatar(
+                  backgroundImage: NetworkImage(state.user?.avatarUrl ?? ''),
+                );
+              },
             ),
           ),
         ),
         const SizedBox(
-          width: 16,
+          width: 8,
         ),
-        Text(
-          'Nguyen Minh Dung',
-          style: AppTextTheme.darkW700TextStyle
-              .copyWith(color: AppPalette.whiteBackgroundColor),
+        BlocBuilder<ProfileBloc, ProfileState>(
+          buildWhen: (previous, current) =>
+              previous.user?.firstName != current.user?.firstName ||
+              previous.user?.lastName != current.user?.lastName,
+          builder: (context, state) {
+            return Text(
+              '${state.user?.firstName} '
+              '${state.user?.lastName}',
+              style: AppTextTheme.darkW700TextStyle
+                  .copyWith(color: AppPalette.whiteBackgroundColor),
+            );
+          },
         )
       ],
     );
@@ -72,19 +106,42 @@ class _ProfilePanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(4),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: Assets.icons.setting.svg(
-                  color: AppPalette.primaryColor,
-                  height: 30,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: Assets.icons.refresh.svg(
+                      color: AppPalette.primaryColor,
+                      height: 28,
+                    ),
+                    splashRadius: 24,
+                    onPressed: () => context.read<ProfileBloc>().add(
+                          const ProfileGetUserInformation(
+                            isForRefreshing: true,
+                          ),
+                        ),
+                  ),
                 ),
-                splashRadius: 24,
-                onPressed: () => context.push(AppRoute.setting),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    icon: Assets.icons.setting.svg(
+                      color: AppPalette.primaryColor,
+                      height: 30,
+                    ),
+                    splashRadius: 24,
+                    onPressed: () => context.push(AppRoute.setting),
+                  ),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -93,6 +150,9 @@ class _ProfilePanel extends StatelessWidget {
                 SizedBox(
                   height: 180,
                   child: _AvatarDecoration(),
+                ),
+                SizedBox(
+                  height: 4,
                 ),
                 SizedBox(
                   height: 120,
@@ -112,34 +172,67 @@ class _BasicUserInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text(
-          'Nguyen Minh Dung',
-          style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 20),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const [
-            _ProfileStat(
-              key: ValueKey('post'),
-              content: 'Bài viết',
-              count: 4,
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      buildWhen: (previous, current) => previous.user != current.user,
+      builder: (context, state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BlocBuilder<ProfileBloc, ProfileState>(
+              buildWhen: (previous, current) =>
+                  previous.user?.firstName != current.user?.firstName ||
+                  previous.user?.lastName != current.user?.lastName,
+              builder: (context, state) {
+                return Text(
+                  '${state.user?.firstName}'
+                  ' ${state.user?.lastName}',
+                  style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 21),
+                );
+              },
             ),
-            _ProfileStat(
-              key: ValueKey('follower'),
-              content: 'Người t.dõi',
-              count: 100,
-            ),
-            _ProfileStat(
-              key: ValueKey('following'),
-              content: 'Đang t.dõi',
-              count: 90,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  buildWhen: (previous, current) =>
+                      previous.user?.blogCount != current.user?.blogCount,
+                  builder: (context, state) {
+                    return _ProfileStat(
+                      key: const ValueKey('post'),
+                      content: 'Bài viết',
+                      count: state.user?.blogCount ?? 0,
+                    );
+                  },
+                ),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  buildWhen: (previous, current) =>
+                      previous.user?.followerCount !=
+                      current.user?.followerCount,
+                  builder: (context, state) {
+                    return _ProfileStat(
+                      key: const ValueKey('follower'),
+                      content: 'Người t.dõi',
+                      count: state.user?.followerCount ?? 0,
+                    );
+                  },
+                ),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  buildWhen: (previous, current) =>
+                      previous.user?.followingCount !=
+                      current.user?.followingCount,
+                  builder: (context, state) {
+                    return _ProfileStat(
+                      key: const ValueKey('following'),
+                      content: 'Đang t.dõi',
+                      count: state.user?.followingCount ?? 0,
+                    );
+                  },
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -200,9 +293,15 @@ class _AvatarDecoration extends StatelessWidget {
             clipBehavior: Clip.none,
             alignment: Alignment.bottomRight,
             children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage: Assets.images.komkat.image().image,
+              BlocBuilder<ProfileBloc, ProfileState>(
+                buildWhen: (previous, current) =>
+                    previous.user?.avatarUrl != current.user?.avatarUrl,
+                builder: (context, state) {
+                  return CircleAvatar(
+                    radius: 60,
+                    backgroundImage: NetworkImage(state.user?.avatarUrl ?? ''),
+                  );
+                },
               ),
               Positioned(
                 bottom: -4,
