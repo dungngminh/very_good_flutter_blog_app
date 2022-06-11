@@ -10,7 +10,7 @@ class BlogSerializer(serializers.ModelSerializer):
                  'content',
                  'id_user',
                  'like_count',
-                 'photourl',
+                 'imageUrl',
                  'category',
                  'date_added')
         depth = 1

@@ -35,8 +35,8 @@ class BlogManage(APIView):
             if "like_count" in request.query_params:
                 blog_model = blog_model.filter(id_user=request.query_params["like_count"])
                 
-            if "photourl" in request.query_params:
-                blog_model = blog_model.filter(id_user=request.query_params["photourl"])
+            if "imageUrl" in request.query_params:
+                blog_model = blog_model.filter(id_user=request.query_params["imageUrl"])
                 
             if "category" in request.query_params:
                 blog_model = blog_model.filter(category=request.query_params["category"])
@@ -62,7 +62,7 @@ class BlogManage(APIView):
         new_blog = models.Blog.objects.create(
             content = data['content'],
             title = data['title'],
-            photourl = data['photourl'],       
+            imageUrl = data['imageUrl'],       
             category = data['category']         
         )
         new_blog.save()
@@ -93,10 +93,10 @@ class BlogManage(APIView):
         
         item.title = request.data["title"]
         item.content = request.data["content"]
-        item.photourl = request.data["photourl"]
+        item.imageUrl = request.data["imageUrl"]
         item.category = request.data["category"]
         
-        item.save(update_fields=["title", "content", "photourl", "category"])
+        item.save(update_fields=["title", "content", "imageUrl", "category"])
         
         serializer = BlogSerializer(item)
         return Response(serializer.data)
