@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:297236090392:android:c026771ad5c1ffc7ccbd6d",
+        "mobilesdk_app_id": "1:297236090392:android:5f2620a39aebbb99ccbd6d",
         "android_client_info": {
-          "package_name": "com.dungngminh.very_good_blog_app"
+          "package_name": "com.dungngminh.very_good_blog_app.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "297236090392-5441j7peqloonhhhkdnqf2muqngj0h3g.apps.googleusercontent.com",
+          "client_id": "297236090392-14p9e163fuj7os6836rchbuhtv05tpnt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.dungngminh.very_good_blog_app",
+            "package_name": "com.dungngminh.very_good_blog_app.dev",
             "certificate_hash": "3b52b8622101dd4687d0fc73cce2a7f15fddf8fd"
           }
         },

@@ -9,16 +9,7 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class ProfileGetUserInformation extends ProfileEvent {
-  final User? user;
-  final bool isForRefreshing;
 
-  const ProfileGetUserInformation({
-    this.user,
-    this.isForRefreshing = false,
-  });
-
-  @override
-  List<Object?> get props => [user];
 }
 
 class ProfileConfirmEditUserInformation extends ProfileEvent {}

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'authentication_event.dart';
@@ -12,17 +11,14 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-    required UserRepository userRepository,
   })  : _authenticationRepository = authenticationRepository,
-        _userRepository = userRepository,
-        super(const AuthenticationState.unknown()) {
+        super(const AuthenticationState()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     _authenticationSubcription = _authenticationRepository.status
         .listen((status) => add(AuthenticationStatusChanged(status)));
   }
 
   final AuthenticationRepository _authenticationRepository;
-  final UserRepository _userRepository;
 
   late final StreamSubscription<AuthenticationStatus>
       _authenticationSubcription;
@@ -31,32 +27,7 @@ class AuthenticationBloc
     AuthenticationStatusChanged event,
     Emitter<AuthenticationState> emit,
   ) async {
-    switch (event.status) {
-      case AuthenticationStatus.unknown:
-        return emit(const AuthenticationState.unknown());
-      case AuthenticationStatus.authenticated:
-        final user = await getUser();
-        return user != null
-            ? emit(AuthenticationState.authenticated(user))
-            : emit(const AuthenticationState.unauthenticated());
-      case AuthenticationStatus.unauthenticated:
-        return emit(const AuthenticationState.unauthenticated());
-      case AuthenticationStatus.successfullyRegistered:
-        return emit(const AuthenticationState.successfullyRegistered());
-      case AuthenticationStatus.existed:
-        return emit(const AuthenticationState.existed());
-      case AuthenticationStatus.unsuccessfullyRegistered:
-        return emit(const AuthenticationState.unsuccessfullyRegistered());
-    }
-  }
-
-  Future<User?> getUser() async {
-    try {
-      final user = await _userRepository.getUserInformation();
-      return user;
-    } catch (_) {
-      return null;
-    }
+    return emit(AuthenticationState(status: event.status));
   }
 
   @override

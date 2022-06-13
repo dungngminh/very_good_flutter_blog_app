@@ -5,7 +5,6 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
 import 'package:very_good_blog_app/features/notification/notification.dart';
-import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/features/reading_list/reading_list.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
@@ -36,55 +35,54 @@ class _MainViewState extends State<MainView> {
         }
       },
       child: Scaffold(
-          body: ValueListenableBuilder<int>(
-            valueListenable: _currentIndex,
-            builder: (context, value, child) {
-              return IndexedStack(
-                index: value,
-                children: const [
-                  HomeView(),
-                  NotificationView(),
-                  ReadingListView(),
-                  ProfileView(),
-                ],
-              );
-            },
-          ),
-          floatingActionButton: Visibility(
-            visible: !isKeyBoardShowing,
-            child: SizedBox.square(
-              dimension: 65,
-              child: FloatingActionButton(
-                onPressed: () => context.push(AppRoute.addBlog),
-                backgroundColor: AppPalette.primaryColor,
-                shape: const CircleBorder(),
-                child: Assets.icons.plus.svg(
-                  color: AppPalette.whiteBackgroundColor,
-                  height: 24,
-                ),
-              ),
-            ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: BottomAppBar(
-            color: AppPalette.whiteBackgroundColor,
-            clipBehavior: Clip.hardEdge,
-            shape: const CircularNotchedRectangle(),
-            child: SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  _buildBottomBarItem(index: 0, icon: Assets.icons.home),
-                  _buildBottomBarItem(index: 1, icon: Assets.icons.bell),
-                  const Spacer(),
-                  _buildBottomBarItem(index: 2, icon: Assets.icons.bookmark),
-                  _buildBottomBarItem(index: 3, icon: Assets.icons.user),
-                ],
+        body: ValueListenableBuilder<int>(
+          valueListenable: _currentIndex,
+          builder: (context, value, child) {
+            return IndexedStack(
+              index: value,
+              children: const [
+                HomeView(),
+                NotificationView(),
+                ReadingListView(),
+                ProfileView(),
+              ],
+            );
+          },
+        ),
+        floatingActionButton: Visibility(
+          visible: !isKeyBoardShowing,
+          child: SizedBox.square(
+            dimension: 65,
+            child: FloatingActionButton(
+              onPressed: () => context.push(AppRoute.addBlog),
+              backgroundColor: AppPalette.primaryColor,
+              shape: const CircleBorder(),
+              child: Assets.icons.plus.svg(
+                color: AppPalette.whiteBackgroundColor,
+                height: 24,
               ),
             ),
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          color: AppPalette.whiteBackgroundColor,
+          clipBehavior: Clip.hardEdge,
+          shape: const CircularNotchedRectangle(),
+          child: SizedBox(
+            height: 70,
+            child: Row(
+              children: [
+                _buildBottomBarItem(index: 0, icon: Assets.icons.home),
+                _buildBottomBarItem(index: 1, icon: Assets.icons.bell),
+                const Spacer(),
+                _buildBottomBarItem(index: 2, icon: Assets.icons.bookmark),
+                _buildBottomBarItem(index: 3, icon: Assets.icons.user),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 

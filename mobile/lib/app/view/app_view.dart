@@ -41,7 +41,6 @@ class VeryGoodBlogAppView extends StatelessWidget {
         BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc(
             authenticationRepository: context.read<AuthenticationRepository>(),
-            userRepository: context.read<UserRepository>(),
           ),
         ),
         BlocProvider<ProfileBloc>(

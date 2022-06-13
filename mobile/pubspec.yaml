@@ -26,6 +26,7 @@ dependencies:
   intl: ^0.17.0
   json_annotation: ^4.5.0
   phosphor_flutter: ^1.4.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   bloc_test: ^9.0.3

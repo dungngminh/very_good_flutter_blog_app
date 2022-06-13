@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,17 +29,19 @@ class ProfileView extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         child: Align(
           alignment: Alignment.centerRight,
-          child: IconButton(
-            icon: Assets.icons.refresh.svg(
-              color: AppPalette.whiteBackgroundColor,
-              height: 28,
-            ),
-            splashRadius: 24,
-            onPressed: () => context.read<ProfileBloc>().add(
-                  const ProfileGetUserInformation(
-                    isForRefreshing: true,
-                  ),
+          child: BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              return _RotateIconButton(
+                icon: Assets.icons.refresh.svg(
+                  color: AppPalette.whiteBackgroundColor,
+                  height: 28,
                 ),
+                isLoading: state.status == ProfileStatus.loading,
+                onPressed: () => context.read<ProfileBloc>().add(
+                      ProfileGetUserInformation(),
+                    ),
+              );
+            },
           ),
         ),
       ),
@@ -48,6 +52,66 @@ class ProfileView extends StatelessWidget {
       body: const [
         _PostPanel(),
       ],
+    );
+  }
+}
+
+class _RotateIconButton extends StatefulWidget {
+  const _RotateIconButton({
+    required this.icon,
+    this.isLoading = false,
+    required this.onPressed,
+  });
+
+  final Widget icon;
+  final bool isLoading;
+  final VoidCallback onPressed;
+
+  @override
+  State<_RotateIconButton> createState() => _RotateIconButtonState();
+}
+
+class _RotateIconButtonState extends State<_RotateIconButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant _RotateIconButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isLoading != oldWidget.isLoading) {
+      if (widget.isLoading) {
+        _animationController.repeat();
+      } else {
+        _animationController.stop();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, _) {
+        return Transform.rotate(
+          angle:
+              widget.isLoading ? _animationController.value * 2 * math.pi : 0,
+          child: IconButton(
+            icon: widget.icon,
+            splashRadius: 24,
+            onPressed: widget.onPressed,
+          ),
+        );
+      },
     );
   }
 }
@@ -69,8 +133,17 @@ class _TitleTile extends StatelessWidget {
               buildWhen: (previous, current) =>
                   previous.user?.avatarUrl != current.user?.avatarUrl,
               builder: (context, state) {
+                if (state.status == ProfileStatus.loading) {
+                  return const CircleAvatar(
+                    child: CircularProgressIndicator(
+                      color: AppPalette.whiteBackgroundColor,
+                    ),
+                  );
+                }
                 return CircleAvatar(
-                  backgroundImage: NetworkImage(state.user?.avatarUrl ?? ''),
+                  backgroundImage: Image.network(
+                    state.user?.avatarUrl ?? '',
+                  ).image,
                 );
               },
             ),
@@ -113,17 +186,19 @@ class _ProfilePanel extends StatelessWidget {
                 padding: const EdgeInsets.all(4),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Assets.icons.refresh.svg(
-                      color: AppPalette.primaryColor,
-                      height: 28,
-                    ),
-                    splashRadius: 24,
-                    onPressed: () => context.read<ProfileBloc>().add(
-                          const ProfileGetUserInformation(
-                            isForRefreshing: true,
-                          ),
+                  child: BlocBuilder<ProfileBloc, ProfileState>(
+                    builder: (context, state) {
+                      return _RotateIconButton(
+                        icon: Assets.icons.refresh.svg(
+                          color: AppPalette.primaryColor,
+                          height: 28,
                         ),
+                        isLoading: state.status == ProfileStatus.loading,
+                        onPressed: () => context.read<ProfileBloc>().add(
+                              ProfileGetUserInformation(),
+                            ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -299,7 +374,9 @@ class _AvatarDecoration extends StatelessWidget {
                 builder: (context, state) {
                   return CircleAvatar(
                     radius: 60,
-                    backgroundImage: NetworkImage(state.user?.avatarUrl ?? ''),
+                    backgroundImage: state.user?.avatarUrl == null
+                        ? Assets.images.komkat.image().image
+                        : NetworkImage(state.user!.avatarUrl!),
                   );
                 },
               ),
