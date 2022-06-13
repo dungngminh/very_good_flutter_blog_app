@@ -30,6 +30,7 @@ class ProfileView extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerRight,
           child: BlocBuilder<ProfileBloc, ProfileState>(
+            buildWhen: (previous, current) => previous.status != current.status,
             builder: (context, state) {
               return _RotateIconButton(
                 icon: Assets.icons.refresh.svg(
@@ -79,7 +80,9 @@ class _RotateIconButtonState extends State<_RotateIconButton>
   void initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(
+        seconds: 1,
+      ),
     );
 
     super.initState();
