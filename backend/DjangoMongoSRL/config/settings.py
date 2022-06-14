@@ -27,9 +27,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [
-	'52.147.34.119',
-    'lequocthinh.com',
-    'localhost',
+	'*'
 ]
 
 APPEND_SLASH = False
