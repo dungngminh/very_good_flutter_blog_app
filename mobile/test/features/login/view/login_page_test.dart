@@ -28,7 +28,7 @@ void main() {
         'renders a LoginForm'
         ' and Logo Very Good Ventures aka Very Good Blog App', (tester) async {
       when(() => authenticationBloc.state).thenReturn(
-        const AuthenticationState.unauthenticated(),
+        const AuthenticationState(status: AuthenticationStatus.unauthenticated),
       );
       await tester.pumpWidget(
         RepositoryProvider.value(

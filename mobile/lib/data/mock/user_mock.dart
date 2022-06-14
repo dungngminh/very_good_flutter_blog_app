@@ -8,5 +8,8 @@ const userMock = User(
   followingCount: 10,
   followerCount: 10,
   blogCount: 2,
-  avatarUrl: 'https://avatars.githubusercontent.com/u/76420753?v=4',
+  avatarUrl: 'https://url.dscdut.com/chucngaymoinhubui',
 );
+
+
+// https://avatars.githubusercontent.com/u/76420753?v=4

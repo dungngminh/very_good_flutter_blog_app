@@ -29,15 +29,17 @@ class ProfileView extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         child: Align(
           alignment: Alignment.centerRight,
-          child: BlocBuilder<ProfileBloc, ProfileState>(
-            buildWhen: (previous, current) => previous.status != current.status,
-            builder: (context, state) {
+          child: Builder(
+            builder: (context) {
+              final status = context.select(
+                (ProfileBloc profileBloc) => profileBloc.state.status,
+              );
               return _RotateIconButton(
                 icon: Assets.icons.refresh.svg(
                   color: AppPalette.whiteBackgroundColor,
                   height: 28,
                 ),
-                isLoading: state.status == ProfileStatus.loading,
+                isLoading: status == ProfileStatus.loading,
                 onPressed: () => context.read<ProfileBloc>().add(
                       ProfileGetUserInformation(),
                     ),
@@ -132,21 +134,17 @@ class _TitleTile extends StatelessWidget {
           backgroundColor: AppPalette.purpleSupportColor,
           child: Padding(
             padding: const EdgeInsets.all(2),
-            child: BlocBuilder<ProfileBloc, ProfileState>(
-              buildWhen: (previous, current) =>
-                  previous.user?.avatarUrl != current.user?.avatarUrl,
-              builder: (context, state) {
-                if (state.status == ProfileStatus.loading) {
-                  return const CircleAvatar(
-                    child: CircularProgressIndicator(
-                      color: AppPalette.whiteBackgroundColor,
-                    ),
-                  );
-                }
+            child: Builder(
+              builder: (context) {
+                final avatarUrl = context.select(
+                  (ProfileBloc profileBloc) =>
+                      profileBloc.state.user?.avatarUrl,
+                );
+
                 return CircleAvatar(
-                  backgroundImage: Image.network(
-                    state.user?.avatarUrl ?? '',
-                  ).image,
+                  backgroundImage: avatarUrl == null
+                      ? Assets.images.komkat.image().image
+                      : NetworkImage(avatarUrl),
                 );
               },
             ),
@@ -155,19 +153,21 @@ class _TitleTile extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        BlocBuilder<ProfileBloc, ProfileState>(
-          buildWhen: (previous, current) =>
-              previous.user?.firstName != current.user?.firstName ||
-              previous.user?.lastName != current.user?.lastName,
-          builder: (context, state) {
+        Builder(
+          builder: (context) {
+            final firstName = context.select(
+              (ProfileBloc profileBloc) => profileBloc.state.user?.firstName,
+            );
+            final lastName = context.select(
+              (ProfileBloc profileBloc) => profileBloc.state.user?.lastName,
+            );
             return Text(
-              '${state.user?.firstName} '
-              '${state.user?.lastName}',
+              '$firstName $lastName',
               style: AppTextTheme.darkW700TextStyle
                   .copyWith(color: AppPalette.whiteBackgroundColor),
             );
           },
-        )
+        ),
       ],
     );
   }
@@ -189,14 +189,17 @@ class _ProfilePanel extends StatelessWidget {
                 padding: const EdgeInsets.all(4),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: BlocBuilder<ProfileBloc, ProfileState>(
-                    builder: (context, state) {
+                  child: Builder(
+                    builder: (context) {
+                      final status = context.select(
+                        (ProfileBloc profileBloc) => profileBloc.state.status,
+                      );
                       return _RotateIconButton(
                         icon: Assets.icons.refresh.svg(
                           color: AppPalette.primaryColor,
                           height: 28,
                         ),
-                        isLoading: state.status == ProfileStatus.loading,
+                        isLoading: status == ProfileStatus.loading,
                         onPressed: () => context.read<ProfileBloc>().add(
                               ProfileGetUserInformation(),
                             ),
@@ -256,14 +259,17 @@ class _BasicUserInformation extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            BlocBuilder<ProfileBloc, ProfileState>(
-              buildWhen: (previous, current) =>
-                  previous.user?.firstName != current.user?.firstName ||
-                  previous.user?.lastName != current.user?.lastName,
-              builder: (context, state) {
+            Builder(
+              builder: (context) {
+                final firstName = context.select(
+                  (ProfileBloc profileBloc) =>
+                      profileBloc.state.user?.firstName,
+                );
+                final lastName = context.select(
+                  (ProfileBloc profileBloc) => profileBloc.state.user?.lastName,
+                );
                 return Text(
-                  '${state.user?.firstName}'
-                  ' ${state.user?.lastName}',
+                  '$firstName $lastName',
                   style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 21),
                 );
               },
@@ -271,38 +277,42 @@ class _BasicUserInformation extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                BlocBuilder<ProfileBloc, ProfileState>(
-                  buildWhen: (previous, current) =>
-                      previous.user?.blogCount != current.user?.blogCount,
-                  builder: (context, state) {
+                Builder(
+                  builder: (context) {
+                    final blogCount = context.select(
+                      (ProfileBloc profileBloc) =>
+                          profileBloc.state.user?.blogCount,
+                    );
                     return _ProfileStat(
                       key: const ValueKey('post'),
                       content: 'Bài viết',
-                      count: state.user?.blogCount ?? 0,
+                      count: blogCount ?? 0,
                     );
                   },
                 ),
-                BlocBuilder<ProfileBloc, ProfileState>(
-                  buildWhen: (previous, current) =>
-                      previous.user?.followerCount !=
-                      current.user?.followerCount,
-                  builder: (context, state) {
+                Builder(
+                  builder: (context) {
+                    final followerCount = context.select(
+                      (ProfileBloc profileBloc) =>
+                          profileBloc.state.user?.followerCount,
+                    );
                     return _ProfileStat(
                       key: const ValueKey('follower'),
                       content: 'Người t.dõi',
-                      count: state.user?.followerCount ?? 0,
+                      count: followerCount ?? 0,
                     );
                   },
                 ),
-                BlocBuilder<ProfileBloc, ProfileState>(
-                  buildWhen: (previous, current) =>
-                      previous.user?.followingCount !=
-                      current.user?.followingCount,
-                  builder: (context, state) {
+                Builder(
+                  builder: (context) {
+                    final followingCount = context.select(
+                      (ProfileBloc profileBloc) =>
+                          profileBloc.state.user?.followingCount,
+                    );
                     return _ProfileStat(
                       key: const ValueKey('following'),
                       content: 'Đang t.dõi',
-                      count: state.user?.followingCount ?? 0,
+                      count: followingCount ?? 0,
                     );
                   },
                 ),
@@ -371,15 +381,17 @@ class _AvatarDecoration extends StatelessWidget {
             clipBehavior: Clip.none,
             alignment: Alignment.bottomRight,
             children: [
-              BlocBuilder<ProfileBloc, ProfileState>(
-                buildWhen: (previous, current) =>
-                    previous.user?.avatarUrl != current.user?.avatarUrl,
-                builder: (context, state) {
+              Builder(
+                builder: (context) {
+                  final avatarUrl = context.select(
+                    (ProfileBloc profileBloc) =>
+                        profileBloc.state.user?.avatarUrl,
+                  );
                   return CircleAvatar(
                     radius: 60,
-                    backgroundImage: state.user?.avatarUrl == null
+                    backgroundImage: avatarUrl == null
                         ? Assets.images.komkat.image().image
-                        : NetworkImage(state.user!.avatarUrl!),
+                        : NetworkImage(avatarUrl),
                   );
                 },
               ),

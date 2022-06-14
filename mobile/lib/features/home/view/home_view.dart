@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/home/widget/widget.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -81,9 +85,18 @@ class _Header extends StatelessWidget {
             children: [
               Expanded(
                 flex: 2,
-                child: Text(
-                  'Xin chào, Dũng',
-                  style: AppTextTheme.lightTextStyle.copyWith(fontSize: 15),
+                child: Builder(
+                  builder: (context) {
+                    final lastName = context.select(
+                          (ProfileBloc profileBloc) =>
+                              profileBloc.state.user?.lastName,
+                        ) ??
+                        'bạn';
+                    return Text(
+                      'Xin chào, $lastName',
+                      style: AppTextTheme.lightTextStyle.copyWith(fontSize: 15),
+                    );
+                  },
                 ),
               ),
               const Expanded(
@@ -95,9 +108,18 @@ class _Header extends StatelessWidget {
               )
             ],
           ),
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: Assets.images.komkat.image().image,
+          Builder(
+            builder: (context) {
+              final avatarUrl = context.select(
+                (ProfileBloc profileBloc) => profileBloc.state.user?.avatarUrl,
+              );
+              return CircleAvatar(
+                radius: 24,
+                backgroundImage: avatarUrl == null
+                    ? Assets.images.komkat.image().image
+                    : NetworkImage(avatarUrl),
+              );
+            },
           ),
         ],
       ),

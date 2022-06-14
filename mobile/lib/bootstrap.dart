@@ -28,6 +28,7 @@ class AppBlocObserver extends BlocObserver {
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await runZonedGuarded(
     () async {
+      
       await BlocOverrides.runZoned(
         () async => runApp(await builder()),
         blocObserver: AppBlocObserver(),
