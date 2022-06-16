@@ -5,7 +5,7 @@ from ..blogs import models
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Blog
-        field = ('id',
+        fields = ('id',
                  'title',
                  'content',
                  'id_user',
@@ -13,4 +13,3 @@ class BlogSerializer(serializers.ModelSerializer):
                  'imageUrl',
                  'category',
                  'date_added')
-        depth = 1

@@ -24,6 +24,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_swagger.views import get_swagger_view
 from apps.swagger.views import TemplateView
+from apps.blogs.views import BlogManage, postFilter
 
 swagger_view = get_schema_view(
    openapi.Info(
@@ -48,7 +49,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/auth/', include('apps.authentication.urls')),
     path('api/v1/', include('apps.users.urls')),
-    path('blog/', include('apps.blogs.urls')),
+    path('blog/', BlogManage.as_view()),
+    path('blog/<int:pk>/', BlogManage.as_view()),
+    path('filter/', postFilter.as_view()),
     path('', include('rest_framework.urls', namespace='rest_framework'))
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
