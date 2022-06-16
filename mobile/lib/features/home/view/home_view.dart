@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/home/widget/widget.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -15,22 +20,18 @@ class HomeView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                _Header(),
-                _SearchField(),
-                _CategoryChoiceBar(),
+              children: [
+                const _Header(),
+                const _SearchField(),
+                const _CategoryChoiceBar(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(24, 32, 0, 16),
+                  padding: const EdgeInsets.fromLTRB(24, 32, 0, 16),
                   child: Text(
                     'Phổ biến',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Palette.primaryTextColor,
-                    ),
+                    style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 18),
                   ),
                 ),
-                _PopularBlogList()
+                const _PopularBlogList()
               ],
             ),
           ),
@@ -45,104 +46,15 @@ class _PopularBlogList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: context.screenHeight * 0.3,
+      height: context.screenHeight * 0.35,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
         itemCount: 3,
         itemBuilder: (context, index) {
-          return Container(
-            width: context.screenHeight * 0.3,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Palette.primaryColor,
-              image: DecorationImage(
-                image: Image.network(
-                  'https://vissaihotel.vn/photo/trang-an-ha-long-bay-on-land.png',
-                ).image,
-                fit: BoxFit.cover,
-              ),
-            ),
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ClipOval(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: IconButton(
-                        splashRadius: 20,
-                        icon: const DecoratedBox(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Icon(
-                              PhosphorIcons.bookmarkFill,
-                              size: 26,
-                              color: Palette.whiteBackgroundColor,
-                            ),
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Palette.whiteBackgroundColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: Assets.images.komkat.image().image,
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
-                                Text(
-                                  'dungngminh',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Palette.primaryTextColor,
-                                  ),
-                                ),
-                                Text(
-                                  '20 phút trước',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Palette.primaryTextColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          return const PopularBlogCard(
+            title: 'Thời tiết đang chuyển biến phức tạp.',
+            username: 'dungngminh',
           );
         },
         separatorBuilder: (context, index) {
@@ -170,33 +82,44 @@ class _Header extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Expanded(
                 flex: 2,
-                child: Text(
-                  'Xin chào, Dũng',
-                  style: TextStyle(
-                    color: Palette.smallTextColor,
-                    fontSize: 15,
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    final lastName = context.select(
+                          (ProfileBloc profileBloc) =>
+                              profileBloc.state.user?.lastName,
+                        ) ??
+                        'bạn';
+                    return Text(
+                      'Xin chào, $lastName',
+                      style: AppTextTheme.lightTextStyle.copyWith(fontSize: 15),
+                    );
+                  },
                 ),
               ),
-              Expanded(
+              const Expanded(
                 flex: 3,
                 child: Text(
                   'Chào mừng bạn!',
-                  style: TextStyle(
-                    color: Palette.primaryTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextTheme.titleTextStyle,
                 ),
               )
             ],
           ),
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: Assets.images.komkat.image().image,
+          Builder(
+            builder: (context) {
+              final avatarUrl = context.select(
+                (ProfileBloc profileBloc) => profileBloc.state.user?.avatarUrl,
+              );
+              return CircleAvatar(
+                radius: 24,
+                backgroundImage: avatarUrl == null
+                    ? Assets.images.komkat.image().image
+                    : NetworkImage(avatarUrl),
+              );
+            },
           ),
         ],
       ),
@@ -214,18 +137,21 @@ class _CategoryChoiceBar extends StatelessWidget {
       'Kinh tế',
       'Khoa học',
       'Văn hóa',
-      'Mghệ thuật'
+      'Nghệ thuật'
     ];
     return SizedBox(
       height: context.screenHeight * 0.06,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
         itemBuilder: (context, index) {
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             decoration: BoxDecoration(
-              color: index == 0 ? Palette.primaryColor : Palette.fieldColor,
+              color: index == 0
+                  ? Theme.of(context).primaryColor
+                  : AppPalette.fieldColor,
               borderRadius: BorderRadius.circular(20),
             ),
             alignment: Alignment.center,
@@ -234,8 +160,8 @@ class _CategoryChoiceBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 color: index == 0
-                    ? Palette.whiteBackgroundColor
-                    : Palette.unSelectedTextChipColor,
+                    ? AppPalette.whiteBackgroundColor
+                    : AppPalette.unSelectedTextChipColor,
               ),
             ),
           );
@@ -261,26 +187,22 @@ class _SearchField extends StatelessWidget {
       height: context.screenHeight * 0.07,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Palette.fieldColor,
+        color: AppPalette.fieldColor,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       alignment: Alignment.center,
-      child: const TextField(
+      child: TextField(
         textAlignVertical: TextAlignVertical.center,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             PhosphorIcons.magnifyingGlassFill,
-            color: Palette.primaryColor,
+            color: AppPalette.primaryColor,
             size: 26,
           ),
           hintText: 'Tìm kiếm',
-          hintStyle: TextStyle(fontWeight: FontWeight.w500),
           contentPadding: EdgeInsets.only(right: 16),
         ),
-        style: TextStyle(
-          fontSize: 16,
-          color: Palette.primaryTextColor,
-        ),
+        style: AppTextTheme.regularTextStyle.copyWith(fontSize: 16),
       ),
     );
   }

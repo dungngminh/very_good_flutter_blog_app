@@ -15,25 +15,24 @@ class LoginView extends StatelessWidget {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
-          context.go('/');
+          context.go(AppRoute.home);
         }
       },
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          body: Column(
-            children: [
-              SizedBox(
-                height: context.screenHeight * 0.06,
-              ),
-              Flexible(
-                flex: 2,
-                child: Center(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: context.screenHeight * 0.1,
+                ),
+                Center(
                   child: Container(
                     width: 120,
                     height: 120,
                     decoration: const BoxDecoration(
-                      color: Palette.purpleSupportColor,
+                      color: AppPalette.purpleSupportColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(90),
                         topRight: Radius.circular(90),
@@ -45,47 +44,46 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Flexible(
-                flex: 3,
-                child: BlocProvider<LoginBloc>(
-                  create: (context) => LoginBloc(
-                    authenticationRepository:
-                        context.read<AuthenticationRepository>(),
-                  ),
-                  child: const LoginForm(),
+                const SizedBox(
+                  height: 24,
                 ),
-              ),
-              const Spacer(),
-              Center(
-                child: Text.rich(
-                  TextSpan(
-                    text: 'Chưa có tài khoản? ',
-                    children: [
-                      TextSpan(
-                        text: 'Đăng ký',
-                        style: const TextStyle(
-                          color: Palette.primaryColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.push('/register'),
-                      )
-                    ],
-                  ),
-                  style: const TextStyle(
-                    color: Palette.descriptionTextColor,
-                    fontWeight: FontWeight.w500,
+                SizedBox(
+                  height: context.screenHeight * 0.65,
+                  child: BlocProvider<LoginBloc>(
+                    create: (context) => LoginBloc(
+                      authenticationRepository:
+                          context.read<AuthenticationRepository>(),
+                    ),
+                    child: const LoginForm(),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: context.screenHeight * 0.02,
-              )
-            ],
+                Center(
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Chưa có tài khoản? ',
+                      children: [
+                        TextSpan(
+                          text: 'Đăng ký',
+                          style: const TextStyle(
+                            color: AppPalette.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => context.push(AppRoute.register),
+                        )
+                      ],
+                    ),
+                    style: const TextStyle(
+                      color: AppPalette.descriptionTextColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: context.screenHeight * 0.02,
+                )
+              ],
+            ),
           ),
         ),
       ),

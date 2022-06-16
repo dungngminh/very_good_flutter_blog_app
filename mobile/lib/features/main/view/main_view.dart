@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
+import 'package:very_good_blog_app/features/notification/notification.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/features/reading_list/reading_list.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class MainView extends StatefulWidget {
@@ -16,17 +17,13 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  late int _currentIndex;
+  late ValueNotifier<int> _currentIndex;
 
   @override
   void initState() {
     super.initState();
-    _currentIndex = 0;
+    _currentIndex = ValueNotifier(0);
   }
-
-  void _onPageChanged(int newIndex) => setState(() {
-        _currentIndex = newIndex;
-      });
 
   @override
   Widget build(BuildContext context) {
@@ -38,104 +35,76 @@ class _MainViewState extends State<MainView> {
         }
       },
       child: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: const [
-            HomeView(),
-            HomeView(),
-            HomeView(),
-            ProfileView(),
-          ],
+        body: ValueListenableBuilder<int>(
+          valueListenable: _currentIndex,
+          builder: (context, value, child) {
+            return IndexedStack(
+              index: value,
+              children: const [
+                HomeView(),
+                NotificationView(),
+                ReadingListView(),
+                ProfileView(),
+              ],
+            );
+          },
         ),
         floatingActionButton: Visibility(
           visible: !isKeyBoardShowing,
           child: SizedBox.square(
             dimension: 65,
             child: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Palette.primaryColor,
+              onPressed: () => context.push(AppRoute.addBlog),
+              backgroundColor: AppPalette.primaryColor,
               shape: const CircleBorder(),
-              child: const Icon(
-                PhosphorIcons.plus,
-                color: Palette.whiteBackgroundColor,
+              child: Assets.icons.plus.svg(
+                color: AppPalette.whiteBackgroundColor,
+                height: 24,
               ),
             ),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
-          color: Palette.whiteBackgroundColor,
+          color: AppPalette.whiteBackgroundColor,
           clipBehavior: Clip.hardEdge,
           shape: const CircularNotchedRectangle(),
           child: SizedBox(
             height: 70,
             child: Row(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 0
-                          ? PhosphorIcons.houseFill
-                          : PhosphorIcons.house,
-                    ),
-                    iconSize: _currentIndex == 0 ? 30 : 26,
-                    color: _currentIndex == 0
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
-                    onPressed: () => _onPageChanged(0),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 1
-                          ? PhosphorIcons.bellFill
-                          : PhosphorIcons.bell,
-                    ),
-                    iconSize: _currentIndex == 1 ? 30 : 26,
-                    color: _currentIndex == 1
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
-                    onPressed: () => _onPageChanged(1),
-                  ),
-                ),
+                _buildBottomBarItem(index: 0, icon: Assets.icons.home),
+                _buildBottomBarItem(index: 1, icon: Assets.icons.bell),
                 const Spacer(),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 2
-                          ? PhosphorIcons.bookmarkFill
-                          : PhosphorIcons.bookmark,
-                    ),
-                    iconSize: _currentIndex == 2 ? 30 : 26,
-                    color: _currentIndex == 2
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
-                    onPressed: () => _onPageChanged(2),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: IconButton(
-                    icon: Icon(
-                      _currentIndex == 3
-                          ? PhosphorIcons.userFill
-                          : PhosphorIcons.user,
-                    ),
-                    iconSize: _currentIndex == 3 ? 30 : 26,
-                    color: _currentIndex == 3
-                        ? Palette.primaryColor
-                        : Palette.unSelectedColor,
-                    onPressed: () => _onPageChanged(3),
-                  ),
-                ),
+                _buildBottomBarItem(index: 2, icon: Assets.icons.bookmark),
+                _buildBottomBarItem(index: 3, icon: Assets.icons.user),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Expanded _buildBottomBarItem({
+    required int index,
+    required SvgGenImage icon,
+  }) {
+    return Expanded(
+      flex: 2,
+      child: IconButton(
+        icon: ValueListenableBuilder<int>(
+          valueListenable: _currentIndex,
+          builder: (context, value, child) {
+            return icon.svg(
+              color: value == index
+                  ? AppPalette.primaryColor
+                  : AppPalette.unSelectedColor,
+              height: value == index ? 28 : 26,
+            );
+          },
+        ),
+        onPressed: () => _currentIndex.value = index,
       ),
     );
   }

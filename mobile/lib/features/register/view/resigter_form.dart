@@ -16,62 +16,27 @@ class ResigterForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Họ của bạn',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
-              ),
-            ),
+            _buildTileTextField('Họ của bạn'),
             _FirstnameInput(),
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Tên của bạn',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
-              ),
-            ),
+            _buildTileTextField('Tên của bạn'),
             _LastnameInput(),
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Tên người dùng',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
-              ),
-            ),
+            _buildTileTextField('Tên người dùng'),
             _UsernameInput(),
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Mật khẩu',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
-              ),
-            ),
+            _buildTileTextField('Mật khẩu'),
             _PasswordInput(),
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Xác nhận mật khẩu',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Palette.primaryTextColor,
-              ),
-            ),
+            _buildTileTextField('Xác nhận mật khẩu'),
             _ConfirmedPasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             Center(
@@ -79,6 +44,17 @@ class ResigterForm extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Text _buildTileTextField(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: AppPalette.primaryTextColor,
       ),
     );
   }
@@ -242,7 +218,9 @@ class _RegisterButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
-            ? const CircularProgressIndicator()
+            ? const CircularProgressIndicator(
+                color: AppPalette.primaryColor,
+              )
             : ElevatedButton(
                 key: const Key('registerForm_continue_raisedButton'),
                 onPressed: state.status.isValidated
@@ -253,17 +231,18 @@ class _RegisterButton extends StatelessWidget {
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
-                  primary: Palette.primaryColor,
                   fixedSize: const Size(130, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
+                  primary: Theme.of(context).primaryColor,
                 ),
                 child: const Text(
                   'Đăng ký',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
+                    color: AppPalette.whiteBackgroundColor,
                   ),
                 ),
               );

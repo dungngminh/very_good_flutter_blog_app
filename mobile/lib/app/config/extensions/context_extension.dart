@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-extension ContextX on BuildContext {
+extension ContextExtension on BuildContext {
   double get screenWidth {
     return MediaQuery.of(this).size.width;
   }

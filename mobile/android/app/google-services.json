@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "297236090392",
+    "project_id": "very-good-blog-app",
+    "storage_bucket": "very-good-blog-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297236090392:android:5f2620a39aebbb99ccbd6d",
+        "android_client_info": {
+          "package_name": "com.dungngminh.very_good_blog_app.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297236090392-14p9e163fuj7os6836rchbuhtv05tpnt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dungngminh.very_good_blog_app.dev",
+            "certificate_hash": "3b52b8622101dd4687d0fc73cce2a7f15fddf8fd"
+          }
+        },
+        {
+          "client_id": "297236090392-3t68fp026fs92gl7qhbi9tjuoiv6sosu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGoJRSB7HrR57xHx1-JUPrH9eEy10Y-vY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297236090392-3t68fp026fs92gl7qhbi9tjuoiv6sosu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
