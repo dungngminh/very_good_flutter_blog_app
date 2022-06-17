@@ -1,17 +1,24 @@
-from http.client import BAD_REQUEST
+from unicodedata import category
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from apps.utils.response import ResponseMessage
 from apps.utils.response import HttpResponse
-
-from apps.utils.jwt import JsonWebTokenHelper
-from .serializers import BlogSerializer
-from apps.users import serializers
+from .serializers import BlogSerializer, BlogPostSerializer, BlogViewSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from bson.objectid import ObjectId
+from bson import json_util
+from django.core import serializers
+from django.forms.models import model_to_dict
+import json
 from . import models
-from ..users.models import User
-# Create your views here.
+from . import middleware
 
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
 
 
 class BlogManage(APIView):
@@ -42,8 +49,50 @@ class BlogManage(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
     def post(self, request):
-        print(request.META)
-        return HttpResponse.response({}, "ok", status.HTTP_200_OK)
+        try:
+            jwt = request.META['HTTP_AUTHORIZATION']
+            # Authorization
+            payload = middleware.BlogMiddleware.authorization(jwt)
+            print(payload)
+            if not payload:
+                return HttpResponse.response(
+                    data = {},
+                    message = ResponseMessage.UNAUTHORIZED,
+                    status = status.HTTP_401_UNAUTHORIZED,
+                )
+
+            serialize = BlogPostSerializer(data = request.data)
+            if serialize.is_valid():
+                # Check if user exists
+                new_blog = models.Blog.objects.create(
+                    _id = ObjectId(),
+                    author_id = payload['_id'],
+                    content = serialize.data['content'],
+                    title = serialize.data['title'],
+                    category = serialize.data['category'],
+                )
+
+                new_blog.save()
+                dict_obj = json.loads(json_util.dumps(serializers.serialize('python', [ new_blog, ])[0]['fields']))
+
+                return HttpResponse.response(
+                    data = dict_obj,
+                    message='ok',
+                    status=status.HTTP_201_CREATED,
+                )
+            else:
+                return HttpResponse.response(
+                    data={},
+                    message='format is not true',
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        except Exception as e:
+            print(e)
+            return HttpResponse.response(
+                data={},
+                message=ResponseMessage.INTERNAL_SERVER_ERROR,
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
     
     def delete(self, request):
         try:

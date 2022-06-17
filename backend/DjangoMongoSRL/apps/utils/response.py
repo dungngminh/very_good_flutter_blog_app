@@ -8,6 +8,7 @@ class ResponseMessage:
     PASSWORD_NOT_MATCH = 'password_not_match'
     PASSWORD_CHANGED = 'password_changed_successfully'
     UNAUTHORIZED = 'permission_is_required'
+    INTERNAL_SERVER_ERROR = 'internal_server_error'
 
 class HttpResponse:
     @staticmethod
