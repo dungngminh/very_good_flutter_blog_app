@@ -63,9 +63,11 @@ class ResigterForm extends StatelessWidget {
 class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
-      buildWhen: (previous, current) => previous.username != current.username,
-      builder: (context, state) {
+    return Builder(
+      builder: (context) {
+        final username = context.select(
+          (RegisterBloc registerBloc) => registerBloc.state.username,
+        );
         return TextFieldDecoration(
           child: TextField(
             key: const Key('registerForm_usernameInput_textField'),
@@ -80,7 +82,7 @@ class _UsernameInput extends StatelessWidget {
               border: InputBorder.none,
               hintText: 'Nhập vào tên người dùng',
               errorText:
-                  state.username.invalid ? 'Tên người dùng không hợp lệ' : null,
+                  username.invalid ? 'Tên người dùng không hợp lệ' : null,
             ),
           ),
         );
@@ -92,9 +94,11 @@ class _UsernameInput extends StatelessWidget {
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
-      buildWhen: (previous, current) => previous.password != current.password,
-      builder: (context, state) {
+    return Builder(
+      builder: (context) {
+        final password = context.select(
+          (RegisterBloc registerBloc) => registerBloc.state.password,
+        );
         return TextFieldDecoration(
           child: TextField(
             key: const Key('registerForm_passwordInput_textField'),
@@ -110,8 +114,7 @@ class _PasswordInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào mật khẩu',
-              errorText:
-                  state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
+              errorText: password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
           ),
         );
@@ -156,24 +159,25 @@ class _ConfirmedPasswordInput extends StatelessWidget {
 class _FirstnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
-      buildWhen: (previous, current) => previous.firstname != current.firstname,
-      builder: (context, state) {
+    return Builder(
+      builder: (context) {
+        final firstname = context.select(
+          (RegisterBloc registerBloc) => registerBloc.state.firstname,
+        );
         return TextFieldDecoration(
           child: TextField(
             key: const Key('registerForm_firstnameInput_textField'),
-            onChanged: (firstname) => context.read<RegisterBloc>().add(
+            onChanged: (firstName) => context.read<RegisterBloc>().add(
                   RegisterEvent(
                     RegisterEventType.firstNameChanged,
-                    input: firstname,
+                    input: firstName,
                   ),
                 ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào họ của bạn',
-              errorText:
-                  state.firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
+              errorText: firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
             ),
           ),
         );
@@ -185,24 +189,24 @@ class _FirstnameInput extends StatelessWidget {
 class _LastnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
-      buildWhen: (previous, current) => previous.lastname != current.lastname,
-      builder: (context, state) {
+    return Builder(
+      builder: (context) {
+        final lastname = context
+            .select((RegisterBloc registerBloc) => registerBloc.state.lastname);
         return TextFieldDecoration(
           child: TextField(
             key: const Key('registerForm_passwordInput_textField'),
-            onChanged: (lastname) => context.read<RegisterBloc>().add(
+            onChanged: (lastName) => context.read<RegisterBloc>().add(
                   RegisterEvent(
                     RegisterEventType.lastNameChanged,
-                    input: lastname,
+                    input: lastName,
                   ),
                 ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào tên của bạn',
-              errorText:
-                  state.lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
+              errorText: lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
             ),
           ),
         );
@@ -214,16 +218,17 @@ class _LastnameInput extends StatelessWidget {
 class _RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return state.status.isSubmissionInProgress
+    return Builder(
+      builder: (context) {
+        final status = context
+            .select((RegisterBloc registerBloc) => registerBloc.state.status);
+        return status.isSubmissionInProgress
             ? const CircularProgressIndicator(
                 color: AppPalette.primaryColor,
               )
             : ElevatedButton(
                 key: const Key('registerForm_continue_raisedButton'),
-                onPressed: state.status.isValidated
+                onPressed: status.isValidated
                     ? () {
                         context.read<RegisterBloc>().add(
                               const RegisterEvent(RegisterEventType.submitted),
