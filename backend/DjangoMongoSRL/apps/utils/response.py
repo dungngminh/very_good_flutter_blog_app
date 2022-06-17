@@ -1,3 +1,4 @@
+from sre_constants import SUCCESS
 from rest_framework.response import Response
 
 class ResponseMessage:
@@ -8,6 +9,10 @@ class ResponseMessage:
     PASSWORD_NOT_MATCH = 'password_not_match'
     PASSWORD_CHANGED = 'password_changed_successfully'
     UNAUTHORIZED = 'permission_is_required'
+    INTERNAL_SERVER_ERROR = 'internal_server_error'
+    GET_BLOGS_SUCCESSFULLY = 'get_blog_successfully'
+    GET_BLOG_SUCCESSFULLY = 'get_blog_succeed'
+    SUCCESS = 'success'
 
 class HttpResponse:
     @staticmethod
