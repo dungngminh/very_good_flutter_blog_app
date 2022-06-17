@@ -7,8 +7,8 @@ class BlogSerializer(serializers.ModelSerializer):
         field = ('id', 'content', 'id_user', 'category')
 
 class BlogPostSerializer(serializers.Serializer):
-    content = serializers.JSONField(required=True)
-    title = serializers.CharField(required=True)
+    content = serializers.JSONField()
+    title = serializers.CharField()
     image_url = serializers.CharField()
     category = serializers.JSONField()
 

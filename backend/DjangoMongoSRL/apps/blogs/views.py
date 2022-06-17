@@ -1,4 +1,3 @@
-from unicodedata import category
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.utils.response import ResponseMessage
@@ -9,8 +8,8 @@ from rest_framework import status
 from bson.objectid import ObjectId
 from bson import json_util
 from django.core import serializers
-from django.forms.models import model_to_dict
 import json
+import re
 from . import models
 from . import middleware
 
@@ -20,29 +19,54 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-
 class BlogManage(APIView):
     permission_classes = (AllowAny,)
     serializer_class = BlogSerializer
     
     def get(self, request, *args, **kwargs):
-        blog_model = models.Blog.objects
         try:
-            if "id" in request.query_params:
-                blog_model = blog_model.filter(id=request.query_params["id"])
-                
-            if "content" in request.query_params:
-                blog_model = blog_model.filter(content=request.query_params["content"])
-                
-            if "id_user" in request.query_params:
-                blog_model = blog_model.filter(id_user=request.query_params["id_user"])
-                
-            if "category" in request.query_params:
-                blog_model = blog_model.filter(category=request.query_params["category"])
-                
-            serializer = BlogSerializer(blog_model, many = True)
+            id = kwargs['id']
+        except:
+            id = ''
+
+        try:
+            if id:
+                blog = models.Blog.objects.get(_id = ObjectId(id))
+                return HttpResponse.response(
+                    data = BlogViewSerializer(blog).data,
+                    message = ResponseMessage.GET_BLOG_SUCCESSFULLY,
+                    status = status.HTTP_200_OK,
+                )
             
-            return Response(serializer.data)
+            blogs = models.Blog.objects.all()
+
+            if "category" in request.query_params:
+                categories = (request.query_params['category'].split(','))
+                print(categories)
+                blogs = blogs.filter(category=[x for x in categories])
+
+            if "author_id" in request.query_params:
+                blogs = blogs.filter(id=request.query_params["author_id"])
+                
+            if "search" in request.query_params:
+                title_search = request.query_params["search"]
+                print(request.query_params["search"])
+                blogs = blogs.filter(title__contains=title_search)
+
+            if "page" in request.query_params:
+                if "limit" in request.query_params:
+                    page = request.query_params["page"]
+                    limit = request.query_params["limit"]
+                    offset = (page - 1) * limit
+                    blogs = blogs.filter()[offset : offset + limit]
+                
+            serializer = BlogViewSerializer(blogs, many = True)
+            
+            return HttpResponse.response(
+                data = serializer.data,
+                message = ResponseMessage.GET_BLOGS_SUCCESSFULLY,
+                status = status.HTTP_200_OK,
+            )
             
         except Exception as e:
             print(e)
@@ -68,7 +92,7 @@ class BlogManage(APIView):
                     _id = ObjectId(),
                     author_id = payload['_id'],
                     content = serialize.data['content'],
-                    title = serialize.data['title'],
+                    title = serialize.data['title'].lower(),
                     category = serialize.data['category'],
                 )
 
@@ -94,29 +118,67 @@ class BlogManage(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
     
-    def delete(self, request):
+    def delete(self, request, *args, **kwargs):
         try:
-            blog_model = models.Blog.objects
-            if "id" in request.query_params:
-                blog_model = blog_model.filter(id=request.query_params["id"])
-                blog_model.delete()
-                return Response(status=status.HTTP_200_OK)
+            id = kwargs['id']
+        except:
+            id = ''
+
+        try:
+            if id:
+                blog = models.Blog.objects.get(_id=ObjectId(id))
+                if blog:
+                    blog.delete()
+                return HttpResponse.response(
+                    data = {},
+                    message = 'delete_succeed',
+                    status = status.HTTP_200_OK,
+                )
             else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+                return HttpResponse.response(
+                    data = {},
+                    message = 'id_is_not_provided',
+                    status = status.HTTP_400_BAD_REQUEST,
+                )
         except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponse.response(
+                data = {},
+                message = ResponseMessage.INTERNAL_SERVER_ERROR,
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         
     
-    def patch(self, request, id=None):
-        item = models.Blog.objects.get(id = id)
-        item.content = request.data["content"]
-        item.category = request.data["category"]
-        item.save(update_fields=["content", "category"])
-        
-        serializer = BlogSerializer(item)
-        return Response(serializer.data)
+    def put(self, request, *args, **kwargs):
+        try:
+            id = kwargs['id']
+        except:
+            id = ''
+
+        try:
+            blog = models.Blog.objects.get(_id=ObjectId(id))
+            data = BlogPostSerializer(request.data).data
+            
+            blog.content = data['content']
+            blog.title = data['title']
+            blog.image_url = data['image_url']
+            blog.category = data['category']
+
+            blog.save()
+            data = BlogViewSerializer(blog).data
+
+            return HttpResponse.response(
+                data = data,
+                message = ResponseMessage.SUCCESS,
+                status = status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            print(e)
+            return HttpResponse.response(
+                data = {},
+                message = ResponseMessage.INTERNAL_SERVER_ERROR,
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         
         
     
