@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart';
@@ -63,6 +64,7 @@ class GoodBlogClient {
   }
 
   T _returnResponseResult<T>(Response response) {
+    log('${response.body}${response.statusCode}');
     switch (response.statusCode) {
       case 200:
       case 201:

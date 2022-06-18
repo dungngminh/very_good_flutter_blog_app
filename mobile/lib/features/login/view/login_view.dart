@@ -21,6 +21,7 @@ class LoginView extends StatelessWidget {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
+          backgroundColor: AppPalette.whiteBackgroundColor,
           body: SingleChildScrollView(
             child: Column(
               children: [

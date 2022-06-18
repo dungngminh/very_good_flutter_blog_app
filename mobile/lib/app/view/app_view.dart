@@ -8,9 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/features/add_blog/add_blog.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
-import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
+import 'package:very_good_blog_app/repository/blog_repository.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class VeryGoodBlogApp extends StatelessWidget {
@@ -25,6 +24,9 @@ class VeryGoodBlogApp extends StatelessWidget {
         ),
         RepositoryProvider<UserRepository>(
           create: (_) => UserRepository(),
+        ),
+        RepositoryProvider<BlogRepository>(
+          create: (_) => BlogRepository(),
         ),
       ],
       child: const VeryGoodBlogAppView(),
@@ -43,15 +45,6 @@ class VeryGoodBlogAppView extends StatelessWidget {
           create: (context) => AuthenticationBloc(
             authenticationRepository: context.read<AuthenticationRepository>(),
           ),
-        ),
-        BlocProvider<ProfileBloc>(
-          create: (context) => ProfileBloc(
-            authenticationRepository: context.read<AuthenticationRepository>(),
-            userRepository: context.read<UserRepository>(),
-          ),
-        ),
-        BlocProvider<AddBlogBloc>(
-          create: (context) => AddBlogBloc(),
         ),
       ],
       child: MaterialApp.router(

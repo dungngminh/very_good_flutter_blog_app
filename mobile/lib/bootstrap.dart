@@ -9,13 +9,30 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    log('onChange(${bloc.runtimeType}, $change)');
+  void onCreate(BlocBase bloc) {
+    super.onCreate(bloc);
+    log('onBlocCreate(${bloc.runtimeType})');
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    log(
+      'onTransition(${bloc.runtimeType}, $transition)',
+      // 'onStateChanged: CurrentState(${transition.currentState}),'
+      // ' NextState(${transition.nextState})',
+    );
+  }
+
+  @override
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+    log('onBlocClose(${bloc.runtimeType})');
   }
 
   @override
@@ -28,9 +45,12 @@ class AppBlocObserver extends BlocObserver {
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await runZonedGuarded(
     () async {
-      
       await BlocOverrides.runZoned(
-        () async => runApp(await builder()),
+        () async {
+          WidgetsFlutterBinding.ensureInitialized();
+          await Firebase.initializeApp();
+          runApp(await builder());
+        },
         blocObserver: AppBlocObserver(),
       );
     },

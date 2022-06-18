@@ -12,6 +12,8 @@ dependencies:
   draggable_home: ^1.0.3
   easy_debounce: ^2.0.2+1
   equatable: ^2.0.3
+  firebase_core: ^1.18.0
+  firebase_storage: ^10.2.18
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
@@ -25,8 +27,10 @@ dependencies:
   hive: ^2.2.1
   hive_flutter: ^1.1.0
   http: ^0.13.4
+  image_picker: ^0.8.5+3
   intl: ^0.17.0
   json_annotation: ^4.5.0
+  path_provider: ^2.0.11
   phosphor_flutter: ^1.4.0
   shimmer: ^2.0.0
 

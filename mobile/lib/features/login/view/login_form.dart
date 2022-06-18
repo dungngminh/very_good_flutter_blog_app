@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart';
+import 'package:very_good_blog_app/widgets/widgets.dart'
+    show TitleOfTextField, TextFieldDecoration;
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -16,33 +18,27 @@ class LoginForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
+              SnackBar(
+                content: Builder(
+                  builder: (context) {
+                    final message =
+                        context.watch<AuthenticationBloc>().state.status;
+                    return Text(message.toString());
+                  },
+                ),
+              ),
             );
         }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Tên người dùng',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppPalette.primaryTextColor,
-              ),
-            ),
+            const TitleOfTextField('Tên người dùng'),
             _UsernameInput(),
             const Padding(padding: EdgeInsets.all(12)),
-            const Text(
-              'Mật khẩu',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppPalette.primaryTextColor,
-              ),
-            ),
+            const TitleOfTextField('Mật khẩu'),
             _PasswordInput(),
             const SizedBox(
               height: 24,

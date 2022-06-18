@@ -129,12 +129,12 @@ class NotificationTile extends StatelessWidget {
               child: SizedBox(width: 10),
             )
           else
-            InkEffectWidget(
+            InkEffectIconButton(
               child: Assets.icons.addUser.svg(
                 height: 24,
                 color: AppPalette.primaryColor,
               ),
-              onTapEvent: () {},
+              onPressed: () {},
             ),
         ],
       ),

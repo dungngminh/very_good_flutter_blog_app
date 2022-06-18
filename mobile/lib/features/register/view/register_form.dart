@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/register/register.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart';
+import 'package:very_good_blog_app/widgets/widgets.dart'
+    show TextFieldDecoration, TitleOfTextField;
 
-class ResigterForm extends StatelessWidget {
-  const ResigterForm({super.key});
+class RegisterForm extends StatelessWidget {
+  const RegisterForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +17,27 @@ class ResigterForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTileTextField('Họ của bạn'),
+            const TitleOfTextField('Họ của bạn'),
             _FirstnameInput(),
             const SizedBox(
               height: 16,
             ),
-            _buildTileTextField('Tên của bạn'),
+            const TitleOfTextField('Tên của bạn'),
             _LastnameInput(),
             const SizedBox(
               height: 16,
             ),
-            _buildTileTextField('Tên người dùng'),
+            const TitleOfTextField('Tên người dùng'),
             _UsernameInput(),
             const SizedBox(
               height: 16,
             ),
-            _buildTileTextField('Mật khẩu'),
+            const TitleOfTextField('Mật khẩu'),
             _PasswordInput(),
             const SizedBox(
               height: 16,
             ),
-            _buildTileTextField('Xác nhận mật khẩu'),
+            const TitleOfTextField('Xác nhận mật khẩu'),
             _ConfirmedPasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             Center(
@@ -44,17 +45,6 @@ class ResigterForm extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Text _buildTileTextField(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: AppPalette.primaryTextColor,
       ),
     );
   }

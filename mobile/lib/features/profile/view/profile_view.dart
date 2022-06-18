@@ -22,7 +22,10 @@ class ProfileView extends StatelessWidget {
             height: 30,
           ),
           splashRadius: 24,
-          onPressed: () => context.push(AppRoute.setting),
+          onPressed: () => context.push(
+            AppRoute.setting,
+            extra: context.read<ProfileBloc>(),
+          ),
         ),
       ],
       leading: Padding(

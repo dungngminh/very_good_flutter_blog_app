@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/register/bloc/register_bloc.dart';
-import 'package:very_good_blog_app/features/register/view/resigter_form.dart';
+import 'package:very_good_blog_app/features/register/view/register_form.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class RegisterView extends StatelessWidget {
@@ -40,6 +40,7 @@ class RegisterView extends StatelessWidget {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
+          backgroundColor: AppPalette.whiteBackgroundColor,
           body: Column(
             children: [
               SizedBox(
@@ -76,7 +77,7 @@ class RegisterView extends StatelessWidget {
                     authenticationRepository:
                         context.read<AuthenticationRepository>(),
                   ),
-                  child: const ResigterForm(),
+                  child: const RegisterForm(),
                 ),
               ),
               SizedBox(

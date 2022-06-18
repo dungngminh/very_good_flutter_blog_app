@@ -34,12 +34,12 @@ class PopularBlogCard extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: InkEffectWidget(
+              child: InkEffectIconButton(
                 child: Assets.icons.bookmark.svg(
                   color: AppPalette.whiteBackgroundColor,
                   height: 24,
                 ),
-                onTapEvent: () {},
+                onPressed: () {},
               ),
             ),
             const Spacer(),

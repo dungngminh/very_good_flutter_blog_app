@@ -48,6 +48,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/add_user.svg
   SvgGenImage get addUser => const SvgGenImage('assets/icons/add_user.svg');
 
+  /// File path: assets/icons/arrow_down.svg
+  SvgGenImage get arrowDown => const SvgGenImage('assets/icons/arrow_down.svg');
+
   /// File path: assets/icons/bell.svg
   SvgGenImage get bell => const SvgGenImage('assets/icons/bell.svg');
 
@@ -60,6 +63,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/circle_arrow_left.svg
   SvgGenImage get circleArrowLeft =>
       const SvgGenImage('assets/icons/circle_arrow_left.svg');
+
+  /// File path: assets/icons/close_square.svg
+  SvgGenImage get closeSquare =>
+      const SvgGenImage('assets/icons/close_square.svg');
 
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');

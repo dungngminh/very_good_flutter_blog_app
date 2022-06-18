@@ -74,10 +74,10 @@ class BlogCard extends StatelessWidget {
             ),
             _buildCardContent(cardType),
             if (cardType == CardType.titleAuthorTime)
-              InkEffectWidget(
+              InkEffectIconButton(
                 child: Assets.icons.bookmark
                     .svg(color: AppPalette.deepPurpleColor),
-                onTapEvent: () {},
+                onPressed: () {},
               )
             else
               const SizedBox(),

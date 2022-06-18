@@ -20,9 +20,9 @@ class AuthenticationRepository {
   }) : _blogClient = blogClient ?? GoodBlogClient();
 
   final GoodBlogClient _blogClient;
+
   final _controller = StreamController<AuthenticationStatus>();
 
-  //action
   Stream<AuthenticationStatus> get status async* {
     final token = await SecureStorageHelper.getValueByKey('jwt');
     log('token $token');
@@ -32,7 +32,7 @@ class AuthenticationRepository {
     } else {
       yield AuthenticationStatus.authenticated;
     }
-
+    // yield AuthenticationStatus.authenticated;
     yield* _controller.stream;
   }
 
