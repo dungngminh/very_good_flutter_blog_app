@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.utils.response import ResponseMessage
@@ -121,9 +120,9 @@ class BlogManage(APIView):
                     message=ResponseMessage.UNAUTHORIZED,
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
-
+            print(request.data)
             serialize = BlogPostSerializer(data=request.data)
-            if serialize.is_valid():
+            if serialize.is_valid(raise_exception=True):
                 # Check if user exists
                 new_blog = models.Blog.objects.create(
                     _id=ObjectId(),

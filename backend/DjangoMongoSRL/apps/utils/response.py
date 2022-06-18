@@ -13,6 +13,7 @@ class ResponseMessage:
     GET_BLOGS_SUCCESSFULLY = 'get_blog_successfully'
     GET_BLOG_SUCCESSFULLY = 'get_blog_succeed'
     SUCCESS = 'success'
+    INVALID_DATA = 'invalid_data'
 
 class HttpResponse:
     @staticmethod
