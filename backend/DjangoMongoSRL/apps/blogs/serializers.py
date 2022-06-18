@@ -22,4 +22,26 @@ class BlogViewSerializer(serializers.Serializer):
     likes = serializers.IntegerField()
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
-    
+
+class BlogViewSerializer(serializers.Serializer):
+    _id = serializers.CharField()
+    content = serializers.JSONField(required=True)
+    title = serializers.CharField(required=True)
+    image_url = serializers.CharField()
+    category = serializers.JSONField()
+    author_id = serializers.CharField()
+    likes = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()    
+
+class BlogGetSerializer(serializers.Serializer):
+    _id = serializers.CharField()
+    content = serializers.JSONField()
+    title = serializers.CharField()
+    image_url = serializers.CharField()
+    category = serializers.JSONField()
+    author_id = serializers.CharField()
+    likes = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    author_detail = serializers.JSONField()
