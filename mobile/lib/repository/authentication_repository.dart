@@ -32,6 +32,7 @@ class AuthenticationRepository {
     } else {
       yield AuthenticationStatus.authenticated;
     }
+
     yield* _controller.stream;
   }
 

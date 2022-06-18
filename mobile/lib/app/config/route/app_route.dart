@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/features/add_blog/add_blog.dart';
+import 'package:very_good_blog_app/features/add_blog/view/add_blog_view.dart';
+import 'package:very_good_blog_app/features/add_blog/view/post_blog_view.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
 import 'package:very_good_blog_app/features/main/main.dart';
@@ -15,6 +16,7 @@ class AppRoute {
   static const setting = '/setting';
   static const addBlog = '/add';
   static const blog = '/blog';
+  static const postBlog = 'post';
 
   static final route = GoRouter(
     routes: [
@@ -53,6 +55,14 @@ class AppRoute {
         builder: (context, state) {
           return const AddBlogView();
         },
+        routes: [
+          GoRoute(
+            path: postBlog,
+            builder: (context, state) {
+              return const PostBlogView();
+            },
+          )
+        ],
       ),
       GoRoute(
         path: blog,

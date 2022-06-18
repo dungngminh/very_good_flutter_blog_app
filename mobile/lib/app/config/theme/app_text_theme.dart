@@ -24,6 +24,10 @@ class AppTextTheme {
     color: AppPalette.primaryTextColor,
   );
 
+  static const reqularDarkTextStyle = TextStyle(
+    color: AppPalette.primaryDarkTextColor,
+  );
+
   static const decriptionTextStyle = TextStyle(
     color: AppPalette.descriptionTextColor,
   );

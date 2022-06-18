@@ -82,6 +82,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/plus.svg
   SvgGenImage get plus => const SvgGenImage('assets/icons/plus.svg');
 
+  /// File path: assets/icons/plus_border.svg
+  SvgGenImage get plusBorder =>
+      const SvgGenImage('assets/icons/plus_border.svg');
+
   /// File path: assets/icons/profile.svg
   SvgGenImage get profile => const SvgGenImage('assets/icons/profile.svg');
 

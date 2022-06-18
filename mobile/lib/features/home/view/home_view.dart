@@ -1,19 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/features/home/widget/widget.dart';
+import 'package:very_good_blog_app/features/home/home.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/widgets/widgets.dart' show TapHideKeyboard;
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+    return TapHideKeyboard(
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
