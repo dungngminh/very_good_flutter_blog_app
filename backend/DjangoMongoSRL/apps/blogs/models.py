@@ -1,4 +1,5 @@
 from djongo import models
+from django_mongodb_engine.contrib import MongoDBManager
 # Create your models here.
 
 # Ref db is used when you want to populate in a query later on.
