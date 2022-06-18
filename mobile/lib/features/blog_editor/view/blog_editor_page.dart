@@ -6,19 +6,19 @@ import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart'
     show ContextExtension, AppPalette, AppRoute, AppTextTheme;
-import 'package:very_good_blog_app/features/add_blog/add_blog.dart'
-    show AddBlogBloc, AddBlogSubmitContent;
+import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
+    show BlogEditorBloc, BlogEditorSubmitContent;
 import 'package:very_good_blog_app/repository/blog_repository.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart'
     show TapHideKeyboard, ActionBar;
 
-class AddBlogPage extends StatelessWidget {
-  const AddBlogPage({super.key});
+class BlogEditorPage extends StatelessWidget {
+  const BlogEditorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AddBlogBloc>(
-      create: (context) => AddBlogBloc(
+    return BlocProvider<BlogEditorBloc>(
+      create: (context) => BlogEditorBloc(
         blogRepository: context.read<BlogRepository>(),
       ),
       child: const _AddBlogView(),
@@ -66,7 +66,7 @@ class _AddBlogViewState extends State<_AddBlogView> {
           padding: EdgeInsets.only(
             left: 16,
             right: 16,
-            top: context.padding.top + 8,
+            top: context.padding.top + 16,
             bottom: 8,
           ),
           child: Column(
@@ -93,11 +93,11 @@ class _AddBlogViewState extends State<_AddBlogView> {
                         return;
                       }
                       context
-                          .read<AddBlogBloc>()
-                          .add(AddBlogSubmitContent(editorContent));
+                          .read<BlogEditorBloc>()
+                          .add(BlogEditorSubmitContent(editorContent));
                       context.push(
                         '${AppRoute.addBlog}/${AppRoute.uploadBlog}',
-                        extra: context.read<AddBlogBloc>(),
+                        extra: context.read<BlogEditorBloc>(),
                       );
                     },
                     child: Padding(
@@ -136,7 +136,6 @@ class _AddBlogViewState extends State<_AddBlogView> {
                     controller: _quillController,
                     autoFocus: false,
                     scrollable: true,
-                    onLaunchUrl: (url) {},
                     focusNode: _textEditorFocusNode,
                     scrollController: ScrollController(),
                     padding: const EdgeInsets.all(16),

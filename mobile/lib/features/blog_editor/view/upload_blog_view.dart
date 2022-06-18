@@ -3,16 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart'
-    show AppPalette, AppTextTheme, Assets, ContextExtension;
-import 'package:very_good_blog_app/features/add_blog/add_blog.dart'
+    show AppPalette, AppRoute, AppTextTheme, Assets, ContextExtension;
+import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
     show
-        AddBlogAddImage,
-        AddBlogBloc,
-        AddBlogCategoryChanged,
-        AddBlogRemoveImage,
-        AddBlogTitleChanged,
-        AddBlogUploadBlog;
+        BlogEditorAddImage,
+        BlogEditorBloc,
+        BlogEditorCategoryChanged,
+        BlogEditorRemoveImage,
+        BlogEditorTitleChanged,
+        BlogEditorUploadBlog;
+import 'package:very_good_blog_app/features/profile/profile.dart'
+    show ProfileBloc;
+import 'package:very_good_blog_app/models/models.dart' show Blog;
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class UploadBlogView extends StatelessWidget {
@@ -25,16 +29,77 @@ class UploadBlogView extends StatelessWidget {
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: context.padding.top + 8,
+            vertical: context.padding.top + 16,
           ),
           child: Column(
-            children: const [
-              ActionBar(),
-              _ImagePlacer(),
-              SizedBox(
+            children: [
+              ActionBar(
+                actions: [
+                  Builder(
+                    builder: (context) {
+                      final validationStatus = context.select(
+                        (BlogEditorBloc blogEditorBloc) =>
+                            blogEditorBloc.state.validationStatus,
+                      );
+                      final category = context.select(
+                        (BlogEditorBloc blogEditorBloc) =>
+                            blogEditorBloc.state.category,
+                      );
+                      return Visibility(
+                        visible:
+                            validationStatus.isValid && category.isNotEmpty,
+                        child: Tooltip(
+                          message: 'Bạn có thể xem trước bài viết'
+                              ' trước khi đăng',
+                          child: InkWell(
+                            onTap: () {
+                              final title = context
+                                  .read<BlogEditorBloc>()
+                                  .state
+                                  .blogTitle
+                                  .value;
+                              final content =
+                                  context.read<BlogEditorBloc>().state.content;
+                              final user =
+                                  context.read<ProfileBloc>().state.user;
+                              final imagePath = context
+                                  .read<BlogEditorBloc>()
+                                  .state
+                                  .imagePath
+                                  .value;
+                              final category =
+                                  context.read<BlogEditorBloc>().state.category;
+                              final previewBlog = Blog.preview(
+                                title: title,
+                                category: category,
+                                content: content,
+                                imageUrl: imagePath,
+                                user: user!,
+                                createdAt: DateTime.now(),
+                              );
+
+                              context.push(AppRoute.blog, extra: previewBlog);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                'Xem trước bài viết',
+                                style: AppTextTheme.darkW700TextStyle
+                                    .copyWith(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+              const _ImagePlacer(),
+              const SizedBox(
                 height: 32,
               ),
-              _BlogInformationForm(),
+              const _BlogInformationForm(),
             ],
           ),
         ),
@@ -49,12 +114,13 @@ class _ImagePlacer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.read<AddBlogBloc>().add(AddBlogAddImage()),
+      onTap: () => context.read<BlogEditorBloc>().add(BlogEditorAddImage()),
       child: Center(
         child: Builder(
           builder: (context) {
             final pickedImage = context.select(
-              (AddBlogBloc addBlogBloc) => addBlogBloc.state.imagePath.value,
+              (BlogEditorBloc blogEditorBlog) =>
+                  blogEditorBlog.state.imagePath.value,
             );
             if (pickedImage.isEmpty) {
               return _buildImagePlaceHoder();
@@ -78,8 +144,9 @@ class _ImagePlacer extends StatelessWidget {
                   top: 16,
                   right: 8,
                   child: InkEffectIconButton(
-                    onPressed: () =>
-                        context.read<AddBlogBloc>().add(AddBlogRemoveImage()),
+                    onPressed: () => context
+                        .read<BlogEditorBloc>()
+                        .add(BlogEditorRemoveImage()),
                     child: Assets.icons.closeSquare.svg(
                       height: 32,
                       color: AppPalette.red300Color,
@@ -162,16 +229,17 @@ class _TitleBlogInput extends StatelessWidget {
     return Builder(
       builder: (context) {
         final blogTitle = context.select(
-          (AddBlogBloc addBlogBloc) => addBlogBloc.state.blogTitle,
+          (BlogEditorBloc blogEditorBlog) => blogEditorBlog.state.blogTitle,
         );
         return TextFieldDecoration(
           fieldColor: AppPalette.whiteBackgroundColor,
           margin: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-          child: TextField(
+          child: TextFormField(
             key: const Key('blogInformationForm_titleBlogInput_textField'),
-            onChanged: (title) => context.read<AddBlogBloc>().add(
-                  AddBlogTitleChanged(title),
+            onChanged: (title) => context.read<BlogEditorBloc>().add(
+                  BlogEditorTitleChanged(title),
                 ),
+            initialValue: blogTitle.value.isNotEmpty ? blogTitle.value : null,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
@@ -196,24 +264,32 @@ class _CategoryDropdownField extends StatelessWidget {
     return TextFieldDecoration(
       fieldColor: AppPalette.whiteBackgroundColor,
       margin: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-      child: DropdownButtonFormField<String>(
-        key: const Key('blogInformationForm_categoryDowndown_fromField'),
-        items: categories
-            .map(
-              (category) => DropdownMenuItem(
-                value: category,
-                child: Text(category),
-              ),
-            )
-            .toList(),
-        onChanged: (category) => context.read<AddBlogBloc>().add(
-              AddBlogCategoryChanged(category!),
+      child: Builder(
+        builder: (context) {
+          final category = context.select(
+            (BlogEditorBloc blogEditorBlog) => blogEditorBlog.state.category,
+          );
+          return DropdownButtonFormField<String>(
+            key: const Key('blogInformationForm_categoryDowndown_fromField'),
+            items: categories
+                .map(
+                  (category) => DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  ),
+                )
+                .toList(),
+            value: category.isNotEmpty ? category : null,
+            onChanged: (category) => context.read<BlogEditorBloc>().add(
+                  BlogEditorCategoryChanged(category!),
+                ),
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.only(left: 16, right: 16),
+              border: InputBorder.none,
+              hintText: 'Chọn thể loại',
             ),
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.only(left: 16, right: 16),
-          border: InputBorder.none,
-          hintText: 'Chọn thể loại',
-        ),
+          );
+        },
       ),
     );
   }
@@ -228,7 +304,11 @@ class _UploadButton extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final validationStatus = context.select(
-            (AddBlogBloc addBlogBloc) => addBlogBloc.state.validationStatus,
+            (BlogEditorBloc blogEditorBlog) =>
+                blogEditorBlog.state.validationStatus,
+          );
+          final category = context.select(
+            (BlogEditorBloc blogEditorBlog) => blogEditorBlog.state.category,
           );
           return validationStatus.isSubmissionInProgress
               ? const CircularProgressIndicator(
@@ -236,9 +316,11 @@ class _UploadButton extends StatelessWidget {
                 )
               : ElevatedButton(
                   key: const Key('loginForm_continue_raisedButton'),
-                  onPressed: validationStatus.isValidated
+                  onPressed: validationStatus.isValidated && category.isNotEmpty
                       ? () {
-                          context.read<AddBlogBloc>().add(AddBlogUploadBlog());
+                          context.read<BlogEditorBloc>().add(
+                                BlogEditorUploadBlog(),
+                              );
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

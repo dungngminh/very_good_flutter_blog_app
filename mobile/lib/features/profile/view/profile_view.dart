@@ -15,18 +15,10 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DraggableHome(
       title: const _TitleTile(),
-      actions: [
-        IconButton(
-          icon: Assets.icons.setting.svg(
-            color: AppPalette.whiteBackgroundColor,
-            height: 30,
-          ),
-          splashRadius: 24,
-          onPressed: () => context.push(
-            AppRoute.setting,
-            extra: context.read<ProfileBloc>(),
-          ),
-        ),
+      actions: const [
+        _SettingButton(
+          color: AppPalette.whiteBackgroundColor,
+        )
       ],
       leading: Padding(
         padding: const EdgeInsets.all(4),
@@ -211,17 +203,12 @@ class _ProfilePanel extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(4),
+              const Padding(
+                padding: EdgeInsets.all(4),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Assets.icons.setting.svg(
-                      color: AppPalette.primaryColor,
-                      height: 30,
-                    ),
-                    splashRadius: 24,
-                    onPressed: () => context.push(AppRoute.setting),
+                  child: _SettingButton(
+                    color: AppPalette.primaryColor,
                   ),
                 ),
               ),
@@ -246,6 +233,29 @@ class _ProfilePanel extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingButton extends StatelessWidget {
+  const _SettingButton({
+    required this.color,
+  });
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Assets.icons.setting.svg(
+        color: color,
+        height: 30,
+      ),
+      splashRadius: 24,
+      onPressed: () => context.push(
+        AppRoute.setting,
+        extra: context.read<ProfileBloc>(),
       ),
     );
   }

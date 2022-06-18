@@ -33,6 +33,7 @@ dependencies:
   path_provider: ^2.0.11
   phosphor_flutter: ^1.4.0
   shimmer: ^2.0.0
+  timeago: ^3.2.2
 
 dev_dependencies:
   bloc_test: ^9.0.3

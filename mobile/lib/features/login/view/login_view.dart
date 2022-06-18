@@ -24,6 +24,7 @@ class LoginView extends StatelessWidget {
           backgroundColor: AppPalette.whiteBackgroundColor,
           body: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
                   height: context.screenHeight * 0.1,

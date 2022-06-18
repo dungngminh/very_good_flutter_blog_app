@@ -1,13 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/features/add_blog/add_blog.dart';
-import 'package:very_good_blog_app/features/blog/blog.dart';
-import 'package:very_good_blog_app/features/login/login.dart';
-import 'package:very_good_blog_app/features/main/main.dart';
-import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
-import 'package:very_good_blog_app/features/register/register.dart';
-import 'package:very_good_blog_app/features/setting/setting.dart';
-import 'package:very_good_blog_app/features/splash/splash.dart';
+import 'package:very_good_blog_app/features/blog/blog.dart' show BlogView;
+import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
+    show BlogEditorPage, UploadBlogView, BlogEditorBloc;
+import 'package:very_good_blog_app/features/login/login.dart' show LoginView;
+import 'package:very_good_blog_app/features/main/main.dart' show MainView;
+import 'package:very_good_blog_app/features/profile/profile.dart'
+    show ProfileBloc;
+import 'package:very_good_blog_app/features/register/register.dart'
+    show RegisterView;
+import 'package:very_good_blog_app/features/setting/setting.dart'
+    show SettingView;
+import 'package:very_good_blog_app/features/splash/splash.dart' show SplashView;
+import 'package:very_good_blog_app/models/models.dart' show Blog;
 
 class AppRoute {
   static const splash = '/';
@@ -58,13 +63,13 @@ class AppRoute {
       GoRoute(
         path: addBlog,
         builder: (context, state) {
-          return const AddBlogPage();
+          return const BlogEditorPage();
         },
         routes: [
           GoRoute(
             path: uploadBlog,
             builder: (context, state) {
-              final addBlogBloc = state.extra! as AddBlogBloc;
+              final addBlogBloc = state.extra! as BlogEditorBloc;
               return BlocProvider.value(
                 value: addBlogBloc,
                 child: const UploadBlogView(),
@@ -76,7 +81,8 @@ class AppRoute {
       GoRoute(
         path: blog,
         builder: (context, state) {
-          return const BlogView();
+          final blog = state.extra! as Blog;
+          return BlogView(blog: blog);
         },
       )
     ],

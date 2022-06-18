@@ -1,9 +1,9 @@
-part of 'add_blog_bloc.dart';
+part of 'blog_editor_bloc.dart';
 
 enum UploadBlogStatus { idle, loading, error }
 
-class AddBlogState extends Equatable {
-  const AddBlogState({
+class BlogEditorState extends Equatable {
+  const BlogEditorState({
     this.validationStatus = FormzStatus.pure,
     this.uploadStatus = UploadBlogStatus.idle,
     this.blogTitle = const BlogTitle.pure(),
@@ -19,7 +19,7 @@ class AddBlogState extends Equatable {
   final ImagePath imagePath;
   final String category;
 
-  AddBlogState copyWith({
+  BlogEditorState copyWith({
     FormzStatus? validationStatus,
     UploadBlogStatus? uploadStatus,
     BlogTitle? blogTitle,
@@ -27,7 +27,7 @@ class AddBlogState extends Equatable {
     ImagePath? imagePath,
     String? category,
   }) {
-    return AddBlogState(
+    return BlogEditorState(
       validationStatus: validationStatus ?? this.validationStatus,
       uploadStatus: uploadStatus ?? this.uploadStatus,
       blogTitle: blogTitle ?? this.blogTitle,

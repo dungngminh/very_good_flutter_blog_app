@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:very_good_blog_app/models/models.dart' show User;
 
 part 'blog.g.dart';
 
@@ -8,11 +9,22 @@ class Blog extends Equatable {
   const Blog({
     required this.id,
     required this.title,
-    required this.authorId,
     this.likeCount = 0,
     required this.imageUrl,
     required this.category,
     required this.content,
+    required this.createdAt,
+    required this.user,
+  });
+
+  const Blog.preview({
+    this.id = 'preview',
+    required this.title,
+    this.likeCount = 0,
+    required this.imageUrl,
+    required this.category,
+    this.content,
+    required this.user,
     required this.createdAt,
   });
 
@@ -21,12 +33,13 @@ class Blog extends Equatable {
   @JsonKey(name: '_id')
   final String id;
   final String title;
-  final String authorId;
   @JsonKey(name: 'likes')
   final int likeCount;
   final String imageUrl;
   final String category;
-  final String content;
+  final String? content;
+  @JsonKey(name: 'author_detail')
+  final User user;
   @JsonKey(fromJson: _fromJson, toJson: _toJson)
   final DateTime createdAt;
 
@@ -41,7 +54,6 @@ class Blog extends Equatable {
     return [
       id,
       title,
-      authorId,
       likeCount,
       imageUrl,
       content,

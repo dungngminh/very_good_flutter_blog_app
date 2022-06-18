@@ -28,9 +28,9 @@ class ActionBar extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
         if (title != null)
-          const Text(
-            'title',
-            style: TextStyle(
+          Text(
+            title!,
+            style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 18,
               color: AppPalette.primaryTextColor,

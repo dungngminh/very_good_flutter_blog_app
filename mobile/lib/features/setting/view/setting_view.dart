@@ -16,7 +16,7 @@ class SettingView extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: context.padding.top + 8,
+          vertical: context.padding.top + 16,
         ),
         child: Column(
           children: [
