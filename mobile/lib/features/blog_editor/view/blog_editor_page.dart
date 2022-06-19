@@ -12,6 +12,7 @@ import 'package:very_good_blog_app/repository/blog_repository.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart'
     show TapHideKeyboard, ActionBar;
 
+// TODO(dungngminh): handle edit blog
 class BlogEditorPage extends StatelessWidget {
   const BlogEditorPage({super.key});
 

@@ -4,11 +4,14 @@ enum GetBlogStatus { loading, idle, error }
 
 enum LikeBlogStatus { loading, idle, error }
 
+enum ContentBlogStatus { loading, idle, error }
+
 class BlogState extends Equatable {
   const BlogState({
     this.getBlogStatus = GetBlogStatus.idle,
     this.likeBlogStatus = LikeBlogStatus.idle,
-    this.blogs = const <Blog>{},
+    this.contentBlogStatus = ContentBlogStatus.idle,
+    this.blogs = const <Blog>[],
     this.filterBlogs = const <Blog>[],
     this.isLoading = false,
     this.errorMessage = '',
@@ -16,7 +19,8 @@ class BlogState extends Equatable {
 
   final GetBlogStatus getBlogStatus;
   final LikeBlogStatus likeBlogStatus;
-  final Set<Blog> blogs;
+  final ContentBlogStatus contentBlogStatus;
+  final List<Blog> blogs;
   final List<Blog> filterBlogs;
   final bool isLoading;
   final String errorMessage;
@@ -24,13 +28,15 @@ class BlogState extends Equatable {
   BlogState copyWith({
     GetBlogStatus? getBlogStatus,
     LikeBlogStatus? likeBlogStatus,
-    Set<Blog>? blogs,
+    ContentBlogStatus? contentBlogStatus,
+    List<Blog>? blogs,
     List<Blog>? filterBlogs,
     bool? isLoading,
     String? errorMessage,
   }) {
     return BlogState(
       getBlogStatus: getBlogStatus ?? this.getBlogStatus,
+      contentBlogStatus: contentBlogStatus ?? this.contentBlogStatus,
       blogs: blogs ?? this.blogs,
       likeBlogStatus: likeBlogStatus ?? this.likeBlogStatus,
       filterBlogs: filterBlogs ?? this.filterBlogs,
@@ -44,6 +50,7 @@ class BlogState extends Equatable {
     return [
       getBlogStatus,
       likeBlogStatus,
+      contentBlogStatus,
       blogs,
       filterBlogs,
       isLoading,

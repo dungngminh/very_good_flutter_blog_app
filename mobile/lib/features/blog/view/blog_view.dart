@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _BlogViewState extends State<BlogView> {
   @override
   void initState() {
     super.initState();
+    log(widget.blog.content.toString());
     _quillController = QuillController(
       document: Document.fromJson(jsonDecode(widget.blog.content!) as List),
       selection: const TextSelection.collapsed(offset: 0),
@@ -35,7 +37,7 @@ class _BlogViewState extends State<BlogView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 0),
+        padding: EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -63,9 +65,9 @@ class _BlogViewState extends State<BlogView> {
                     children: [
                       CircleAvatar(
                         radius: 24,
-                        backgroundImage: widget.blog.user.avatarUrl != null
-                            ? Image.network(widget.blog.user.avatarUrl!).image
-                            : Assets.images.komkat.image().image,
+                        backgroundImage: widget.blog.user.avatarUrl.isEmpty
+                            ? Assets.images.blankAvatar.image().image
+                            : Image.network(widget.blog.user.avatarUrl).image,
                       ),
                       const SizedBox(
                         width: 8,
@@ -102,7 +104,7 @@ class _BlogViewState extends State<BlogView> {
                       image: DecorationImage(
                         image: widget.blog.id != 'preview'
                             ? Image.network(
-                                'https://miro.medium.com/max/1400/1*yuiVVfFOuPnrsHcUx7xf_Q.png',
+                                widget.blog.imageUrl,
                               ).image
                             : Image.file(
                                 File(widget.blog.imageUrl),

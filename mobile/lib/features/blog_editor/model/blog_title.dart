@@ -9,7 +9,7 @@ class BlogTitle extends FormzInput<String, BlogTitleValidationError> {
   @override
   BlogTitleValidationError? validator(String? value) {
     if (value?.isNotEmpty == true) {
-      return value!.length >= 50 ? BlogTitleValidationError.maxLength : null;
+      return value!.length >= 200 ? BlogTitleValidationError.maxLength : null;
     } else {
       return BlogTitleValidationError.empty;
     }

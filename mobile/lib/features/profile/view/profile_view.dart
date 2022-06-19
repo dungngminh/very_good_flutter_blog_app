@@ -137,8 +137,8 @@ class _TitleTile extends StatelessWidget {
                 );
 
                 return CircleAvatar(
-                  backgroundImage: avatarUrl == null
-                      ? Assets.images.komkat.image().image
+                  backgroundImage: avatarUrl == null || avatarUrl.isEmpty
+                      ? Assets.images.blankAvatar.image().image
                       : NetworkImage(avatarUrl),
                 );
               },
@@ -402,8 +402,8 @@ class _AvatarDecoration extends StatelessWidget {
                   );
                   return CircleAvatar(
                     radius: 60,
-                    backgroundImage: avatarUrl == null
-                        ? Assets.images.komkat.image().image
+                    backgroundImage: avatarUrl == null || avatarUrl.isEmpty
+                        ? Assets.images.blankAvatar.image().image
                         : NetworkImage(avatarUrl),
                   );
                 },
@@ -420,6 +420,7 @@ class _AvatarDecoration extends StatelessWidget {
                         color: AppPalette.primaryColor,
                       ),
                       splashRadius: 24,
+                      // TODO(dungngminh): add function user picture
                       onPressed: () {},
                     ),
                   ),
@@ -485,24 +486,35 @@ class _PostPanelState extends State<_PostPanel> {
             ],
           ),
         ),
-        ListView.separated(
-          padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
-          itemCount: 10,
-          primary: false,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return const BlogCard(
-              title: 'How i hack Google, Microsoft,dadadadad,..',
-              imageUrl: 'https://i.kym-cdn.com/'
-                  'photos/images/facebook/001/839/197/2ad.png',
-              likeCount: 300,
-              dateAdded: '20 tháng 9, 2022',
-              cardType: CardType.titleStatsTime,
-            );
-          },
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
+        Builder(
+          builder: (context) {
+            final userBlogs = context.watch<ProfileBloc>().state.userBlogs;
+            if (userBlogs.isEmpty) {
+              return const Center(
+                child: Text('Bạn chưa có blog nào'),
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
+              itemCount: userBlogs.length,
+              primary: false,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final blog = userBlogs[index];
+                return BlogCard(
+                  title: blog.title,
+                  imageUrl: blog.imageUrl,
+                  likeCount: blog.likeCount,
+                  dateAdded: '${blog.createdAt.day} tháng '
+                      '${blog.createdAt.month}, ${blog.createdAt.year}',
+                  cardType: CardType.titleStatsTime,
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 16,
+                );
+              },
             );
           },
         ),

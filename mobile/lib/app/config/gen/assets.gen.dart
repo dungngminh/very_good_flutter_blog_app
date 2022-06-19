@@ -115,6 +115,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/blank_avatar.png
+  AssetGenImage get blankAvatar =>
+      const AssetGenImage('assets/images/blank_avatar.png');
+
   /// File path: assets/images/komkat.png
   AssetGenImage get komkat => const AssetGenImage('assets/images/komkat.png');
 

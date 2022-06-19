@@ -81,7 +81,20 @@ class _UsernameInput extends StatelessWidget {
   }
 }
 
-class _PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatefulWidget {
+  @override
+  State<_PasswordInput> createState() => _PasswordInputState();
+}
+
+class _PasswordInputState extends State<_PasswordInput> {
+  late bool _isHidePassword;
+
+  @override
+  void initState() {
+    super.initState();
+    _isHidePassword = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -99,13 +112,25 @@ class _PasswordInput extends StatelessWidget {
                   input: password,
                 ),
               ),
-            obscureText: true,
+            obscureText: _isHidePassword,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào mật khẩu',
+              suffixIcon: IconButton(
+                icon: _isHidePassword
+                    ? Assets.icons.show.svg(color: AppPalette.primaryColor)
+                    : Assets.icons.hide.svg(color: AppPalette.primaryColor),
+                onPressed: () {
+                  setState(() {
+                    _isHidePassword = !_isHidePassword;
+                  });
+                },
+                splashRadius: 24,
+              ),
               errorText: password.invalid ? 'Mật khẩu không hợp lệ' : null,
             ),
+            textAlignVertical: TextAlignVertical.center,
           ),
         );
       },
@@ -113,7 +138,21 @@ class _PasswordInput extends StatelessWidget {
   }
 }
 
-class _ConfirmedPasswordInput extends StatelessWidget {
+class _ConfirmedPasswordInput extends StatefulWidget {
+  @override
+  State<_ConfirmedPasswordInput> createState() =>
+      _ConfirmedPasswordInputState();
+}
+
+class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
+  late bool _isHideConfirmationPassword;
+
+  @override
+  void initState() {
+    super.initState();
+    _isHideConfirmationPassword = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterBloc, RegisterState>(
@@ -130,15 +169,27 @@ class _ConfirmedPasswordInput extends StatelessWidget {
                     input: confirmedPassword,
                   ),
                 ),
-            obscureText: true,
+            obscureText: _isHideConfirmationPassword,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập lại mật khẩu',
+              suffixIcon: IconButton(
+                icon: _isHideConfirmationPassword
+                    ? Assets.icons.show.svg(color: AppPalette.primaryColor)
+                    : Assets.icons.hide.svg(color: AppPalette.primaryColor),
+                onPressed: () {
+                  setState(() {
+                    _isHideConfirmationPassword = !_isHideConfirmationPassword;
+                  });
+                },
+                splashRadius: 24,
+              ),
               errorText: state.confirmedPassword.invalid
                   ? 'Mật khẩu không trùng'
                   : null,
             ),
+            textAlignVertical: TextAlignVertical.center,
           ),
         );
       },

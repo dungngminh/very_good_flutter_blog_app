@@ -15,21 +15,31 @@ class BlogRepository {
 
   final GoodBlogClient _blogClient;
   final StorageFirebase _storageFirebase;
-  
 
-  Future<List<Blog>> getBlogs({int page = 0, int offset = 10}) async {
+  Future<List<Blog>> getBlogs({required int page, required int limit}) async {
     try {
       final jsonBody = await _blogClient.get(
         '/blogs',
         queryParams: <String, dynamic>{
-          'page': page,
-          'offset': offset,
+          'page': page.toString(),
+          'limit': limit.toString(),
         },
       ) as List;
       final listBlog = jsonBody
           .map((e) => Blog.fromJson(e as Map<String, dynamic>))
           .toList();
       return listBlog;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Blog> getBlogById(String blogId) async {
+    try {
+    final jsonBody = await _blogClient.get(
+      '/blogs/$blogId',
+    );
+    return Blog.fromJson(jsonBody as Map<String, dynamic>);
     } catch (e) {
       rethrow;
     }
@@ -48,7 +58,7 @@ class BlogRepository {
       await _blogClient.post(
         '/blogs',
         body: <String, dynamic>{
-          'content': {'data': content},
+          'content': content,
           'image_url': uploadedImageUrl,
           'title': title,
           'category': [category],
@@ -79,6 +89,26 @@ class BlogRepository {
     }
   }
 
+  Future<List<Blog>> getBlogsByUserId(String userId) async {
+    // try {
+    final jsonBody = await _blogClient.get(
+      '/blogs',
+      queryParams: <String, dynamic>{
+        'id': userId,
+      },
+    ) as List;
+    final blogs = jsonBody
+        .map(
+          (e) => Blog.fromJson(e as Map<String, dynamic>),
+        )
+        .toList();
+    return blogs;
+    // } catch (e) {
+    //   log(e.toString());
+    //   rethrow;
+    // }
+  }
+
   Future<void> addBlogToBookmark(Blog blog) async {
     try {
       final token = await SecureStorageHelper.getValueByKey('jwt');
@@ -101,7 +131,7 @@ class BlogRepository {
   Future<String?> _uploadImageToFirebaseStorage(String imagePath) async {
     try {
       final now = DateTime.now();
-      final formatedDate = '${now.day}-${now.month}-${now.year}';
+      final formatedDate = '${now.millisecondsSinceEpoch}';
       final imageUrl = await _storageFirebase.saveImageToStorage(
         folder: 'blogs',
         name: formatedDate,

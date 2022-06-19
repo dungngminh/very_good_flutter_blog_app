@@ -14,7 +14,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       followingCount: json['following_count'] as int? ?? 0,
       followerCount: json['follower_count'] as int? ?? 0,
       blogCount: json['num_blog'] as int? ?? 0,
-      avatarUrl: json['avatar'] as String?,
+      avatarUrl: json['avatar'] as String? ?? '',
       blogs: (json['blogs'] as List<dynamic>?)
           ?.map((e) => Blog.fromJson(e as Map<String, dynamic>))
           .toList(),

@@ -15,7 +15,7 @@ class User extends Equatable {
     this.followingCount = 0,
     this.followerCount = 0,
     this.blogCount = 0,
-    this.avatarUrl,
+    this.avatarUrl = '',
     this.blogs,
   });
 
@@ -31,7 +31,7 @@ class User extends Equatable {
   @JsonKey(name: 'num_blog')
   final int blogCount;
   @JsonKey(name: 'avatar')
-  final String? avatarUrl;
+  final String avatarUrl;
   final List<Blog>? blogs;
 
   Map<String, dynamic> toJson() => _$UserToJson(this);

@@ -9,15 +9,15 @@ abstract class BlogEvent extends Equatable {
 
 class BlogGetBlogs extends BlogEvent {
   const BlogGetBlogs({
-    this.offset = 10,
-    this.page = 0,
+    this.limit = 10,
+    this.page = 1,
   });
 
-  final int offset;
+  final int limit;
   final int page;
 
   @override
-  List<Object?> get props => [offset, page];
+  List<Object?> get props => [limit, page];
 }
 
 class BlogLikePressed extends BlogEvent {
@@ -77,11 +77,11 @@ class BlogRemoveFromBookmarkPressed extends BlogEvent {
 
 class BlogCardPressed extends BlogEvent {
   const BlogCardPressed({
-    required this.blog,
+    required this.blogId,
   });
 
-  final Blog blog;
+  final String blogId;
 
   @override
-  List<Object?> get props => [blog];
+  List<Object?> get props => [blogId];
 }

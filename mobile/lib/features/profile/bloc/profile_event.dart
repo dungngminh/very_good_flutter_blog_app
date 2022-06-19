@@ -8,9 +8,7 @@ abstract class ProfileEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ProfileGetUserInformation extends ProfileEvent {
-
-}
+class ProfileGetUserInformation extends ProfileEvent {}
 
 class ProfileConfirmEditUserInformation extends ProfileEvent {}
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart' show TapHideKeyboard;
@@ -45,19 +46,31 @@ class _PopularBlogList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: context.screenHeight * 0.35,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return const PopularBlogCard(
-            title: 'Thời tiết đang chuyển biến phức tạp.',
-            username: 'dungngminh',
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(
-            width: 16,
+      child: BlocBuilder<BlogBloc, BlogState>(
+        buildWhen: (previous, current) => previous.blogs != current.blogs,
+        builder: (context, state) {
+          if (state.getBlogStatus == GetBlogStatus.loading) {
+            return const CircularProgressIndicator();
+          } else if (state.getBlogStatus == GetBlogStatus.error) {
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          }
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.blogs.length,
+            itemBuilder: (context, index) {
+              final blog = state.blogs.elementAt(index);
+              return PopularBlogCard(
+                blog: blog,
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(
+                width: 16,
+              );
+            },
           );
         },
       ),
@@ -106,18 +119,22 @@ class _Header extends StatelessWidget {
               )
             ],
           ),
-          Builder(
-            builder: (context) {
-              final avatarUrl = context.select(
-                (ProfileBloc profileBloc) => profileBloc.state.user?.avatarUrl,
-              );
-              return CircleAvatar(
-                radius: 24,
-                backgroundImage: avatarUrl == null
-                    ? Assets.images.komkat.image().image
-                    : NetworkImage(avatarUrl),
-              );
-            },
+          GestureDetector(
+            onTap: () => context.read<BlogBloc>().add(const BlogGetBlogs()),
+            child: Builder(
+              builder: (context) {
+                final avatarUrl = context.select(
+                  (ProfileBloc profileBloc) =>
+                      profileBloc.state.user?.avatarUrl,
+                );
+                return CircleAvatar(
+                  radius: 24,
+                  backgroundImage: avatarUrl == null || avatarUrl.isEmpty
+                      ? Assets.images.blankAvatar.image().image
+                      : NetworkImage(avatarUrl),
+                );
+              },
+            ),
           ),
         ],
       ),

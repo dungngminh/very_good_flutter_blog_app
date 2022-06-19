@@ -38,6 +38,7 @@ class GoodBlogClient {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) async {
+    log(body.toString());
     try {
       final uri = Uri.https(
         _baseUrl,

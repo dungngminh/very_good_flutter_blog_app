@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart' show BlogView;
@@ -82,7 +85,8 @@ class AppRoute {
         path: blog,
         builder: (context, state) {
           final blog = state.extra! as Blog;
-          return BlogView(blog: blog);
+          log(state.toString());
+          return BlogView(key: ValueKey(blog.id), blog: blog);
         },
       )
     ],

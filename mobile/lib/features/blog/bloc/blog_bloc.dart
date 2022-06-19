@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:very_good_blog_app/models/models.dart';
@@ -13,6 +15,8 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
         super(const BlogState()) {
     on<BlogGetBlogs>(_onGetBlogs);
     on<BlogLikePressed>(_onLikePressed);
+    on<BlogCardPressed>(_onBlogCardPressed);
+    add(const BlogGetBlogs());
   }
 
   final BlogRepository _blogRepository;
@@ -52,14 +56,14 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       await _blogRepository
           .getBlogs(
         page: event.page,
-        offset: event.offset,
+        limit: event.limit,
       )
           .then(
         (blogs) {
           emit(
             state.copyWith(
               getBlogStatus: GetBlogStatus.idle,
-              blogs: blogs.toSet(),
+              blogs: blogs,
               filterBlogs: blogs,
             ),
           );
@@ -69,6 +73,43 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       emit(
         state.copyWith(
           getBlogStatus: GetBlogStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onBlogCardPressed(
+    BlogCardPressed event,
+    Emitter<BlogState> emit,
+  ) async {
+    try {
+      
+      emit(state.copyWith(contentBlogStatus: ContentBlogStatus.loading));
+      await _blogRepository
+          .getBlogById(
+        event.blogId,
+      )
+          .then(
+        (data) {
+          final currentBlogs = state.blogs;
+          for (var i = 0; i < currentBlogs.length; i++) {
+            if (currentBlogs[i].id == event.blogId) {
+              currentBlogs[i] = currentBlogs[i].copyWith(content: data.content);
+            }
+          }
+          emit(
+            state.copyWith(
+              contentBlogStatus: ContentBlogStatus.idle,
+              blogs: currentBlogs,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          contentBlogStatus: ContentBlogStatus.error,
           errorMessage: e.toString(),
         ),
       );

@@ -30,7 +30,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     BlogEditorRemoveImage event,
     Emitter<BlogEditorState> emit,
   ) {
-    const imagePath = ImagePath.pure();
+    const imagePath = ImagePath.dirty();
     emit(
       state.copyWith(
         imagePath: imagePath,

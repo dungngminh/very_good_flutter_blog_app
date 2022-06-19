@@ -11,7 +11,7 @@ enum AuthenticationStatus {
   unauthenticated,
   successfullyRegistered,
   existed,
-  unsuccessfullyRegistered,
+  unsuccessfullyRegistered;
 }
 
 class AuthenticationRepository {
@@ -53,9 +53,9 @@ class AuthenticationRepository {
         },
       ) as Map<String, dynamic>;
       final token = jsonBody['jwt'] as String;
-      log('token $token');
-
+      final userId = jsonBody['id'] as String;
       await SecureStorageHelper.writeValueToKey(key: 'jwt', value: token);
+      await SecureStorageHelper.writeValueToKey(key: 'id', value: userId);
       _controller.add(AuthenticationStatus.authenticated);
     } on ConnectionExpcetion catch (e1) {
       log(e1.toString());
@@ -103,6 +103,7 @@ class AuthenticationRepository {
 
   Future<void> logOut() async {
     await SecureStorageHelper.deleteValueFromKey('jwt');
+    await SecureStorageHelper.deleteValueFromKey('id');
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

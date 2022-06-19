@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:very_good_blog_app/models/models.dart' show User;
 
 part 'blog.g.dart';
@@ -12,7 +14,7 @@ class Blog extends Equatable {
     this.likeCount = 0,
     required this.imageUrl,
     required this.category,
-    required this.content,
+    this.content,
     required this.createdAt,
     required this.user,
   });
@@ -45,8 +47,8 @@ class Blog extends Equatable {
 
   Map<String, dynamic> toJson() => _$BlogToJson(this);
 
-  static DateTime _fromJson(int int) =>
-      DateTime.fromMillisecondsSinceEpoch(int);
+  static DateTime _fromJson(int timestamp) =>
+      DateTime.fromMillisecondsSinceEpoch(timestamp);
   static int _toJson(DateTime time) => time.millisecondsSinceEpoch;
 
   @override
@@ -64,4 +66,26 @@ class Blog extends Equatable {
 
   @override
   bool get stringify => true;
+
+  Blog copyWith({
+    String? id,
+    String? title,
+    int? likeCount,
+    String? imageUrl,
+    String? category,
+    String? content,
+    User? user,
+    DateTime? createdAt,
+  }) {
+    return Blog(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      likeCount: likeCount ?? this.likeCount,
+      imageUrl: imageUrl ?? this.imageUrl,
+      category: category ?? this.category,
+      content: content ?? this.content,
+      user: user ?? this.user,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
