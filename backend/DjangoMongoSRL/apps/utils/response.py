@@ -14,6 +14,7 @@ class ResponseMessage:
     GET_BLOG_SUCCESSFULLY = 'get_blog_succeed'
     SUCCESS = 'success'
     INVALID_DATA = 'invalid_data'
+    DUPLICATED = 'duplicated'
 
 class HttpResponse:
     @staticmethod

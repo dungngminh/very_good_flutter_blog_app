@@ -1,5 +1,7 @@
+import json
+from bson import json_util
+from django.core import serializers
 from bson import ObjectId
-from django.dispatch import receiver
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.utils.response import ResponseMessage
@@ -8,7 +10,14 @@ from apps.utils.response import HttpResponse
 from apps.utils.jwt import JsonWebTokenHelper
 from apps.utils.database import mongo_extension
 from .models import Following
+from apps.users.models import User
+from apps.users.serializers import UserViewSerializer
 # Create your views here.
+
+def convert_objectId(x):
+    x['_id'] = str(x['_id'])
+    return x
+
 class FollowView(APIView):
     permission_classes = (AllowAny,)
     database = mongo_extension.get_database()
@@ -17,6 +26,11 @@ class FollowView(APIView):
         try:
             user_id = request.query_params['user_id'] if "user_id" in request.query_params else ""
             direction = request.query_params['direction'] if "direction" in request.query_params else ['in', 'out']
+
+            if direction == 'both':
+                direction = ['in', 'out']
+            else:
+                direction = [direction]
 
             if not user_id:
                 return HttpResponse.response(
@@ -29,14 +43,24 @@ class FollowView(APIView):
             followings = []
             
             if 'in' in direction:
-                followers = list(self.database.followings_following.find({
-                    receiver: user_id
-                }))
+                followers = list(self.database.followings_following.find({ 'sender': user_id }))
+                ids = list(map(lambda x: ObjectId(x['receiver']), followers))
+                followers = list(
+                    map(
+                        convert_objectId,
+                        list(self.database.users_user.find({ '_id': { '$in': ids } }, { 'password': 0 }))
+                    )
+                )
 
             if 'out' in direction:
-                followings =list(self.database.followings_following.find({
-                    'sender': user_id
-                }))
+                followings = list(self.database.followings_following.find({ 'sender': user_id }))
+                ids = list(map(lambda x: ObjectId(x['receiver']), followings))
+                followings = list(
+                    map(
+                        convert_objectId,
+                        list(self.database.users_user.find({ '_id': { '$in': ids } }, { 'password': 0 }))
+                    )
+                )
 
             response_data = {}
             if len(followers) > 0:
@@ -46,7 +70,8 @@ class FollowView(APIView):
             
             return HttpResponse.response(data=response_data, message=ResponseMessage.SUCCESS, status=status.HTTP_200_OK) 
 
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponse.response(
                 data = {},
                 message = ResponseMessage.INTERNAL_SERVER_ERROR,
@@ -82,9 +107,12 @@ class FollowView(APIView):
             )
 
         except:
-            return True
+            return HttpResponse.response(
+                data = {},
+                message = ResponseMessage.UNAUTHORIZED,
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
-    
     def post(self, request, *args, **kwargs):
         try:
             jwt = request.META['HTTP_AUTHORIZATION']

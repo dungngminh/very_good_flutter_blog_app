@@ -1,3 +1,4 @@
+from array import array
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.utils.response import ResponseMessage
@@ -12,12 +13,26 @@ import json
 from apps.utils.database import mongo_extension
 from . import models
 from . import middleware
+from datetime import datetime, timedelta
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
+
+
+def convert_timestamp(data: datetime):
+    local_time = (data + timedelta(hours=7))
+    return int(datetime.timestamp(local_time))
+
+def map_timestamp(x):
+    x['_id'] = str(x['_id'])
+    x['author_detail']['_id'] = str(x['author_detail']['_id'])
+    del x['author_id']
+    x['created_at'] = convert_timestamp(x['created_at'])
+    x['updated_at'] = convert_timestamp(x['updated_at'])
+    return x
 
 class BlogManage(APIView):
     permission_classes = (AllowAny,)
@@ -32,9 +47,20 @@ class BlogManage(APIView):
 
         try:
             if id:
-                blog = models.Blog.objects.get(_id=ObjectId(id))
+                blog_dict = self.db.blogs_blog.find_one({ '_id': ObjectId(id) })
+                user = self.db.users_user.find_one({ '_id': ObjectId(blog_dict['author_id']) })
+                del user['password']
+                del user['created_at']
+                del user['updated_at']
+                del blog_dict['author_id']
+                user['_id'] = str(user['_id'])
+                blog_dict['_id'] = str(blog_dict['_id'])
+                blog_dict['author_detail'] = user
+                blog_dict['created_at'] = convert_timestamp(blog_dict['created_at'])
+                blog_dict['updated_at'] = convert_timestamp(blog_dict['updated_at'])
+                
                 return HttpResponse.response(
-                    data=BlogViewSerializer(blog).data,
+                    data=blog_dict,
                     message=ResponseMessage.GET_BLOG_SUCCESSFULLY,
                     status=status.HTTP_200_OK,
                 )
@@ -88,18 +114,16 @@ class BlogManage(APIView):
                 },
                 {
                     "$unset": [
-                        "author_detail._id",
                         "author_detail.password",
                     ]
                 }
             ];
 
             records = self.db['blogs_blog'].aggregate(pipeline=pipelines);
-            arr = list(records)
-            serializer = BlogGetSerializer(arr, many=True)
+            arr = list((map(map_timestamp, list(records))))
 
             return HttpResponse.response(
-                data=serializer.data,
+                data=arr,
                 message=ResponseMessage.GET_BLOGS_SUCCESSFULLY,
                 status=status.HTTP_200_OK,
             )
@@ -113,14 +137,21 @@ class BlogManage(APIView):
             jwt = request.META['HTTP_AUTHORIZATION']
             # Authorization
             payload = middleware.BlogMiddleware.authorization(jwt)
-            print(payload)
             if not payload:
                 return HttpResponse.response(
                     data={},
                     message=ResponseMessage.UNAUTHORIZED,
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
-            print(request.data)
+
+            current_user = self.db.users_user.find_one({ '_id': ObjectId(payload['_id']) })
+            if not current_user:
+                return HttpResponse.response(
+                    data={},
+                    message=ResponseMessage.UNAUTHORIZED,
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
             serialize = BlogPostSerializer(data=request.data)
             if serialize.is_valid(raise_exception=True):
                 # Check if user exists
