@@ -7,14 +7,14 @@ class BlogSerializer(serializers.ModelSerializer):
         field = ('id', 'content', 'id_user', 'category')
 
 class BlogPostSerializer(serializers.Serializer):
-    content = serializers.JSONField()
+    content = serializers.CharField()
     title = serializers.CharField()
     image_url = serializers.CharField()
     category = serializers.JSONField()
 
 class BlogViewSerializer(serializers.Serializer):
     _id = serializers.CharField()
-    content = serializers.JSONField(required=True)
+    content = serializers.CharField(required=True)
     title = serializers.CharField(required=True)
     image_url = serializers.CharField()
     category = serializers.JSONField()
@@ -36,7 +36,7 @@ class BlogViewSerializer(serializers.Serializer):
 
 class BlogGetSerializer(serializers.Serializer):
     _id = serializers.CharField()
-    content = serializers.JSONField()
+    content = serializers.CharField()
     title = serializers.CharField()
     image_url = serializers.CharField()
     category = serializers.JSONField()

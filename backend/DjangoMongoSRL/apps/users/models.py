@@ -4,7 +4,7 @@ from apps.blogs.models import Blog
 # Create your models here.
 class User(models.Model):
     _id = models.ObjectIdField(null=False)
-    username = models.CharField(max_length=200, null=False)
+    username = models.CharField(max_length=200, null=False, unique=True)
     password = models.CharField(max_length=200, null=False)
     following_count = models.IntegerField(default=0)
     follower_count = models.IntegerField(default=0)

@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/thinhle/LeQuocThinh/very_good_blog_app'
+make: Leaving directory '/home/thinhle/LeQuocThinh/very_good_blog_app'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

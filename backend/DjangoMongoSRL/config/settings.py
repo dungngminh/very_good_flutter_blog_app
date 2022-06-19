@@ -27,9 +27,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [
-	'52.147.34.119',
-    'lequocthinh.com',
-    'localhost',
+	'*'
 ]
 
 APPEND_SLASH = False
@@ -48,6 +46,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.blogs',
     'apps.bookmarks',
+    'apps.followings',
     'apps.authentication',
     'rest_framework',
     'rest_framework_swagger',

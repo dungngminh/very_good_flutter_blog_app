@@ -11,7 +11,7 @@ class Blog(models.Model):
     likes = models.IntegerField(default=0, null=False)
     category = models.JSONField(default=[], null=False)
     image_url = models.CharField(max_length=5000, default='', null=False)
-    content = models.JSONField(null=False)
+    content = models.CharField(null=False, max_length=5000000000)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now=True, null=False)
     
