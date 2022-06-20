@@ -20,7 +20,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         super(const ProfileState()) {
     on<ProfileGetUserInformation>(_onGetUserInformation);
     on<ProfileUserLogoutRequested>(_onUserRequestedLogout);
-    on<ProfileConfirmEditUserInformation>(_onConfirmEditUserInformation);
+    on<ProfileConfirmEditInformation>(_onConfirmEditUserInformation);
+    on<ProfileEditInformationRequested>(_onEditProfileRequested);
     add(ProfileGetUserInformation());
   }
 
@@ -61,10 +62,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     return _authenticationRepository.logOut();
   }
 
-  Future<FutureOr<void>> _onConfirmEditUserInformation(
-    ProfileConfirmEditUserInformation event,
+  Future<void> _onConfirmEditUserInformation(
+    ProfileConfirmEditInformation event,
     Emitter<ProfileState> emit,
   ) async {
-    await _authenticationRepository.logOut();
+    return _authenticationRepository.logOut();
+  }
+
+  void _onEditProfileRequested(
+    ProfileEditInformationRequested event,
+    Emitter<ProfileState> emit,
+  ) {
+    emit(state.copyWith(enableEditProfile: true));
   }
 }

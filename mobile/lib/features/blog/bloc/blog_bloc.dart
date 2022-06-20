@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:very_good_blog_app/models/models.dart';
@@ -84,7 +82,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     Emitter<BlogState> emit,
   ) async {
     try {
-      
       emit(state.copyWith(contentBlogStatus: ContentBlogStatus.loading));
       await _blogRepository
           .getBlogById(

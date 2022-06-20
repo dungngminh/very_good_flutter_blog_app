@@ -3,10 +3,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:go_router/go_router.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/models/models.dart';
+import 'package:very_good_blog_app/widgets/action_bar.dart';
 
 class BlogView extends StatefulWidget {
   const BlogView({
@@ -41,26 +46,41 @@ class _BlogViewState extends State<BlogView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                icon: Assets.icons.circleArrowLeft.svg(
-                  color: AppPalette.primaryColor,
-                  height: 36,
-                ),
-                splashRadius: 24,
-                onPressed: () => context.pop(),
-              ),
+            Builder(
+              builder: (context) {
+                final user = context.read<ProfileBloc>().state.user;
+                return ActionBar(
+                  title: widget.blog.title,
+                  titleFontSize: 20,
+                  actions: widget.blog.user == user! &&
+                          widget.blog.id != 'preview'
+                      ? [
+                          IconButton(
+                            icon: Assets.icons.editSquare.svg(
+                              color: AppPalette.purple700Color,
+                              height: 28,
+                            ),
+                            splashRadius: 24,
+                            onPressed: () => context.push(
+                              AppRoute.blogEditor,
+                              extra: ExtraParams3<ProfileBloc, BlogBloc, Blog>(
+                                param1: context.read<ProfileBloc>(),
+                                param2: context.read<BlogBloc>(),
+                                param3: widget.blog,
+                              ),
+                            ),
+                          ),
+                        ]
+                      : null,
+                );
+              },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding:
+                  const EdgeInsets.only(top: 12, bottom: 14, left: 8, right: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
                   Row(
                     children: [
                       CircleAvatar(
@@ -81,7 +101,9 @@ class _BlogViewState extends State<BlogView> {
                                 .copyWith(fontSize: 16),
                           ),
                           Text(
-                            '20 phút trước',
+                            timeago.format(
+                              widget.blog.createdAt,
+                            ),
                             style: AppTextTheme.decriptionTextStyle
                                 .copyWith(fontSize: 14),
                           )
@@ -90,11 +112,7 @@ class _BlogViewState extends State<BlogView> {
                     ],
                   ),
                   const SizedBox(
-                    height: 24,
-                  ),
-                  Text(
-                    widget.blog.title,
-                    style: AppTextTheme.titleTextStyle.copyWith(fontSize: 19),
+                    height: 8,
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 16),
@@ -115,8 +133,8 @@ class _BlogViewState extends State<BlogView> {
                   ),
                   Padding(
                     padding: widget.blog.id != 'preview'
-                        ? EdgeInsets.zero
-                        : const EdgeInsets.symmetric(vertical: 12),
+                        ? const EdgeInsets.symmetric(vertical: 6)
+                        : const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
                       children: [
                         Assets.icons.heart.svg(
@@ -135,7 +153,7 @@ class _BlogViewState extends State<BlogView> {
                           IconButton(
                             icon: Assets.icons.bookmark.svg(
                               color: AppPalette.purple700Color,
-                              height: 20,
+                              height: 24,
                             ),
                             splashRadius: 24,
                             onPressed: () {},

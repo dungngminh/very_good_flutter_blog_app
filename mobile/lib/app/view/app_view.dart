@@ -8,11 +8,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/data/firebase/storage_firebase.dart';
+import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
-import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
-import 'package:very_good_blog_app/features/profile/profile.dart'
-    show ProfileBloc;
 import 'package:very_good_blog_app/repository/repository.dart';
+
+// class VeryGoodBlogApp extends StatelessWidget {
+//   const VeryGoodBlogApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiRepositoryProvider(
+//       providers: [
+//         RepositoryProvider.value(
+//           value: Client(),
+//         ),
+//         RepositoryProvider.value(
+//           value: FirebaseStorage.instance,
+//         ),
+//       ],
+//       child: Builder(
+//         builder: (context) {
+//           return MultiRepositoryProvider(
+//             providers: [
+//               RepositoryProvider(
+//                 create: (context) => GoodBlogClient(
+//                   client: context.read<Client>(),
+//                 ),
+//               ),
+//               RepositoryProvider(
+//                 create: (context) => StorageFirebase(
+//                   firebaseStorage: context.read<FirebaseStorage>(),
+//                 ),
+//               ),
+//             ],
+//             child: Builder(
+//               builder: (context) {
+//                 return MultiRepositoryProvider(
+//                   providers: [
+//                     RepositoryProvider<AuthenticationRepository>(
+//                       create: (_) => AuthenticationRepository(
+//                         blogClient: context.read<GoodBlogClient>(),
+//                       ),
+//                     ),
+//                     RepositoryProvider<UserRepository>(
+//                       create: (_) => UserRepository(
+//                         blogClient: context.read<GoodBlogClient>(),
+//                       ),
+//                     ),
+//                     RepositoryProvider<BlogRepository>(
+//                       create: (_) => BlogRepository(
+//                         blogClient: context.read<GoodBlogClient>(),
+//                         storageFirebase: context.read<StorageFirebase>(),
+//                       ),
+//                     ),
+//                   ],
+//                   child: const VeryGoodBlogAppView(),
+//                 );
+//               },
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class VeryGoodBlogApp extends StatelessWidget {
   const VeryGoodBlogApp({super.key});
@@ -22,13 +82,19 @@ class VeryGoodBlogApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthenticationRepository>(
-          create: (_) => AuthenticationRepository(),
+          create: (_) => AuthenticationRepository(
+
+          ),
         ),
         RepositoryProvider<UserRepository>(
-          create: (_) => UserRepository(),
+          create: (_) => UserRepository(
+     
+          ),
         ),
         RepositoryProvider<BlogRepository>(
-          create: (_) => BlogRepository(),
+          create: (_) => BlogRepository(
+         
+          ),
         ),
       ],
       child: const VeryGoodBlogAppView(),
@@ -46,18 +112,6 @@ class VeryGoodBlogAppView extends StatelessWidget {
         BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc(
             authenticationRepository: context.read<AuthenticationRepository>(),
-          ),
-        ),
-        BlocProvider<ProfileBloc>(
-          create: (context) => ProfileBloc(
-            authenticationRepository: context.read<AuthenticationRepository>(),
-            userRepository: context.read<UserRepository>(),
-            blogRepository: context.read<BlogRepository>(),
-          ),
-        ),
-        BlocProvider<BlogBloc>(
-          create: (context) => BlogBloc(
-            blogRepository: context.read<BlogRepository>(),
           ),
         ),
       ],

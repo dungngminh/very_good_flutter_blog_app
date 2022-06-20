@@ -5,7 +5,8 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart' show TapHideKeyboard;
+import 'package:very_good_blog_app/widgets/widgets.dart'
+    show BlogCard, TapHideKeyboard;
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -16,6 +17,7 @@ class HomeView extends StatelessWidget {
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
+            primary: true,
             padding: const EdgeInsets.only(top: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,19 +25,70 @@ class HomeView extends StatelessWidget {
                 const _Header(),
                 const _SearchField(),
                 const _CategoryChoiceBar(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 32, 0, 16),
-                  child: Text(
-                    'Phổ biến',
-                    style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 18),
-                  ),
-                ),
-                const _PopularBlogList()
+                _buildHeadTitle('Phổ biến'),
+                const _PopularBlogList(),
+                _buildHeadTitle('Bài viết khác'),
+                const _MoreBlogList(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeadTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 32, 0, 16),
+      child: Text(
+        title,
+        style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 18),
+      ),
+    );
+  }
+}
+
+class _MoreBlogList extends StatelessWidget {
+  const _MoreBlogList();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BlogBloc, BlogState>(
+      buildWhen: (previous, current) =>
+          previous.getBlogStatus != current.getBlogStatus,
+      builder: (context, state) {
+        if (state.getBlogStatus == GetBlogStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppPalette.primaryColor,
+            ),
+          );
+        } else if (state.getBlogStatus == GetBlogStatus.error) {
+          return Center(
+            child: Text(state.errorMessage),
+          );
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.only(
+            bottom: 36,
+          ),
+          primary: false,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            final blog = state.blogs[index];
+            return BlogCard(
+              needMargin: true,
+              blog: blog,
+            );
+          },
+          itemCount: state.blogs.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(
+              height: 16,
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -50,7 +103,11 @@ class _PopularBlogList extends StatelessWidget {
         buildWhen: (previous, current) => previous.blogs != current.blogs,
         builder: (context, state) {
           if (state.getBlogStatus == GetBlogStatus.loading) {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppPalette.primaryColor,
+              ),
+            );
           } else if (state.getBlogStatus == GetBlogStatus.error) {
             return Center(
               child: Text(state.errorMessage),
@@ -59,7 +116,7 @@ class _PopularBlogList extends StatelessWidget {
           return ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             scrollDirection: Axis.horizontal,
-            itemCount: state.blogs.length,
+            itemCount: 4,
             itemBuilder: (context, index) {
               final blog = state.blogs.elementAt(index);
               return PopularBlogCard(

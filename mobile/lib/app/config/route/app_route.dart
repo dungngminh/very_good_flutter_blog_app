@@ -1,9 +1,7 @@
-import 'dart:developer';
-
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/features/blog/blog.dart' show BlogView;
+import 'package:very_good_blog_app/features/blog/blog.dart'
+    show BlogBloc, BlogView;
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
     show BlogEditorPage, UploadBlogView, BlogEditorBloc;
 import 'package:very_good_blog_app/features/login/login.dart' show LoginView;
@@ -14,6 +12,7 @@ import 'package:very_good_blog_app/features/register/register.dart'
     show RegisterView;
 import 'package:very_good_blog_app/features/setting/setting.dart'
     show SettingView;
+import 'package:very_good_blog_app/features/setting/view/edit_profile_view.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart' show SplashView;
 import 'package:very_good_blog_app/models/models.dart' show Blog;
 
@@ -23,7 +22,8 @@ class AppRoute {
   static const login = '/login';
   static const register = '/register';
   static const setting = '/setting';
-  static const addBlog = '/addBlog';
+  static const editProfile = 'edit-profile';
+  static const blogEditor = '/editor';
   static const blog = '/blog';
   static const uploadBlog = 'upload';
 
@@ -62,19 +62,57 @@ class AppRoute {
             child: const SettingView(),
           );
         },
+        routes: [
+          GoRoute(
+            path: editProfile,
+            builder: (context, state) {
+              final extras = state.extra! as ProfileBloc;
+              return BlocProvider.value(
+                value: extras,
+                child: const EditProfileView(),
+              );
+            },
+          )
+        ],
       ),
       GoRoute(
-        path: addBlog,
+        path: blogEditor,
         builder: (context, state) {
-          return const BlogEditorPage();
+          final extras =
+              state.extra! as ExtraParams3<ProfileBloc, BlogBloc, Blog?>;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: extras.param1,
+              ),
+              BlocProvider.value(
+                value: extras.param2,
+              ),
+            ],
+            child: BlogEditorPage(
+              blog: extras.param3,
+            ),
+          );
         },
         routes: [
           GoRoute(
             path: uploadBlog,
             builder: (context, state) {
-              final addBlogBloc = state.extra! as BlogEditorBloc;
-              return BlocProvider.value(
-                value: addBlogBloc,
+              final extras = state.extra!
+                  as ExtraParams3<BlogEditorBloc, BlogBloc, ProfileBloc>;
+
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: extras.param1,
+                  ),
+                  BlocProvider.value(
+                    value: extras.param2,
+                  ),
+                  BlocProvider.value(
+                    value: extras.param3,
+                  ),
+                ],
                 child: const UploadBlogView(),
               );
             },
@@ -84,9 +122,21 @@ class AppRoute {
       GoRoute(
         path: blog,
         builder: (context, state) {
-          final blog = state.extra! as Blog;
-          log(state.toString());
-          return BlogView(key: ValueKey(blog.id), blog: blog);
+          final extras =
+              state.extra! as ExtraParams3<Blog, ProfileBloc, BlogBloc>;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: extras.param2,
+              ),
+              BlocProvider.value(
+                value: extras.param3,
+              ),
+            ],
+            child: BlogView(
+              blog: extras.param1,
+            ),
+          );
         },
       )
     ],
@@ -94,4 +144,23 @@ class AppRoute {
     debugLogDiagnostics: true,
     urlPathStrategy: UrlPathStrategy.path,
   );
+}
+
+class ExtraParams2<T, S> {
+  ExtraParams2({required this.param1, required this.param2});
+
+  final T param1;
+  final S param2;
+}
+
+class ExtraParams3<A, B, C> {
+  ExtraParams3({
+    required this.param1,
+    required this.param2,
+    required this.param3,
+  });
+
+  final A param1;
+  final B param2;
+  final C param3;
 }

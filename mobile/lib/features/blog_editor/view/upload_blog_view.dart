@@ -6,14 +6,17 @@ import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart'
     show AppPalette, AppRoute, AppTextTheme, Assets, ContextExtension;
+import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
     show
         BlogEditorAddImage,
         BlogEditorBloc,
         BlogEditorCategoryChanged,
         BlogEditorRemoveImage,
+        BlogEditorState,
         BlogEditorTitleChanged,
-        BlogEditorUploadBlog;
+        BlogEditorUploadBlog,
+        UploadBlogStatus;
 import 'package:very_good_blog_app/features/profile/profile.dart'
     show ProfileBloc;
 import 'package:very_good_blog_app/models/models.dart' show Blog;
@@ -24,83 +27,98 @@ class UploadBlogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TapHideKeyboard(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: context.padding.top + 16,
-          ),
-          child: Column(
-            children: [
-              ActionBar(
-                actions: [
-                  Builder(
-                    builder: (context) {
-                      final validationStatus = context.select(
-                        (BlogEditorBloc blogEditorBloc) =>
-                            blogEditorBloc.state.validationStatus,
-                      );
-                      final category = context.select(
-                        (BlogEditorBloc blogEditorBloc) =>
-                            blogEditorBloc.state.category,
-                      );
-                      return Visibility(
-                        visible:
-                            validationStatus.isValid && category.isNotEmpty,
-                        child: Tooltip(
-                          message: 'Bạn có thể xem trước bài viết'
-                              ' trước khi đăng',
-                          child: InkWell(
-                            onTap: () {
-                              final title = context
-                                  .read<BlogEditorBloc>()
-                                  .state
-                                  .blogTitle
-                                  .value;
-                              final content =
-                                  context.read<BlogEditorBloc>().state.content;
-                              final user =
-                                  context.read<ProfileBloc>().state.user;
-                              final imagePath = context
-                                  .read<BlogEditorBloc>()
-                                  .state
-                                  .imagePath
-                                  .value;
-                              final category =
-                                  context.read<BlogEditorBloc>().state.category;
-                              final previewBlog = Blog.preview(
-                                title: title,
-                                category: category,
-                                content: content,
-                                imageUrl: imagePath,
-                                user: user!,
-                                createdAt: DateTime.now(),
-                              );
+    return BlocListener<BlogEditorBloc, BlogEditorState>(
+      listener: (context, state) {
+        if (state.uploadStatus == UploadBlogStatus.done) {
+          context
+            ..pop()
+            ..pop();
 
-                              context.push(AppRoute.blog, extra: previewBlog);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                'Xem trước bài viết',
-                                style: AppTextTheme.darkW700TextStyle
-                                    .copyWith(fontSize: 16),
+          context.read<BlogBloc>().add(const BlogGetBlogs());
+        }
+      },
+      child: TapHideKeyboard(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: context.padding.top + 16,
+            ),
+            child: Column(
+              children: [
+                ActionBar(
+                  actions: [
+                    Builder(
+                      builder: (context) {
+                        final validationStatus = context.select(
+                          (BlogEditorBloc blogEditorBloc) =>
+                              blogEditorBloc.state.validationStatus,
+                        );
+                        final category = context.select(
+                          (BlogEditorBloc blogEditorBloc) =>
+                              blogEditorBloc.state.category,
+                        );
+                        return Visibility(
+                          visible:
+                              validationStatus.isValid && category.isNotEmpty,
+                          child: Tooltip(
+                            message: 'Bạn có thể xem trước bài viết'
+                                ' trước khi đăng',
+                            child: InkWell(
+                              onTap: () {
+                                final title = context
+                                    .read<BlogEditorBloc>()
+                                    .state
+                                    .blogTitle
+                                    .value;
+                                final content = context
+                                    .read<BlogEditorBloc>()
+                                    .state
+                                    .content;
+                                final user =
+                                    context.read<ProfileBloc>().state.user;
+                                final imagePath = context
+                                    .read<BlogEditorBloc>()
+                                    .state
+                                    .imagePath
+                                    .value;
+                                final category = context
+                                    .read<BlogEditorBloc>()
+                                    .state
+                                    .category;
+                                final previewBlog = Blog.preview(
+                                  title: title,
+                                  category: category,
+                                  content: content,
+                                  imageUrl: imagePath,
+                                  user: user!,
+                                  createdAt: DateTime.now(),
+                                );
+
+                                context.push(AppRoute.blog, extra: previewBlog);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  'Xem trước bài viết',
+                                  style: AppTextTheme.darkW700TextStyle
+                                      .copyWith(fontSize: 16),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
-              const _ImagePlacer(),
-              const SizedBox(
-                height: 32,
-              ),
-              const _BlogInformationForm(),
-            ],
+                        );
+                      },
+                    )
+                  ],
+                ),
+                const _ImagePlacer(),
+                const SizedBox(
+                  height: 32,
+                ),
+                const _BlogInformationForm(),
+              ],
+            ),
           ),
         ),
       ),
@@ -310,7 +328,11 @@ class _UploadButton extends StatelessWidget {
           final category = context.select(
             (BlogEditorBloc blogEditorBlog) => blogEditorBlog.state.category,
           );
-          return validationStatus.isSubmissionInProgress
+          final uploadStatus = context.select(
+            (BlogEditorBloc blogEditorBloc) =>
+                blogEditorBloc.state.uploadStatus,
+          );
+          return uploadStatus == UploadBlogStatus.loading
               ? const CircularProgressIndicator(
                   color: AppPalette.primaryColor,
                 )

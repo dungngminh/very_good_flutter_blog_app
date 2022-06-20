@@ -7,10 +7,12 @@ class ActionBar extends StatelessWidget {
     super.key,
     this.title,
     this.actions,
+    this.titleFontSize = 18,
   });
 
   final String? title;
   final List<Widget>? actions;
+  final double titleFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +29,28 @@ class ActionBar extends StatelessWidget {
           splashRadius: 24,
           onPressed: () => context.pop(),
         ),
+        const SizedBox(
+          width: 16,
+        ),
         if (title != null)
-          Text(
-            title!,
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: AppPalette.primaryTextColor,
+          Expanded(
+            child: Align(
+              child: Text(
+                title!,
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: titleFontSize,
+                  color: AppPalette.primaryTextColor,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
+        const SizedBox(
+          width: 16,
+        ),
         if (actions != null)
           Row(
             children: actions!,

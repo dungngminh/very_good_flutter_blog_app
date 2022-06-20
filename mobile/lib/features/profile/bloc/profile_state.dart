@@ -9,6 +9,7 @@ class ProfileState extends Equatable {
     this.status = ProfileStatus.initial,
     this.userBlogs = const <Blog>[],
     this.userLikedBlogs = const <Blog>[],
+    this.enableEditProfile = false, 
   });
 
   final User? user;
@@ -16,6 +17,7 @@ class ProfileState extends Equatable {
   final ProfileStatus status;
   final List<Blog> userBlogs;
   final List<Blog> userLikedBlogs;
+  final bool enableEditProfile;
 
   @override
   List<Object?> get props => [
@@ -32,6 +34,7 @@ class ProfileState extends Equatable {
     ProfileStatus? status,
     List<Blog>? userBlogs,
     List<Blog>? userLikedBlogs,
+    bool? enableEditProfile,
   }) {
     return ProfileState(
       user: user ?? this.user,
@@ -39,6 +42,8 @@ class ProfileState extends Equatable {
       status: status ?? this.status,
       userBlogs: userBlogs ?? this.userBlogs,
       userLikedBlogs: userLikedBlogs ?? this.userLikedBlogs,
+      enableEditProfile: enableEditProfile ?? this.enableEditProfile,
+      
     );
   }
 }

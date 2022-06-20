@@ -61,7 +61,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
       )
           .then((_) {
         emit(
-          state.copyWith(uploadStatus: UploadBlogStatus.idle),
+          state.copyWith(uploadStatus: UploadBlogStatus.done),
         );
       });
     } catch (e) {

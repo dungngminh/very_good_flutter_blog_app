@@ -1,11 +1,11 @@
 part of 'blog_editor_bloc.dart';
 
-enum UploadBlogStatus { idle, loading, error }
+enum UploadBlogStatus { done, loading, error, initial }
 
 class BlogEditorState extends Equatable {
   const BlogEditorState({
     this.validationStatus = FormzStatus.pure,
-    this.uploadStatus = UploadBlogStatus.idle,
+    this.uploadStatus = UploadBlogStatus.initial,
     this.blogTitle = const BlogTitle.pure(),
     this.content = '',
     this.imagePath = const ImagePath.pure(),

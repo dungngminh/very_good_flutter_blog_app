@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart'
     show ProfileBloc, ProfileUserLogoutRequested;
@@ -25,7 +26,10 @@ class SettingView extends StatelessWidget {
             ),
             SettingTile(
               iconPath: Assets.icons.profile.path,
-              onTap: () {},
+              onTap: () => context.push(
+                '${AppRoute.setting}/${AppRoute.editProfile}',
+                extra: context.read<ProfileBloc>(),
+              ),
               title: 'Thông tin cá nhân',
               primaryColor: AppPalette.purple700Color,
               supportBackgroundColor: AppPalette.purple700SupportColor,

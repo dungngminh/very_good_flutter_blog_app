@@ -68,6 +68,13 @@ class $AssetsIconsGen {
   SvgGenImage get closeSquare =>
       const SvgGenImage('assets/icons/close_square.svg');
 
+  /// File path: assets/icons/edit.svg
+  SvgGenImage get edit => const SvgGenImage('assets/icons/edit.svg');
+
+  /// File path: assets/icons/edit_square.svg
+  SvgGenImage get editSquare =>
+      const SvgGenImage('assets/icons/edit_square.svg');
+
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
 

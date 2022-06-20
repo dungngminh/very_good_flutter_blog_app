@@ -2,15 +2,15 @@ part of 'blog_bloc.dart';
 
 enum GetBlogStatus { loading, idle, error }
 
-enum LikeBlogStatus { loading, idle, error }
+enum LikeBlogStatus { initial, loading, idle, error }
 
-enum ContentBlogStatus { loading, idle, error }
+enum ContentBlogStatus { initial, loading, idle, error }
 
 class BlogState extends Equatable {
   const BlogState({
-    this.getBlogStatus = GetBlogStatus.idle,
-    this.likeBlogStatus = LikeBlogStatus.idle,
-    this.contentBlogStatus = ContentBlogStatus.idle,
+    this.getBlogStatus = GetBlogStatus.loading,
+    this.likeBlogStatus = LikeBlogStatus.initial,
+    this.contentBlogStatus = ContentBlogStatus.initial,
     this.blogs = const <Blog>[],
     this.filterBlogs = const <Blog>[],
     this.isLoading = false,

@@ -402,6 +402,7 @@ class _AvatarDecoration extends StatelessWidget {
                   );
                   return CircleAvatar(
                     radius: 60,
+                    backgroundColor: AppPalette.purple700SupportColor,
                     backgroundImage: avatarUrl == null || avatarUrl.isEmpty
                         ? Assets.images.blankAvatar.image().image
                         : NetworkImage(avatarUrl),
@@ -502,11 +503,12 @@ class _PostPanelState extends State<_PostPanel> {
               itemBuilder: (context, index) {
                 final blog = userBlogs[index];
                 return BlogCard(
-                  title: blog.title,
-                  imageUrl: blog.imageUrl,
-                  likeCount: blog.likeCount,
-                  dateAdded: '${blog.createdAt.day} tháng '
-                      '${blog.createdAt.month}, ${blog.createdAt.year}',
+                  blog: blog,
+                  // title: blog.title,
+                  // imageUrl: blog.imageUrl,
+                  // likeCount: blog.likeCount,
+                  // dateAdded: '${blog.createdAt.day} tháng '
+                  //     '${blog.createdAt.month}, ${blog.createdAt.year}',
                   cardType: CardType.titleStatsTime,
                 );
               },

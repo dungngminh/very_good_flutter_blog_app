@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
+import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
+import 'package:very_good_blog_app/models/models.dart' show Blog;
 import 'package:very_good_blog_app/widgets/ink_response_widget.dart';
 
 enum CardType {
@@ -11,20 +17,31 @@ enum CardType {
 class BlogCard extends StatelessWidget {
   const BlogCard({
     super.key,
-    required this.title,
-    required this.imageUrl,
-    this.likeCount,
-    this.author,
-    required this.dateAdded,
     this.cardType = CardType.titleAuthorTime,
+    required this.blog,
     this.needMargin = false,
+    this.enableBookmarkButton = false,
   });
 
-  final String title;
-  final String imageUrl;
-  final int? likeCount;
-  final String? author;
-  final String dateAdded;
+  final Blog blog;
+  final bool enableBookmarkButton;
+
+  // const BlogCard({
+  //   super.key,
+  //   required this.title,
+  //   required this.imageUrl,
+  //   this.likeCount,
+  //   this.author,
+  //   required this.dateAdded,
+  //   this.cardType = CardType.titleAuthorTime,
+  //   this.needMargin = false,
+  // });
+
+  // final String title;
+  // final String imageUrl;
+  // final int? likeCount;
+  // final String? author;
+  // final String dateAdded;
   final bool needMargin;
 
   /// This setting for order of content display from top to bottom
@@ -43,6 +60,14 @@ class BlogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () => context.push(
+        AppRoute.blog,
+        extra: ExtraParams3<Blog, ProfileBloc, BlogBloc>(
+          param1: blog,
+          param2: context.read<ProfileBloc>(),
+          param3: context.read<BlogBloc>(),
+        ),
+      ),
       child: Container(
         // height: 135,
         margin: needMargin ? const EdgeInsets.symmetric(horizontal: 24) : null,
@@ -64,7 +89,7 @@ class BlogCard extends StatelessWidget {
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: Image.network(
-                        imageUrl,
+                        blog.imageUrl,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -73,7 +98,7 @@ class BlogCard extends StatelessWidget {
               ),
             ),
             _buildCardContent(cardType),
-            if (cardType == CardType.titleAuthorTime)
+            if (enableBookmarkButton)
               InkEffectIconButton(
                 child: Assets.icons.bookmark
                     .svg(color: AppPalette.deepPurpleColor),
@@ -98,7 +123,7 @@ class BlogCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  blog.title,
                   style: AppTextTheme.titleTextStyle.copyWith(fontSize: 16),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -107,7 +132,7 @@ class BlogCard extends StatelessWidget {
                   height: 6,
                 ),
                 Text(
-                  author!,
+                  blog.user.username,
                   style:
                       AppTextTheme.decriptionTextStyle.copyWith(fontSize: 13),
                 ),
@@ -115,7 +140,7 @@ class BlogCard extends StatelessWidget {
                   height: 8,
                 ),
                 Text(
-                  dateAdded,
+                  timeago.format(blog.createdAt),
                   style:
                       AppTextTheme.decriptionTextStyle.copyWith(fontSize: 12),
                 )
@@ -132,7 +157,7 @@ class BlogCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  blog.title,
                   style: AppTextTheme.titleTextStyle.copyWith(fontSize: 16),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -149,8 +174,8 @@ class BlogCard extends StatelessWidget {
                     const SizedBox(
                       width: 4,
                     ),
-                    const Text(
-                      '300',
+                    Text(
+                      '${blog.likeCount}',
                       style: AppTextTheme.mediumTextStyle,
                     ),
                   ],
@@ -159,7 +184,7 @@ class BlogCard extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  dateAdded,
+                  timeago.format(blog.createdAt),
                   style:
                       AppTextTheme.decriptionTextStyle.copyWith(fontSize: 12),
                 )
@@ -176,7 +201,7 @@ class BlogCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  blog.title,
                   style: const TextStyle(
                     color: AppPalette.primaryTextColor,
                     fontWeight: FontWeight.w700,
@@ -208,7 +233,7 @@ class BlogCard extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  author!,
+                  blog.user.username,
                   style: AppTextTheme.decriptionTextStyle.copyWith(
                     fontSize: 14,
                   ),
