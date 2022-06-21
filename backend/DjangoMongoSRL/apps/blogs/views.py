@@ -164,8 +164,11 @@ class BlogManage(APIView):
             serialize = BlogPostSerializer(data=request.data)
             if serialize.is_valid(raise_exception=True):
                 # Check if user exists
+
+                id = ObjectId()
+
                 new_blog = models.Blog.objects.create(
-                    _id=ObjectId(),
+                    _id=id,
                     author_id=payload['_id'],
                     content=serialize.data['content'],
                     title=serialize.data['title'].lower(),
@@ -173,13 +176,14 @@ class BlogManage(APIView):
                     image_url=serialize.data['image_url']
                 )
 
-                new_blog.save()
-                dict_obj = json.loads(json_util.dumps(
-                    serializers.serialize('python', [new_blog, ])[0]['fields']))
+                blog_dict = self.db.blogs_blog.find_one({ '_id': ObjectId(str(id)) })
+                blog_dict['_id'] = str(blog_dict['_id'])
+                blog_dict['created_at'] = convert_timestamp(blog_dict['created_at'])
+                blog_dict['updated_at'] = convert_timestamp(blog_dict['updated_at'])
 
                 return HttpResponse.response(
-                    data=dict_obj,
-                    message='ok',
+                    data=blog_dict,
+                    message='',
                     status=status.HTTP_201_CREATED,
                 )
             else:
