@@ -94,7 +94,7 @@ class UserView(APIView):
                 token = JsonWebTokenHelper.generate(payload)
 
                 return HttpResponse.response(
-                    data = {'jwt': token },
+                    data = {'jwt': token, 'id': str(data['_id']) },
                     message = ResponseMessage.LOGIN_SUCCESS,
                     status = status.HTTP_200_OK,
                 )
@@ -134,9 +134,11 @@ class UserView(APIView):
                 return HttpResponse.response(
                     data = user_serializer.data,
                     message = ResponseMessage.LOGIN_SUCCESS,
-                    status = status.HTTP_200_OK,
+                    status = status.HTTP_201_CREATED,
                 )
         
+        # TODO: Add likes
+
         return HttpResponse.response(
             data = {},
             message = 'error',

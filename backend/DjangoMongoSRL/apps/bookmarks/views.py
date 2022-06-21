@@ -64,9 +64,6 @@ class BookmarksView(APIView):
 
     def get(self, request, *a, **b):
         try:
-            user_id = request.query_params['user_id'] if "user_id" in request.query_params else ""
-            if not user_id:
-                raise Exception('missing_id')
             payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
             
             if not payload:
@@ -74,16 +71,16 @@ class BookmarksView(APIView):
 
             current_user_id = payload['_id']
                         
-            print(user_id)
+            # print(user_id)
             print(current_user_id)
 
-            if (user_id != current_user_id):
-                return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+            # if (user_id != current_user_id):
+            #     return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
 
             pipeline = [
                 {
                     "$match": {
-                        "user_id": user_id,
+                        "user_id": current_user_id,
                     },
                 },
                 {

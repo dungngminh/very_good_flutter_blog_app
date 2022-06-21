@@ -1,4 +1,5 @@
 from array import array
+from django.forms import model_to_dict
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.utils.response import ResponseMessage
@@ -32,6 +33,7 @@ def map_timestamp(x):
     del x['author_id']
     x['created_at'] = convert_timestamp(x['created_at'])
     x['updated_at'] = convert_timestamp(x['updated_at'])
+    x['category'] = x['category'][0]
     return x
 
 class BlogManage(APIView):
@@ -56,6 +58,7 @@ class BlogManage(APIView):
                 user['_id'] = str(user['_id'])
                 blog_dict['_id'] = str(blog_dict['_id'])
                 blog_dict['author_detail'] = user
+                blog_dict['category'] = blog_dict['category'][0]
                 blog_dict['created_at'] = convert_timestamp(blog_dict['created_at'])
                 blog_dict['updated_at'] = convert_timestamp(blog_dict['updated_at'])
                 
@@ -67,7 +70,7 @@ class BlogManage(APIView):
 
             categories = (request.query_params['category'].split(',')) if "category" in request.query_params else []
             search = (request.query_params['search']) if "search" in request.query_params else ""
-            page = (int(request.query_params['page'])) if "page" in request.query_params else 0
+            page = (int(request.query_params['page'])) if "page" in request.query_params else 1
             limit = (int(request.query_params['limit'])) if "limit" in request.query_params else 10
             author_id = (request.query_params['author_id']) if "author_id" in request.query_params else ""
             offset = (page - 1) * limit
@@ -75,7 +78,7 @@ class BlogManage(APIView):
             pipelines = [
                 { 
                     "$match": {
-                        "title": { "$exists": True } if len(search) == 0 else search,
+                        "title": { "$exists": True } if len(search) == 0 else '/' + search + '/',
                         "category": { "$exists": True } if len(categories) == 0 else { "$in": categories },
                         "author_id": { "$exists": True } if len(author_id) == 0 else author_id, 
                     },
@@ -102,7 +105,6 @@ class BlogManage(APIView):
                     "$project": {
                         "author_detail": 1,
                         "title": 1,
-                        "content": 1,
                         "category": 1,
                         "image_url": 1,
                         "_id": 1,
@@ -110,12 +112,19 @@ class BlogManage(APIView):
                         "likes": 1,
                         "created_at": 1,
                         "updated_at": 1,
+                        "content": 1,
                     }
                 },
                 {
                     "$unset": [
                         "author_detail.password",
                     ]
+                },
+                {
+                    "$skip": int(offset),
+                },
+                {
+                    "$limit": int(limit),
                 }
             ];
 
@@ -161,6 +170,7 @@ class BlogManage(APIView):
                     content=serialize.data['content'],
                     title=serialize.data['title'].lower(),
                     category=serialize.data['category'],
+                    image_url=serialize.data['image_url']
                 )
 
                 new_blog.save()
