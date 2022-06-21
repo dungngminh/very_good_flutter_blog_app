@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.bookmarks',
     'apps.followings',
     'apps.authentication',
+    'apps.likes',
     'rest_framework',
     'rest_framework_swagger',
 ]

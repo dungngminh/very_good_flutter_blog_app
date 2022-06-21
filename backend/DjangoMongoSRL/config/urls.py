@@ -52,6 +52,7 @@ urlpatterns = [\
     path('api/v1/', include('apps.bookmarks.urls')),
     path('api/v1/', include('apps.blogs.urls')),
     path('api/v1/', include('apps.followings.urls')),
+    path('api/v1/', include('apps.likes.urls')),
     path('', include('rest_framework.urls', namespace='rest_framework')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
