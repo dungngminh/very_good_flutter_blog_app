@@ -23,6 +23,8 @@ class GoodBlogClient {
         '/api/v1$path',
         queryParams,
       );
+      log(uri.toString());
+
       final response = await _client.get(uri, headers: headers).timeout(
             Constant.timeOutDuration,
             onTimeout: () => throw TimeoutException('Ah shjt timeout'),
@@ -57,11 +59,38 @@ class GoodBlogClient {
       return _returnResponseResult(response);
     } on SocketException {
       throw ConnectionExpcetion('No internet connection');
+    } catch (e) {
+      log(e.toString());
+      throw Exception();
     }
-    // catch (e) {
-    //   log(e.toString());
-    //   throw Exception();
-    // }
+  }
+
+  Future<T> put<T>(
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    log(body.toString());
+    try {
+      final uri = Uri.https(
+        _baseUrl,
+        '/api/v1$path',
+      );
+      log(uri.toString());
+      final response = await _client
+          .put(
+            uri,
+            body: jsonEncode(body),
+            headers: headers,
+          )
+          .timeout(
+            Constant.timeOutDuration,
+            onTimeout: () => throw TimeoutException('Ah shjt timeout'),
+          );
+      return _returnResponseResult(response);
+    } on SocketException {
+      throw ConnectionExpcetion('No internet connection');
+    }
   }
 
   T _returnResponseResult<T>(Response response) {

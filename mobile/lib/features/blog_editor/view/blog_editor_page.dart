@@ -10,7 +10,7 @@ import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
     show BlogEditorBloc, BlogEditorSubmitContent;
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
-import 'package:very_good_blog_app/models/models.dart' show Blog;
+import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/repository/blog_repository.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart'
     show TapHideKeyboard, ActionBar;
@@ -19,7 +19,7 @@ import 'package:very_good_blog_app/widgets/widgets.dart'
 class BlogEditorPage extends StatelessWidget {
   const BlogEditorPage({super.key, this.blog});
 
-  final Blog? blog;
+  final BlogModel? blog;
 
   @override
   Widget build(BuildContext context) {

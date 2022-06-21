@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'user_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) => User(
+UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['_id'] as String,
       username: json['username'] as String,
       firstName: json['first_name'] as String? ?? '',
@@ -16,11 +16,11 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       blogCount: json['num_blog'] as int? ?? 0,
       avatarUrl: json['avatar'] as String? ?? '',
       blogs: (json['blogs'] as List<dynamic>?)
-          ?.map((e) => Blog.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => BlogModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       '_id': instance.id,
       'username': instance.username,
       'first_name': instance.firstName,

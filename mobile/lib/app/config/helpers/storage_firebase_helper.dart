@@ -2,13 +2,10 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
-class StorageFirebase {
-  StorageFirebase({FirebaseStorage? firebaseStorage})
-      : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
+abstract class StorageFirebaseHelper {
+  static final _firebaseStorage = FirebaseStorage.instance;
 
-  final FirebaseStorage _firebaseStorage;
-
-  Future<String?> saveImageToStorage({
+  static Future<String?> saveImageToStorage({
     required String folder,
     required String name,
     required File file,

@@ -2,13 +2,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:very_good_blog_app/models/models.dart' show User;
+import 'package:very_good_blog_app/models/models.dart' show UserModel;
 
-part 'blog.g.dart';
+part 'blog_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class Blog extends Equatable {
-  const Blog({
+class BlogModel extends Equatable {
+  const BlogModel({
     required this.id,
     required this.title,
     this.likeCount = 0,
@@ -19,7 +19,7 @@ class Blog extends Equatable {
     required this.user,
   });
 
-  const Blog.preview({
+  const BlogModel.preview({
     this.id = 'preview',
     required this.title,
     this.likeCount = 0,
@@ -30,7 +30,8 @@ class Blog extends Equatable {
     required this.createdAt,
   });
 
-  factory Blog.fromJson(Map<String, dynamic> json) => _$BlogFromJson(json);
+  factory BlogModel.fromJson(Map<String, dynamic> json) =>
+      _$BlogModelFromJson(json);
 
   @JsonKey(name: '_id')
   final String id;
@@ -41,11 +42,11 @@ class Blog extends Equatable {
   final String category;
   final String? content;
   @JsonKey(name: 'author_detail')
-  final User user;
+  final UserModel user;
   @JsonKey(fromJson: _fromJson, toJson: _toJson)
   final DateTime createdAt;
 
-  Map<String, dynamic> toJson() => _$BlogToJson(this);
+  Map<String, dynamic> toJson() => _$BlogModelToJson(this);
 
   static DateTime _fromJson(int timestamp) =>
       DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
@@ -67,17 +68,17 @@ class Blog extends Equatable {
   @override
   bool get stringify => true;
 
-  Blog copyWith({
+  BlogModel copyWith({
     String? id,
     String? title,
     int? likeCount,
     String? imageUrl,
     String? category,
     String? content,
-    User? user,
+    UserModel? user,
     DateTime? createdAt,
   }) {
-    return Blog(
+    return BlogModel(
       id: id ?? this.id,
       title: title ?? this.title,
       likeCount: likeCount ?? this.likeCount,

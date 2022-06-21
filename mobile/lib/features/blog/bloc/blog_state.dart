@@ -11,28 +11,31 @@ class BlogState extends Equatable {
     this.getBlogStatus = GetBlogStatus.loading,
     this.likeBlogStatus = LikeBlogStatus.initial,
     this.contentBlogStatus = ContentBlogStatus.initial,
-    this.blogs = const <Blog>[],
-    this.filterBlogs = const <Blog>[],
-    this.isLoading = false,
+    this.blogs = const <BlogModel>[],
+    this.filterBlogs = const <BlogModel>[],
     this.errorMessage = '',
+    this.category = 'Tất cả',
+    this.isSearching = false,
   });
 
   final GetBlogStatus getBlogStatus;
   final LikeBlogStatus likeBlogStatus;
   final ContentBlogStatus contentBlogStatus;
-  final List<Blog> blogs;
-  final List<Blog> filterBlogs;
-  final bool isLoading;
+  final List<BlogModel> blogs;
+  final List<BlogModel> filterBlogs;
   final String errorMessage;
+  final String category;
+  final bool isSearching;
 
   BlogState copyWith({
     GetBlogStatus? getBlogStatus,
     LikeBlogStatus? likeBlogStatus,
     ContentBlogStatus? contentBlogStatus,
-    List<Blog>? blogs,
-    List<Blog>? filterBlogs,
-    bool? isLoading,
+    List<BlogModel>? blogs,
+    List<BlogModel>? filterBlogs,
+    bool? isSearching,
     String? errorMessage,
+    String? category,
   }) {
     return BlogState(
       getBlogStatus: getBlogStatus ?? this.getBlogStatus,
@@ -40,8 +43,9 @@ class BlogState extends Equatable {
       blogs: blogs ?? this.blogs,
       likeBlogStatus: likeBlogStatus ?? this.likeBlogStatus,
       filterBlogs: filterBlogs ?? this.filterBlogs,
-      isLoading: isLoading ?? this.isLoading,
+      isSearching: isSearching ?? this.isSearching,
       errorMessage: errorMessage ?? this.errorMessage,
+      category: category ?? this.category,
     );
   }
 
@@ -53,8 +57,9 @@ class BlogState extends Equatable {
       contentBlogStatus,
       blogs,
       filterBlogs,
-      isLoading,
+      isSearching,
       errorMessage,
+      category,
     ];
   }
 }

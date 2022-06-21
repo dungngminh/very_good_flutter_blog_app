@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart';
 import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
 import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
@@ -21,7 +23,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileGetUserInformation>(_onGetUserInformation);
     on<ProfileUserLogoutRequested>(_onUserRequestedLogout);
     on<ProfileConfirmEditInformation>(_onConfirmEditUserInformation);
-    on<ProfileEditInformationRequested>(_onEditProfileRequested);
+    on<ProfileAvatarButtonPressed>(_onAvatarButtonPressed);
     add(ProfileGetUserInformation());
   }
 
@@ -69,10 +71,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     return _authenticationRepository.logOut();
   }
 
-  void _onEditProfileRequested(
-    ProfileEditInformationRequested event,
+  Future<void> _onAvatarButtonPressed(
+    ProfileAvatarButtonPressed event,
     Emitter<ProfileState> emit,
-  ) {
-    emit(state.copyWith(enableEditProfile: true));
+  ) async {
+    final imagePickedPath =
+        await ImagePickerHelper.pickImageFromSource(ImageSource.gallery);
+    if (imagePickedPath != null) {
+      emit(
+        state.copyWith(
+          imagePath: imagePickedPath,
+        ),
+      );
+    }
   }
 }

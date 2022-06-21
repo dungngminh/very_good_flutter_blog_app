@@ -20,7 +20,7 @@ class ProfileView extends StatelessWidget {
           color: AppPalette.whiteBackgroundColor,
         )
       ],
-      leading: Padding(
+        leading: Padding(
         padding: const EdgeInsets.all(4),
         child: Align(
           alignment: Alignment.centerRight,

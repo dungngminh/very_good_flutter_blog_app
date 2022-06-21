@@ -5,7 +5,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
-import 'package:very_good_blog_app/models/models.dart' show Blog;
+import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/widgets/ink_response_widget.dart';
 
 enum CardType {
@@ -23,7 +23,7 @@ class BlogCard extends StatelessWidget {
     this.enableBookmarkButton = false,
   });
 
-  final Blog blog;
+  final BlogModel blog;
   final bool enableBookmarkButton;
 
   // const BlogCard({
@@ -62,7 +62,7 @@ class BlogCard extends StatelessWidget {
     return InkWell(
       onTap: () => context.push(
         AppRoute.blog,
-        extra: ExtraParams3<Blog, ProfileBloc, BlogBloc>(
+        extra: ExtraParams3<BlogModel, ProfileBloc, BlogBloc>(
           param1: blog,
           param2: context.read<ProfileBloc>(),
           param3: context.read<BlogBloc>(),

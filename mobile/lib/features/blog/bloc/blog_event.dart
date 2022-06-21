@@ -9,15 +9,13 @@ abstract class BlogEvent extends Equatable {
 
 class BlogGetBlogs extends BlogEvent {
   const BlogGetBlogs({
-    this.limit = 10,
     this.page = 1,
   });
 
-  final int limit;
   final int page;
 
   @override
-  List<Object?> get props => [limit, page];
+  List<Object?> get props => [page];
 }
 
 class BlogLikePressed extends BlogEvent {
@@ -36,7 +34,7 @@ class BlogAddToBookmarkPressed extends BlogEvent {
     required this.blog,
   });
 
-  final Blog blog;
+  final BlogModel blog;
 
   @override
   List<Object?> get props => [blog];
@@ -45,23 +43,27 @@ class BlogAddToBookmarkPressed extends BlogEvent {
 class BlogSearchChanged extends BlogEvent {
   const BlogSearchChanged({
     required this.value,
+    this.page = 1,
   });
 
   final String value;
+   final int page;
 
   @override
-  List<Object?> get props => [value];
+  List<Object?> get props => [value, page];
 }
 
 class BlogCategoryPressed extends BlogEvent {
   const BlogCategoryPressed({
     required this.catagory,
+    this.page = 1,
   });
 
   final String catagory;
+  final int page;
 
   @override
-  List<Object?> get props => [catagory];
+  List<Object?> get props => [catagory, page];
 }
 
 class BlogRemoveFromBookmarkPressed extends BlogEvent {
@@ -69,7 +71,7 @@ class BlogRemoveFromBookmarkPressed extends BlogEvent {
     required this.blog,
   });
 
-  final Blog blog;
+  final BlogModel blog;
 
   @override
   List<Object?> get props => [blog];

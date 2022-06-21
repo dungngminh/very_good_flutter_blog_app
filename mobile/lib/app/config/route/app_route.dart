@@ -12,9 +12,9 @@ import 'package:very_good_blog_app/features/register/register.dart'
     show RegisterView;
 import 'package:very_good_blog_app/features/setting/setting.dart'
     show SettingView;
-import 'package:very_good_blog_app/features/setting/view/edit_profile_view.dart';
+import 'package:very_good_blog_app/features/setting/view/edit_profile_page.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart' show SplashView;
-import 'package:very_good_blog_app/models/models.dart' show Blog;
+import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 
 class AppRoute {
   static const splash = '/';
@@ -69,7 +69,7 @@ class AppRoute {
               final extras = state.extra! as ProfileBloc;
               return BlocProvider.value(
                 value: extras,
-                child: const EditProfileView(),
+                child: const EditProfilePage(),
               );
             },
           )
@@ -79,7 +79,7 @@ class AppRoute {
         path: blogEditor,
         builder: (context, state) {
           final extras =
-              state.extra! as ExtraParams3<ProfileBloc, BlogBloc, Blog?>;
+              state.extra! as ExtraParams3<ProfileBloc, BlogBloc, BlogModel?>;
           return MultiBlocProvider(
             providers: [
               BlocProvider.value(
@@ -123,7 +123,7 @@ class AppRoute {
         path: blog,
         builder: (context, state) {
           final extras =
-              state.extra! as ExtraParams3<Blog, ProfileBloc, BlogBloc>;
+              state.extra! as ExtraParams3<BlogModel, ProfileBloc, BlogBloc>;
           return MultiBlocProvider(
             providers: [
               BlocProvider.value(

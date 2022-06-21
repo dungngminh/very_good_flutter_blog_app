@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:very_good_blog_app/models/models.dart';
@@ -14,10 +16,122 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     on<BlogGetBlogs>(_onGetBlogs);
     on<BlogLikePressed>(_onLikePressed);
     on<BlogCardPressed>(_onBlogCardPressed);
+    on<BlogCategoryPressed>(_onCategoryPressed);
+    on<BlogSearchChanged>(_onSearchChanged);
     add(const BlogGetBlogs());
   }
 
   final BlogRepository _blogRepository;
+
+  Future<void> _onSearchChanged(
+    BlogSearchChanged event,
+    Emitter<BlogState> emit,
+  ) async {
+    try {
+      if (event.value.isEmpty) {
+        emit(
+          state.copyWith(
+            isSearching: false,
+            filterBlogs: state.blogs,
+          ),
+        );
+        return;
+      }
+      emit(
+        state.copyWith(
+          getBlogStatus: GetBlogStatus.loading,
+          isSearching: true,
+        ),
+      );
+      await _blogRepository
+          .searchBlogs(
+        event.value,
+        page: event.page,
+      )
+          .then(
+        (blogs) {
+          log(blogs.toString());
+          emit(
+            state.copyWith(
+              getBlogStatus: GetBlogStatus.idle,
+              filterBlogs: blogs,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          getBlogStatus: GetBlogStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onCategoryPressed(
+    BlogCategoryPressed event,
+    Emitter<BlogState> emit,
+  ) async {
+    try {
+      if (event.catagory == 'Tất cả') {
+        emit(
+          state.copyWith(
+            getBlogStatus: GetBlogStatus.loading,
+            category: event.catagory,
+          ),
+        );
+        await _blogRepository
+            .getBlogs(
+          page: event.page,
+        )
+            .then(
+          (blogs) {
+            emit(
+              state.copyWith(
+                getBlogStatus: GetBlogStatus.idle,
+                blogs: blogs,
+                filterBlogs: blogs,
+              ),
+            );
+            log(
+              state.filterBlogs.length.toString(),
+            );
+          },
+        );
+        return;
+      }
+      emit(
+        state.copyWith(
+          getBlogStatus: GetBlogStatus.loading,
+          category: event.catagory,
+        ),
+      );
+      await _blogRepository
+          .getBlogsByCategory(
+        event.catagory,
+        page: event.page,
+      )
+          .then(
+        (blogs) {
+          log(blogs.toString());
+          emit(
+            state.copyWith(
+              getBlogStatus: GetBlogStatus.idle,
+              filterBlogs: blogs,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          getBlogStatus: GetBlogStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
 
   Future<void> _onLikePressed(
     BlogLikePressed event,
@@ -54,7 +168,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       await _blogRepository
           .getBlogs(
         page: event.page,
-        limit: event.limit,
       )
           .then(
         (blogs) {
@@ -64,6 +177,9 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
               blogs: blogs,
               filterBlogs: blogs,
             ),
+          );
+          log(
+            state.filterBlogs.length.toString(),
           );
         },
       );

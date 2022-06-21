@@ -1,6 +1,6 @@
-import 'package:very_good_blog_app/models/models.dart' show User;
+import 'package:very_good_blog_app/models/models.dart' show UserModel;
 
-const userMock = User(
+const userMock = UserModel(
   id: 'hehedung',
   username: 'dungngminh',
   firstName: 'Ong',

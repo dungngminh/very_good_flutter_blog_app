@@ -19,7 +19,7 @@ import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
         UploadBlogStatus;
 import 'package:very_good_blog_app/features/profile/profile.dart'
     show ProfileBloc;
-import 'package:very_good_blog_app/models/models.dart' show Blog;
+import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class UploadBlogView extends StatelessWidget {
@@ -86,7 +86,7 @@ class UploadBlogView extends StatelessWidget {
                                     .read<BlogEditorBloc>()
                                     .state
                                     .category;
-                                final previewBlog = Blog.preview(
+                                final previewBlog = BlogModel.preview(
                                   title: title,
                                   category: category,
                                   content: content,

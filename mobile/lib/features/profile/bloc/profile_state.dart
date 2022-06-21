@@ -7,17 +7,17 @@ class ProfileState extends Equatable {
     this.user,
     this.messageError = '',
     this.status = ProfileStatus.initial,
-    this.userBlogs = const <Blog>[],
-    this.userLikedBlogs = const <Blog>[],
-    this.enableEditProfile = false, 
+    this.userBlogs = const <BlogModel>[],
+    this.userLikedBlogs = const <BlogModel>[],
+    this.imagePath = '', 
   });
 
-  final User? user;
+  final UserModel? user;
   final String messageError;
   final ProfileStatus status;
-  final List<Blog> userBlogs;
-  final List<Blog> userLikedBlogs;
-  final bool enableEditProfile;
+  final List<BlogModel> userBlogs;
+  final List<BlogModel> userLikedBlogs;
+  final String imagePath;
 
   @override
   List<Object?> get props => [
@@ -26,15 +26,16 @@ class ProfileState extends Equatable {
         status,
         userBlogs,
         userLikedBlogs,
+        imagePath,
       ];
 
   ProfileState copyWith({
-    User? user,
+    UserModel? user,
     String? messageError,
     ProfileStatus? status,
-    List<Blog>? userBlogs,
-    List<Blog>? userLikedBlogs,
-    bool? enableEditProfile,
+    List<BlogModel>? userBlogs,
+    List<BlogModel>? userLikedBlogs,
+    String? imagePath, 
   }) {
     return ProfileState(
       user: user ?? this.user,
@@ -42,7 +43,7 @@ class ProfileState extends Equatable {
       status: status ?? this.status,
       userBlogs: userBlogs ?? this.userBlogs,
       userLikedBlogs: userLikedBlogs ?? this.userLikedBlogs,
-      enableEditProfile: enableEditProfile ?? this.enableEditProfile,
+      imagePath: imagePath ?? this.imagePath,
       
     );
   }

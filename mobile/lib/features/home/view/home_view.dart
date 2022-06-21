@@ -1,3 +1,4 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -15,20 +16,60 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return TapHideKeyboard(
       child: Scaffold(
-        body: SafeArea(
+        body: RefreshIndicator(
+          color: AppPalette.primaryColor,
+          onRefresh: () async =>
+              context.read<BlogBloc>().add(const BlogGetBlogs()),
           child: SingleChildScrollView(
             primary: true,
-            padding: const EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: context.padding.top + 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _Header(),
                 const _SearchField(),
-                const _CategoryChoiceBar(),
-                _buildHeadTitle('Phổ biến'),
-                const _PopularBlogList(),
-                _buildHeadTitle('Bài viết khác'),
-                const _MoreBlogList(),
+                Builder(
+                  builder: (context) {
+                    final currentCategory = context
+                        .select((BlogBloc blogBloc) => blogBloc.state.category);
+                    final isSearching = context.select(
+                      (BlogBloc blogBloc) => blogBloc.state.isSearching,
+                    );
+                    if (currentCategory == 'Tất cả' && isSearching == false) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const _CategoryChoiceBar(),
+                          _buildHeadTitle('Phổ biến'),
+                          const _PopularBlogList(),
+                          _buildHeadTitle('Bài viết khác'),
+                          const _MoreBlogList(),
+                        ],
+                      );
+                    } else if (currentCategory != 'Tất cả' &&
+                        isSearching == false) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const _CategoryChoiceBar(),
+                          _buildHeadTitle('Bài viết về $currentCategory'),
+                          const _MoreBlogList(),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildHeadTitle(
+                            'Kết quả tìm kiếm',
+                            padding: const EdgeInsets.fromLTRB(24, 8, 0, 16),
+                          ),
+                          const _MoreBlogList(),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -37,9 +78,12 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildHeadTitle(String title) {
+  Widget _buildHeadTitle(
+    String title, {
+    EdgeInsets padding = const EdgeInsets.fromLTRB(24, 32, 0, 16),
+  }) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 32, 0, 16),
+      padding: padding,
       child: Text(
         title,
         style: AppTextTheme.mediumTextStyle.copyWith(fontSize: 18),
@@ -68,26 +112,30 @@ class _MoreBlogList extends StatelessWidget {
             child: Text(state.errorMessage),
           );
         }
-        return ListView.separated(
-          padding: const EdgeInsets.only(
-            bottom: 36,
-          ),
-          primary: false,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final blog = state.blogs[index];
-            return BlogCard(
-              needMargin: true,
-              blog: blog,
-            );
-          },
-          itemCount: state.blogs.length,
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
-            );
-          },
-        );
+        return state.filterBlogs.isEmpty
+            ? const Center(
+                child: Text('Không có bài viết nào'),
+              )
+            : ListView.separated(
+                padding: const EdgeInsets.only(
+                  bottom: 36,
+                ),
+                primary: false,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final blog = state.filterBlogs[index];
+                  return BlogCard(
+                    needMargin: true,
+                    blog: blog,
+                  );
+                },
+                itemCount: state.filterBlogs.length,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(
+                    height: 16,
+                  );
+                },
+              );
       },
     );
   }
@@ -100,7 +148,8 @@ class _PopularBlogList extends StatelessWidget {
     return SizedBox(
       height: context.screenHeight * 0.35,
       child: BlocBuilder<BlogBloc, BlogState>(
-        buildWhen: (previous, current) => previous.blogs != current.blogs,
+        buildWhen: (previous, current) =>
+            previous.filterBlogs != current.filterBlogs,
         builder: (context, state) {
           if (state.getBlogStatus == GetBlogStatus.loading) {
             return const Center(
@@ -113,22 +162,26 @@ class _PopularBlogList extends StatelessWidget {
               child: Text(state.errorMessage),
             );
           }
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              final blog = state.blogs.elementAt(index);
-              return PopularBlogCard(
-                blog: blog,
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(
-                width: 16,
-              );
-            },
-          );
+          return state.filterBlogs.isEmpty
+              ? const Center(
+                  child: Text('Không có bài viết nào'),
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    final blog = state.filterBlogs.elementAt(index);
+                    return PopularBlogCard(
+                      blog: blog,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      width: 16,
+                    );
+                  },
+                );
         },
       ),
     );
@@ -204,7 +257,7 @@ class _CategoryChoiceBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final category = <String>[
+    final categories = <String>[
       'Tất cả',
       'Kinh tế',
       'Khoa học',
@@ -218,24 +271,42 @@ class _CategoryChoiceBar extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
         itemBuilder: (context, index) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-            decoration: BoxDecoration(
-              color: index == 0
-                  ? Theme.of(context).primaryColor
-                  : AppPalette.fieldColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              category[index],
-              style: TextStyle(
-                fontSize: 16,
-                color: index == 0
-                    ? AppPalette.whiteBackgroundColor
-                    : AppPalette.unSelectedTextChipColor,
-              ),
-            ),
+          final category = categories[index];
+          return Builder(
+            builder: (context) {
+              final currentCategory = context
+                  .select((BlogBloc blogBloc) => blogBloc.state.category);
+              return GestureDetector(
+                onTap: currentCategory != category
+                    ? () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        context
+                            .read<BlogBloc>()
+                            .add(BlogCategoryPressed(catagory: category));
+                      }
+                    : null,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+                  decoration: BoxDecoration(
+                    color: currentCategory == category
+                        ? Theme.of(context).primaryColor
+                        : AppPalette.fieldColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    category,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: currentCategory == category
+                          ? AppPalette.whiteBackgroundColor
+                          : AppPalette.unSelectedTextChipColor,
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
         separatorBuilder: (BuildContext context, int index) {
@@ -243,7 +314,7 @@ class _CategoryChoiceBar extends StatelessWidget {
             width: 16,
           );
         },
-        itemCount: category.length,
+        itemCount: categories.length,
       ),
     );
   }
@@ -273,6 +344,11 @@ class _SearchField extends StatelessWidget {
           ),
           hintText: 'Tìm kiếm',
           contentPadding: EdgeInsets.only(right: 16),
+        ),
+        onChanged: (value) => EasyDebounce.debounce(
+          'searching',
+          const Duration(milliseconds: 750),
+          () => context.read<BlogBloc>().add(BlogSearchChanged(value: value)),
         ),
         style: AppTextTheme.regularTextStyle.copyWith(fontSize: 16),
       ),

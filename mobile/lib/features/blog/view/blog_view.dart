@@ -19,7 +19,7 @@ class BlogView extends StatefulWidget {
     required this.blog,
   });
 
-  final Blog blog;
+  final BlogModel blog;
 
   @override
   State<BlogView> createState() => _BlogViewState();
@@ -52,26 +52,27 @@ class _BlogViewState extends State<BlogView> {
                 return ActionBar(
                   title: widget.blog.title,
                   titleFontSize: 20,
-                  actions: widget.blog.user == user! &&
-                          widget.blog.id != 'preview'
-                      ? [
-                          IconButton(
-                            icon: Assets.icons.editSquare.svg(
-                              color: AppPalette.purple700Color,
-                              height: 28,
-                            ),
-                            splashRadius: 24,
-                            onPressed: () => context.push(
-                              AppRoute.blogEditor,
-                              extra: ExtraParams3<ProfileBloc, BlogBloc, Blog>(
-                                param1: context.read<ProfileBloc>(),
-                                param2: context.read<BlogBloc>(),
-                                param3: widget.blog,
+                  actions:
+                      widget.blog.user == user! && widget.blog.id != 'preview'
+                          ? [
+                              IconButton(
+                                icon: Assets.icons.editSquare.svg(
+                                  color: AppPalette.purple700Color,
+                                  height: 28,
+                                ),
+                                splashRadius: 24,
+                                onPressed: () => context.push(
+                                  AppRoute.blogEditor,
+                                  extra: ExtraParams3<ProfileBloc, BlogBloc,
+                                      BlogModel>(
+                                    param1: context.read<ProfileBloc>(),
+                                    param2: context.read<BlogBloc>(),
+                                    param3: widget.blog,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ]
-                      : null,
+                            ]
+                          : null,
                 );
               },
             ),
@@ -137,16 +138,23 @@ class _BlogViewState extends State<BlogView> {
                         : const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
                       children: [
-                        Assets.icons.heart.svg(
-                          color: AppPalette.pink500Color,
-                          height: 24,
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          icon: Assets.icons.heart.svg(
+                            color: AppPalette.pink500Color,
+                            height: 24,
+                          ),
+                          splashRadius: 24,
+                          onPressed: () {},
                         ),
                         const SizedBox(
                           width: 4,
                         ),
                         Text(
                           '${widget.blog.likeCount}',
-                          style: AppTextTheme.regularTextStyle,
+                          style: AppTextTheme.regularTextStyle
+                              .copyWith(fontSize: 15),
                         ),
                         const Spacer(),
                         if (widget.blog.id != 'preview')

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class BookmarksView extends StatelessWidget {
   const BookmarksView({super.key});
@@ -28,37 +26,7 @@ class BookmarksView extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              // Expanded(
-              //   child: ListView.separated(
-              //     padding: const EdgeInsets.only(
-              //       bottom: 36,
-              //       // left: 24,
-              //       // right: 24,
-              //     ),
-              //     itemCount: 5,
-              //     itemBuilder: (context, index) {
-              //       return const Slidable(
-              //         endActionPane: ActionPane(
-              //           motion: ScrollMotion(),
-              //           children: [],
-              //         ),
-              //         child: BlogCard(
-              //           needMargin: true,
-              //           dateAdded: '20 tháng 9, 2022',
-              //           author: 'Dungngminh',
-              //           title: 'How to make a beautiful widget',
-              //           imageUrl: 'https://i.kym-cdn.com/'
-              //               'photos/images/facebook/001/839/197/2ad.png',
-              //         ),
-              //       );
-              //     },
-              //     separatorBuilder: (context, index) {
-              //       return const SizedBox(
-              //         height: 16,
-              //       );
-              //     },
-              //   ),
-              // ),
+              // _BookmarkList(),
             ],
           ),
         ),
@@ -66,3 +34,47 @@ class BookmarksView extends StatelessWidget {
     );
   }
 }
+
+// class _BookmarkList extends StatelessWidget {
+//   const _BookmarkList({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Builder(
+//       builder: (context) {
+//         final context.
+//         return Expanded(
+//           child: ListView.separated(
+//             padding: const EdgeInsets.only(
+//               bottom: 36,
+//               // left: 24,
+//               // right: 24,
+//             ),
+//             itemCount: 5,
+//             itemBuilder: (context, index) {
+//               return const Slidable(
+//                 endActionPane: ActionPane(
+//                   motion: ScrollMotion(),
+//                   children: [],
+//                 ),
+//                 child: BlogCard(
+//                   needMargin: true,
+//                   dateAdded: '20 tháng 9, 2022',
+//                   author: 'Dungngminh',
+//                   title: 'How to make a beautiful widget',
+//                   imageUrl: 'https://i.kym-cdn.com/'
+//                       'photos/images/facebook/001/839/197/2ad.png',
+//                 ),
+//               );
+//             },
+//             separatorBuilder: (context, index) {
+//               return const SizedBox(
+//                 height: 16,
+//               );
+//             },
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }

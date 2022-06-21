@@ -14,4 +14,4 @@ class ProfileConfirmEditInformation extends ProfileEvent {}
 
 class ProfileUserLogoutRequested extends ProfileEvent {}
 
-class ProfileEditInformationRequested extends ProfileEvent {}
+class ProfileAvatarButtonPressed extends ProfileEvent {}

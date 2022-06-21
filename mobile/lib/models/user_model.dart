@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:very_good_blog_app/models/blog.dart';
+import 'package:very_good_blog_app/models/blog_model.dart';
 
-part 'user.g.dart';
+part 'user_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class User extends Equatable {
-  const User({
+class UserModel extends Equatable {
+  const UserModel({
     required this.id,
     required this.username,
     this.firstName = '',
@@ -19,7 +19,8 @@ class User extends Equatable {
     this.blogs,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   @JsonKey(name: '_id')
   final String id;
@@ -32,9 +33,9 @@ class User extends Equatable {
   final int blogCount;
   @JsonKey(name: 'avatar')
   final String avatarUrl;
-  final List<Blog>? blogs;
+  final List<BlogModel>? blogs;
 
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   @override
   List<Object?> get props {

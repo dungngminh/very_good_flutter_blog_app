@@ -2,21 +2,21 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
-import 'package:very_good_blog_app/data/firebase/storage_firebase.dart';
+import 'package:very_good_blog_app/app/config/helpers/storage_firebase_helper.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
-import 'package:very_good_blog_app/models/models.dart' show Blog;
+import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 
 class BlogRepository {
   BlogRepository({
     GoodBlogClient? blogClient,
-    StorageFirebase? storageFirebase,
-  })  : _blogClient = blogClient ?? GoodBlogClient(),
-        _storageFirebase = storageFirebase ?? StorageFirebase();
+  }) : _blogClient = blogClient ?? GoodBlogClient();
 
   final GoodBlogClient _blogClient;
-  final StorageFirebase _storageFirebase;
 
-  Future<List<Blog>> getBlogs({required int page, required int limit}) async {
+  Future<List<BlogModel>> getBlogs({
+    required int page,
+    int limit = 10,
+  }) async {
     try {
       final jsonBody = await _blogClient.get(
         '/blogs',
@@ -25,8 +25,10 @@ class BlogRepository {
           'limit': limit.toString(),
         },
       ) as List;
+      if (jsonBody.isEmpty) return [];
+
       final listBlog = jsonBody
-          .map((e) => Blog.fromJson(e as Map<String, dynamic>))
+          .map((e) => BlogModel.fromJson(e as Map<String, dynamic>))
           .toList();
       return listBlog;
     } catch (e) {
@@ -34,12 +36,60 @@ class BlogRepository {
     }
   }
 
-  Future<Blog> getBlogById(String blogId) async {
+  Future<List<BlogModel>> getBlogsByCategory(
+    String category, {
+    required int page,
+    int limit = 10,
+  }) async {
     try {
-    final jsonBody = await _blogClient.get(
-      '/blogs/$blogId',
-    );
-    return Blog.fromJson(jsonBody as Map<String, dynamic>);
+      final jsonBody = await _blogClient.get(
+        '/blogs',
+        queryParams: <String, dynamic>{
+          'category': category,
+          'page': page.toString(),
+          'limit': limit.toString(),
+        },
+      ) as List;
+      if (jsonBody.isEmpty) return [];
+      final listBlog = jsonBody
+          .map((e) => BlogModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return listBlog;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<BlogModel>> searchBlogs(
+    String search, {
+    required int page,
+    int limit = 10,
+  }) async {
+    try {
+      final jsonBody = await _blogClient.get(
+        '/blogs',
+        queryParams: <String, dynamic>{
+          'search': search,
+          'page': page.toString(),
+          'limit': limit.toString(),
+        },
+      ) as List;
+      if (jsonBody.isEmpty) return [];
+      final listBlog = jsonBody
+          .map((e) => BlogModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return listBlog;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<BlogModel> getBlogById(String blogId) async {
+    try {
+      final jsonBody = await _blogClient.get(
+        '/blogs/$blogId',
+      );
+      return BlogModel.fromJson(jsonBody as Map<String, dynamic>);
     } catch (e) {
       rethrow;
     }
@@ -89,7 +139,7 @@ class BlogRepository {
     }
   }
 
-  Future<List<Blog>> getBlogsByUserId(String userId) async {
+  Future<List<BlogModel>> getBlogsByUserId(String userId) async {
     // try {
     final jsonBody = await _blogClient.get(
       '/blogs',
@@ -99,7 +149,7 @@ class BlogRepository {
     ) as List;
     final blogs = jsonBody
         .map(
-          (e) => Blog.fromJson(e as Map<String, dynamic>),
+          (e) => BlogModel.fromJson(e as Map<String, dynamic>),
         )
         .toList();
     return blogs;
@@ -109,7 +159,7 @@ class BlogRepository {
     // }
   }
 
-  Future<void> addBlogToBookmark(Blog blog) async {
+  Future<void> addBlogToBookmark(BlogModel blog) async {
     try {
       final token = await SecureStorageHelper.getValueByKey('jwt');
       await _blogClient.post(
@@ -132,7 +182,7 @@ class BlogRepository {
     try {
       final now = DateTime.now();
       final formatedDate = '${now.millisecondsSinceEpoch}';
-      final imageUrl = await _storageFirebase.saveImageToStorage(
+      final imageUrl = await StorageFirebaseHelper.saveImageToStorage(
         folder: 'blogs',
         name: formatedDate,
         file: File(imagePath),

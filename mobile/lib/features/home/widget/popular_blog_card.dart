@@ -5,7 +5,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
-import 'package:very_good_blog_app/models/models.dart' show Blog;
+import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class PopularBlogCard extends StatelessWidget {
@@ -14,14 +14,14 @@ class PopularBlogCard extends StatelessWidget {
     required this.blog,
   });
 
-  final Blog blog;
+  final BlogModel blog;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => context.push(
         AppRoute.blog,
-        extra: ExtraParams3<Blog, ProfileBloc, BlogBloc>(
+        extra: ExtraParams3<BlogModel, ProfileBloc, BlogBloc>(
           param1: blog,
           param2: context.read<ProfileBloc>(),
           param3: context.read<BlogBloc>(),
@@ -44,12 +44,16 @@ class PopularBlogCard extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: InkEffectIconButton(
-                child: Assets.icons.bookmark.svg(
-                  color: AppPalette.whiteBackgroundColor,
-                  height: 24,
+              child: CircleAvatar(
+                backgroundColor:
+                    AppPalette.whiteBackgroundColor.withOpacity(0.4),
+                child: InkEffectIconButton(
+                  child: Assets.icons.bookmark.svg(
+                    color: AppPalette.purple700Color,
+                    height: 24,
+                  ),
+                  onPressed: () {},
                 ),
-                onPressed: () {},
               ),
             ),
             const Spacer(),
@@ -66,8 +70,19 @@ class PopularBlogCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        backgroundImage: Assets.images.komkat.image().image,
+                      Builder(
+                        builder: (context) {
+                          final avatarUrl = context.select(
+                            (ProfileBloc profileBloc) =>
+                                profileBloc.state.user?.avatarUrl,
+                          );
+                          return CircleAvatar(
+                            backgroundImage:
+                                avatarUrl == null || avatarUrl.isEmpty
+                                    ? Assets.images.blankAvatar.image().image
+                                    : NetworkImage(avatarUrl),
+                          );
+                        },
                       ),
                       const SizedBox(
                         width: 12,
@@ -82,7 +97,6 @@ class PopularBlogCard extends StatelessWidget {
                               style: AppTextTheme.titleTextStyle
                                   .copyWith(fontSize: 14),
                             ),
-                            // TODO(dungngminh): handle timeago
                             Text(
                               timeago.format(
                                 blog.createdAt,

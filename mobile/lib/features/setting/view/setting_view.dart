@@ -24,6 +24,9 @@ class SettingView extends StatelessWidget {
             const ActionBar(
               title: 'Thiết lập',
             ),
+            const SizedBox(
+              height: 8,
+            ),
             SettingTile(
               iconPath: Assets.icons.profile.path,
               onTap: () => context.push(

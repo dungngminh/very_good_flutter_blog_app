@@ -76,7 +76,7 @@ class _MainViewState extends State<MainView> {
                   return FloatingActionButton(
                     onPressed: () => context.push(
                       AppRoute.blogEditor,
-                      extra: ExtraParams3<ProfileBloc, BlogBloc, Blog?>(
+                      extra: ExtraParams3<ProfileBloc, BlogBloc, BlogModel?>(
                         param1: context.read<ProfileBloc>(),
                         param2: context.read<BlogBloc>(),
                         param3: null,
