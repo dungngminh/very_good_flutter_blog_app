@@ -36,6 +36,20 @@ class BlogRepository {
     }
   }
 
+  Future<void> deleteBlog(BlogModel blog) async {
+    try {
+      final token = await SecureStorageHelper.getValueByKey('jwt');
+      await _blogClient.delete(
+        '/blogs/${blog.id}',
+        headers: <String, String>{
+          'Authorization': token!,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<BlogModel>> getBlogsByCategory(
     String category, {
     required int page,
@@ -124,6 +138,40 @@ class BlogRepository {
     }
   }
 
+  Future<void> updateBlog({
+    required BlogModel blog,
+    required String title,
+    required String imagePath,
+    required String category,
+    required String content,
+  }) async {
+    try {
+      String? finalImage;
+      final token = await SecureStorageHelper.getValueByKey('jwt');
+      if (imagePath != blog.imageUrl) {
+        finalImage = await _uploadImageToFirebaseStorage(imagePath);
+      } else {
+        finalImage = blog.imageUrl;
+      }
+      await _blogClient.put(
+        '/blogs/${blog.id}',
+        body: <String, dynamic>{
+          'content': content,
+          'image_url': finalImage,
+          'title': title,
+          'category': [category],
+        },
+        headers: <String, String>{
+          'Authorization': token!,
+          'Content-Type': 'application/json'
+        },
+      );
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> likeBlog(String blogId) async {
     try {
       await _blogClient.post(
@@ -144,7 +192,7 @@ class BlogRepository {
     final jsonBody = await _blogClient.get(
       '/blogs',
       queryParams: <String, dynamic>{
-        'id': userId,
+        'author_id': userId,
       },
     ) as List;
     final blogs = jsonBody

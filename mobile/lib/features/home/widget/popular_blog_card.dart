@@ -70,19 +70,10 @@ class PopularBlogCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Builder(
-                        builder: (context) {
-                          final avatarUrl = context.select(
-                            (ProfileBloc profileBloc) =>
-                                profileBloc.state.user?.avatarUrl,
-                          );
-                          return CircleAvatar(
-                            backgroundImage:
-                                avatarUrl == null || avatarUrl.isEmpty
-                                    ? Assets.images.blankAvatar.image().image
-                                    : NetworkImage(avatarUrl),
-                          );
-                        },
+                      CircleAvatar(
+                        backgroundImage: blog.user.avatarUrl.isEmpty
+                            ? Assets.images.blankAvatar.image().image
+                            : NetworkImage(blog.user.avatarUrl),
                       ),
                       const SizedBox(
                         width: 12,

@@ -15,17 +15,27 @@ class BookmarksView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.only(left: 24),
                 child: Text(
                   'Danh sách bài viết đã lưu',
                   style: AppTextTheme.darkW700TextStyle,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Center(
+                    child: Text(
+                      'Danh sách bài viết đã lưu không có ',
+                    ),
+                  )
+                ],
+              )
               // _BookmarkList(),
             ],
           ),

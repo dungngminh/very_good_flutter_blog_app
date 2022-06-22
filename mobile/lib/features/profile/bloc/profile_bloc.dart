@@ -24,6 +24,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileUserLogoutRequested>(_onUserRequestedLogout);
     on<ProfileConfirmEditInformation>(_onConfirmEditUserInformation);
     on<ProfileAvatarButtonPressed>(_onAvatarButtonPressed);
+    on<ProfileOnLongPressedBlog>(_onBlogLongPressed);
     add(ProfileGetUserInformation());
   }
 
@@ -31,19 +32,38 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AuthenticationRepository _authenticationRepository;
   final BlogRepository _blogRepository;
 
+  Future<void> _onBlogLongPressed(
+    ProfileOnLongPressedBlog event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(deleteStatus: DeleteStatus.loading));
+      await _blogRepository.deleteBlog(event.blog);
+      emit(state.copyWith(deleteStatus: DeleteStatus.done));
+      add(ProfileGetUserInformation());
+    } catch (e) {
+      emit(
+        state.copyWith(
+          deleteStatus: DeleteStatus.error,
+          messageError: e.toString(),
+        ),
+      );
+    }
+  }
+
   Future<void> _onGetUserInformation(
     ProfileGetUserInformation event,
     Emitter<ProfileState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: ProfileStatus.loading));
+      emit(state.copyWith(profileStatus: ProfileStatus.loading));
       final userId = await SecureStorageHelper.getValueByKey('id');
       final user = await _userRepository.getUserInformationByUserId(userId!);
       final userBlogs = await _blogRepository.getBlogsByUserId(userId);
       emit(
         state.copyWith(
           user: user,
-          status: ProfileStatus.done,
+          profileStatus: ProfileStatus.done,
           userBlogs: userBlogs,
         ),
       );
@@ -51,7 +71,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(
         state.copyWith(
           messageError: e.toString(),
-          status: ProfileStatus.error,
+          profileStatus: ProfileStatus.error,
         ),
       );
     }

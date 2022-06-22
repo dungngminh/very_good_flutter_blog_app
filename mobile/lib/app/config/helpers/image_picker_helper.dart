@@ -5,7 +5,7 @@ abstract class ImagePickerHelper {
 
   static Future<String?> pickImageFromSource(ImageSource source) async {
     try {
-      final image = await _picker.pickImage(source: source);
+      final image = await _picker.pickImage(source: source, imageQuality: 60);
       if (image != null) {
         return image.path;
       }

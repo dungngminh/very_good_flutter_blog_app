@@ -68,6 +68,9 @@ class BlogCard extends StatelessWidget {
           param3: context.read<BlogBloc>(),
         ),
       ),
+      onLongPress: () {
+        context.read<ProfileBloc>().add(ProfileOnLongPressedBlog(blog: blog));
+      },
       child: Container(
         // height: 135,
         margin: needMargin ? const EdgeInsets.symmetric(horizontal: 24) : null,

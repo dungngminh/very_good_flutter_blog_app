@@ -23,6 +23,8 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   final BlogRepository _blogRepository;
 
+
+
   Future<void> _onSearchChanged(
     BlogSearchChanged event,
     Emitter<BlogState> emit,
@@ -53,7 +55,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           log(blogs.toString());
           emit(
             state.copyWith(
-              getBlogStatus: GetBlogStatus.idle,
+              getBlogStatus: GetBlogStatus.done,
               filterBlogs: blogs,
             ),
           );
@@ -89,7 +91,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           (blogs) {
             emit(
               state.copyWith(
-                getBlogStatus: GetBlogStatus.idle,
+                getBlogStatus: GetBlogStatus.done,
                 blogs: blogs,
                 filterBlogs: blogs,
               ),
@@ -117,7 +119,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           log(blogs.toString());
           emit(
             state.copyWith(
-              getBlogStatus: GetBlogStatus.idle,
+              getBlogStatus: GetBlogStatus.done,
               filterBlogs: blogs,
             ),
           );
@@ -147,7 +149,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
         (_) {
           emit(
             state.copyWith(
-              likeBlogStatus: LikeBlogStatus.idle,
+              likeBlogStatus: LikeBlogStatus.done,
             ),
           );
         },
@@ -173,11 +175,16 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
         (blogs) {
           emit(
             state.copyWith(
-              getBlogStatus: GetBlogStatus.idle,
+              getBlogStatus: GetBlogStatus.done,
               blogs: blogs,
               filterBlogs: blogs,
             ),
           );
+          if (state.popularBlogs.length <= 4) {
+            state.copyWith(
+              popularBlogs: blogs,
+            );
+          }
           log(
             state.filterBlogs.length.toString(),
           );
@@ -213,7 +220,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           }
           emit(
             state.copyWith(
-              contentBlogStatus: ContentBlogStatus.idle,
+              contentBlogStatus: ContentBlogStatus.done,
               blogs: currentBlogs,
             ),
           );

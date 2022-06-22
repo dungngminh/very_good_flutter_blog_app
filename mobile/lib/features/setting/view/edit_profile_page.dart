@@ -72,24 +72,36 @@ class _EditProfileView extends StatelessWidget {
             ),
             child: Column(
               children: [
-                ActionBar(
-                  title: 'Thông tin cá nhân',
-                  actions: [
-                    IconButton(
-                      icon: Assets.icons.edit.svg(
-                        color: AppPalette.deepPurpleColor,
-                        height: 28,
-                      ),
-                      onPressed: () {
-                        context.read<EditProfileBloc>().add(
-                              const EditProfileEvent(
-                                EditProfileType.enalbeToEdit,
+                Builder(
+                  builder: (context) {
+                    final enableToEdit = context.select(
+                      (EditProfileBloc editProfileBloc) =>
+                          editProfileBloc.state.enableEditing,
+                    );
+                    return ActionBar(
+                      title: enableToEdit
+                          ? 'Chỉnh sửa thông tin'
+                          : 'Thông tin cá nhân',
+                      actions: !enableToEdit
+                          ? [
+                              IconButton(
+                                icon: Assets.icons.edit.svg(
+                                  color: AppPalette.deepPurpleColor,
+                                  height: 28,
+                                ),
+                                onPressed: () {
+                                  context.read<EditProfileBloc>().add(
+                                        const EditProfileEvent(
+                                          EditProfileType.enalbeToEdit,
+                                        ),
+                                      );
+                                },
+                                splashRadius: 24,
                               ),
-                            );
-                      },
-                      splashRadius: 24,
-                    ),
-                  ],
+                            ]
+                          : null,
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 24,
@@ -196,32 +208,35 @@ class _UpdateProfileButton extends StatelessWidget {
             ? const CircularProgressIndicator(
                 color: AppPalette.primaryColor,
               )
-            : ElevatedButton(
-                key: const Key('editProfile_confirmedEdit_raisedButton'),
-                onPressed: enableToEdit
-                    ? (validationStatus.isValid
-                        ? () {
-                            context.read<EditProfileBloc>().add(
-                                  const EditProfileEvent(
-                                    EditProfileType.submitted,
-                                  ),
-                                );
-                          }
-                        : null)
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(180, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
+            : Visibility(
+                visible: enableToEdit,
+                child: ElevatedButton(
+                  key: const Key('editProfile_confirmedEdit_raisedButton'),
+                  onPressed: enableToEdit
+                      ? (validationStatus.isValid
+                          ? () {
+                              context.read<EditProfileBloc>().add(
+                                    const EditProfileEvent(
+                                      EditProfileType.submitted,
+                                    ),
+                                  );
+                            }
+                          : null)
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(120, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    primary: Theme.of(context).primaryColor,
                   ),
-                  primary: Theme.of(context).primaryColor,
-                ),
-                child: const Text(
-                  'Cập nhật thông tin',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: AppPalette.whiteBackgroundColor,
+                  child: const Text(
+                    'Cập nhật',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: AppPalette.whiteBackgroundColor,
+                    ),
                   ),
                 ),
               );

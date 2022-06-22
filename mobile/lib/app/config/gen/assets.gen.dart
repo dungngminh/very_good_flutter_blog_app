@@ -129,6 +129,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/komkat.png
   AssetGenImage get komkat => const AssetGenImage('assets/images/komkat.png');
 
+  /// File path: assets/images/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
+
   /// File path: assets/images/very_good.svg
   SvgGenImage get veryGood => const SvgGenImage('assets/images/very_good.svg');
 }

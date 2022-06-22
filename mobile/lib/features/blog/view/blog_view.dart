@@ -146,7 +146,11 @@ class _BlogViewState extends State<BlogView> {
                             height: 24,
                           ),
                           splashRadius: 24,
-                          onPressed: () {},
+                          onPressed: widget.blog.id != 'preview'
+                              ? () {}
+                              : () => context
+                                  .read<BlogBloc>()
+                                  .add(BlogLikePressed(id: widget.blog.id)),
                         ),
                         const SizedBox(
                           width: 4,

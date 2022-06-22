@@ -15,3 +15,14 @@ class ProfileConfirmEditInformation extends ProfileEvent {}
 class ProfileUserLogoutRequested extends ProfileEvent {}
 
 class ProfileAvatarButtonPressed extends ProfileEvent {}
+
+class ProfileOnLongPressedBlog extends ProfileEvent {
+  const ProfileOnLongPressedBlog({
+    required this.blog,
+  });
+
+  final BlogModel blog;
+
+  @override
+  List<Object?> get props => [blog];
+}

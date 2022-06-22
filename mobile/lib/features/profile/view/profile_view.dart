@@ -3,53 +3,71 @@ import 'dart:math' as math;
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
+// TODO(dung.nguyen): handle lock scroll body when listBlog isEmpty
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DraggableHome(
-      title: const _TitleTile(),
-      actions: const [
-        _SettingButton(
-          color: AppPalette.whiteBackgroundColor,
-        )
-      ],
+    return BlocListener<ProfileBloc, ProfileState>(
+      listenWhen: (previous, current) =>
+          previous.profileStatus != current.profileStatus,
+      listener: (context, state) {
+        if (state.profileStatus == ProfileStatus.loading) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Đang cập nhật dữ liệu');
+        } else if (state.profileStatus == ProfileStatus.error) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
+        } else if (state.profileStatus == ProfileStatus.done) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Cập nhật dữ liệu thành công');
+        }
+      },
+      child: DraggableHome(
+        title: const _TitleTile(),
+        actions: const [
+          _SettingButton(
+            color: AppPalette.whiteBackgroundColor,
+          )
+        ],
         leading: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Builder(
-            builder: (context) {
-              final status = context.select(
-                (ProfileBloc profileBloc) => profileBloc.state.status,
-              );
-              return _RotateIconButton(
-                icon: Assets.icons.refresh.svg(
-                  color: AppPalette.whiteBackgroundColor,
-                  height: 28,
-                ),
-                isLoading: status == ProfileStatus.loading,
-                onPressed: () => context.read<ProfileBloc>().add(
-                      ProfileGetUserInformation(),
-                    ),
-              );
-            },
+          padding: const EdgeInsets.all(4),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Builder(
+              builder: (context) {
+                final status = context.select(
+                  (ProfileBloc profileBloc) => profileBloc.state.profileStatus,
+                );
+                return _RotateIconButton(
+                  icon: Assets.icons.refresh.svg(
+                    color: AppPalette.whiteBackgroundColor,
+                    height: 28,
+                  ),
+                  isLoading: status == ProfileStatus.loading,
+                  onPressed: () => context.read<ProfileBloc>().add(
+                        ProfileGetUserInformation(),
+                      ),
+                );
+              },
+            ),
           ),
         ),
+        headerWidget: const _ProfilePanel(),
+        headerExpandedHeight: 0.56,
+        curvedBodyRadius: 40,
+        appBarColor: AppPalette.primaryColor,
+        body: const [
+          _BlogPanel(),
+        ],
       ),
-      headerWidget: const _ProfilePanel(),
-      headerExpandedHeight: 0.56,
-      curvedBodyRadius: 40,
-      appBarColor: AppPalette.primaryColor,
-      body: const [
-        _PostPanel(),
-      ],
     );
   }
 }
@@ -187,7 +205,8 @@ class _ProfilePanel extends StatelessWidget {
                   child: Builder(
                     builder: (context) {
                       final status = context.select(
-                        (ProfileBloc profileBloc) => profileBloc.state.status,
+                        (ProfileBloc profileBloc) =>
+                            profileBloc.state.profileStatus,
                       );
                       return _RotateIconButton(
                         icon: Assets.icons.refresh.svg(
@@ -292,14 +311,14 @@ class _BasicUserInformation extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    final blogCount = context.select(
+                    final userBlogs = context.select(
                       (ProfileBloc profileBloc) =>
-                          profileBloc.state.user?.blogCount,
+                          profileBloc.state.user?.blogs,
                     );
                     return _ProfileStat(
                       key: const ValueKey('post'),
                       content: 'Bài viết',
-                      count: blogCount ?? 0,
+                      count: userBlogs?.length ?? 0,
                     );
                   },
                 ),
@@ -409,20 +428,23 @@ class _AvatarDecoration extends StatelessWidget {
                   );
                 },
               ),
-              Positioned(
-                bottom: -4,
-                right: -4,
-                child: CircleAvatar(
-                  backgroundColor: AppPalette.purpleSupportColor,
-                  radius: 18,
-                  child: Align(
-                    child: IconButton(
-                      icon: Assets.icons.camera.svg(
-                        color: AppPalette.primaryColor,
+              Visibility(
+                visible: false,
+                child: Positioned(
+                  bottom: -4,
+                  right: -4,
+                  child: CircleAvatar(
+                    backgroundColor: AppPalette.purpleSupportColor,
+                    radius: 18,
+                    child: Align(
+                      child: IconButton(
+                        icon: Assets.icons.camera.svg(
+                          color: AppPalette.primaryColor,
+                        ),
+                        splashRadius: 24,
+                        // TODO(dungngminh): add function user picture
+                        onPressed: () {},
                       ),
-                      splashRadius: 24,
-                      // TODO(dungngminh): add function user picture
-                      onPressed: () {},
                     ),
                   ),
                 ),
@@ -455,14 +477,14 @@ class BackgroundClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
 
-class _PostPanel extends StatefulWidget {
-  const _PostPanel();
+class _BlogPanel extends StatefulWidget {
+  const _BlogPanel();
 
   @override
-  State<_PostPanel> createState() => _PostPanelState();
+  State<_BlogPanel> createState() => _BlogPanelState();
 }
 
-class _PostPanelState extends State<_PostPanel> {
+class _BlogPanelState extends State<_BlogPanel> {
   late ValueNotifier<int> _currentTabIndex;
 
   @override

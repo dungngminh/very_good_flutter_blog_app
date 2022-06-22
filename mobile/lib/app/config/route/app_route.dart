@@ -85,7 +85,7 @@ class AppRoute {
               BlocProvider.value(
                 value: extras.param1,
               ),
-              BlocProvider.value(
+              BlocProvider.value( 
                 value: extras.param2,
               ),
             ],
@@ -98,8 +98,8 @@ class AppRoute {
           GoRoute(
             path: uploadBlog,
             builder: (context, state) {
-              final extras = state.extra!
-                  as ExtraParams3<BlogEditorBloc, BlogBloc, ProfileBloc>;
+              final extras = state.extra! as ExtraParams4<BlogEditorBloc,
+                  BlogBloc, ProfileBloc, BlogModel?>;
 
               return MultiBlocProvider(
                 providers: [
@@ -163,4 +163,18 @@ class ExtraParams3<A, B, C> {
   final A param1;
   final B param2;
   final C param3;
+}
+
+class ExtraParams4<A, B, C, D> {
+  ExtraParams4({
+    required this.param1,
+    required this.param2,
+    required this.param3,
+    required this.param4,
+  });
+
+  final A param1;
+  final B param2;
+  final C param3;
+  final D param4;
 }

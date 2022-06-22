@@ -18,6 +18,17 @@ class BlogGetBlogs extends BlogEvent {
   List<Object?> get props => [page];
 }
 
+class BlogOnLongPressedBlog extends BlogEvent {
+  const BlogOnLongPressedBlog({
+    required this.blog,
+  });
+
+  final BlogModel blog;
+
+  @override
+  List<Object?> get props => [blog];
+}
+
 class BlogLikePressed extends BlogEvent {
   const BlogLikePressed({
     required this.id,
@@ -47,7 +58,7 @@ class BlogSearchChanged extends BlogEvent {
   });
 
   final String value;
-   final int page;
+  final int page;
 
   @override
   List<Object?> get props => [value, page];

@@ -15,9 +15,11 @@ class UserRepository {
   Future<UserModel?> getUserInformationByUserId(String userId) async {
     try {
       final jsonBody = await _blogClient.get('/users/$userId');
+      log(jsonBody.toString());
       return UserModel.fromJson(jsonBody as Map<String, dynamic>);
     } catch (e) {
-      throw Exception('can not get user information');
+      // throw Exception('can not get user information');
+      rethrow;
     }
   }
 

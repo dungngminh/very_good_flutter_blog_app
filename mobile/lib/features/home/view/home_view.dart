@@ -1,6 +1,7 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
@@ -14,63 +15,81 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TapHideKeyboard(
-      child: Scaffold(
-        body: RefreshIndicator(
-          color: AppPalette.primaryColor,
-          onRefresh: () async =>
-              context.read<BlogBloc>().add(const BlogGetBlogs()),
-          child: SingleChildScrollView(
-            primary: true,
-            padding: EdgeInsets.only(top: context.padding.top + 16),
-            child: Column(
-              children: [
-                const _Header(),
-                const _SearchField(),
-                Builder(
-                  builder: (context) {
-                    final currentCategory = context
-                        .select((BlogBloc blogBloc) => blogBloc.state.category);
-                    final isSearching = context.select(
-                      (BlogBloc blogBloc) => blogBloc.state.isSearching,
-                    );
-                    if (currentCategory == 'Tất cả' && isSearching == false) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const _CategoryChoiceBar(),
-                          _buildHeadTitle('Phổ biến'),
-                          const _PopularBlogList(),
-                          _buildHeadTitle('Bài viết khác'),
-                          const _MoreBlogList(),
-                        ],
+    return BlocListener<BlogBloc, BlogState>(
+      listenWhen: (previous, current) {
+        return previous.blogs != current.blogs;
+      },
+      listener: (context, state) {
+        if (state.getBlogStatus == GetBlogStatus.loading) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Đang cập nhật dữ liệu bài viết');
+        } else if (state.getBlogStatus == GetBlogStatus.error) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
+        } else if (state.getBlogStatus == GetBlogStatus.done) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Cập nhật dữ liệu thành công');
+        }
+      },
+      child: TapHideKeyboard(
+        child: Scaffold(
+          body: RefreshIndicator(
+            color: AppPalette.primaryColor,
+            onRefresh: () async =>
+                context.read<BlogBloc>().add(const BlogGetBlogs()),
+            child: SingleChildScrollView(
+              primary: true,
+              padding: EdgeInsets.only(top: context.padding.top + 16),
+              child: Column(
+                children: [
+                  const _Header(),
+                  const _SearchField(),
+                  Builder(
+                    builder: (context) {
+                      final currentCategory = context.select(
+                        (BlogBloc blogBloc) => blogBloc.state.category,
                       );
-                    } else if (currentCategory != 'Tất cả' &&
-                        isSearching == false) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const _CategoryChoiceBar(),
-                          _buildHeadTitle('Bài viết về $currentCategory'),
-                          const _MoreBlogList(),
-                        ],
+                      final isSearching = context.select(
+                        (BlogBloc blogBloc) => blogBloc.state.isSearching,
                       );
-                    } else {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildHeadTitle(
-                            'Kết quả tìm kiếm',
-                            padding: const EdgeInsets.fromLTRB(24, 8, 0, 16),
-                          ),
-                          const _MoreBlogList(),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ],
+                      if (currentCategory == 'Tất cả' && isSearching == false) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const _CategoryChoiceBar(),
+                            _buildHeadTitle('Phổ biến'),
+                            const _PopularBlogList(),
+                            _buildHeadTitle('tất cả bài viết'),
+                            const _MoreBlogList(),
+                          ],
+                        );
+                      } else if (currentCategory != 'Tất cả' &&
+                          isSearching == false) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const _CategoryChoiceBar(),
+                            _buildHeadTitle('Bài viết về $currentCategory'),
+                            const _MoreBlogList(),
+                          ],
+                        );
+                      } else {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildHeadTitle(
+                              'Kết quả tìm kiếm',
+                              padding: const EdgeInsets.fromLTRB(24, 8, 0, 16),
+                            ),
+                            const _MoreBlogList(),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -169,7 +188,7 @@ class _PopularBlogList extends StatelessWidget {
               : ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   scrollDirection: Axis.horizontal,
-                  itemCount: 4,
+                  itemCount: state.filterBlogs.length,
                   itemBuilder: (context, index) {
                     final blog = state.filterBlogs.elementAt(index);
                     return PopularBlogCard(
@@ -259,10 +278,10 @@ class _CategoryChoiceBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final categories = <String>[
       'Tất cả',
-      'Kinh tế',
+      'Đời sống',
       'Khoa học',
-      'Văn hóa',
-      'Nghệ thuật'
+      'Du lịch',
+      'Ẩm thực'
     ];
     return SizedBox(
       height: context.screenHeight * 0.06,

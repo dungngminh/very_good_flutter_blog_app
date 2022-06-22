@@ -67,6 +67,7 @@ class _UsernameInput extends StatelessWidget {
                     input: username,
                   ),
                 ),
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
@@ -112,6 +113,7 @@ class _PasswordInputState extends State<_PasswordInput> {
                   input: password,
                 ),
               ),
+            textInputAction: TextInputAction.next,
             obscureText: _isHidePassword,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
@@ -214,6 +216,7 @@ class _FirstnameInput extends StatelessWidget {
                     input: firstName,
                   ),
                 ),
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
@@ -243,6 +246,7 @@ class _LastnameInput extends StatelessWidget {
                     input: lastName,
                   ),
                 ),
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,

@@ -19,7 +19,7 @@ class BlogEditorSubmitContent extends BlogEditorEvent {
 class BlogEditorTitleChanged extends BlogEditorEvent {
   const BlogEditorTitleChanged(this.title);
 
-  final String title;
+  final String? title;
 
   @override
   List<Object?> get props => [title];
@@ -30,14 +30,30 @@ class BlogEditorCategoryChanged extends BlogEditorEvent {
     this.category,
   );
 
-  final String category;
+  final String? category;
 
   @override
   List<Object?> get props => [category];
 }
 
-class BlogEditorAddImage extends BlogEditorEvent {}
+class BlogEditorAddImage extends BlogEditorEvent {
+  const BlogEditorAddImage({this.imageUrl});
+
+  final String? imageUrl;
+
+  @override
+  List<Object?> get props => [imageUrl];
+}
 
 class BlogEditorRemoveImage extends BlogEditorEvent {}
 
 class BlogEditorUploadBlog extends BlogEditorEvent {}
+
+class BlogEditorEditExistBlog extends BlogEditorEvent {
+  const BlogEditorEditExistBlog({this.existBlog});
+
+  final BlogModel? existBlog;
+
+  @override
+  List<Object?> get props => [existBlog];
+}

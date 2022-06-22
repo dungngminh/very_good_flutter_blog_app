@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
@@ -6,6 +8,7 @@ import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart'
     show ImagePickerHelper;
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
     show ImagePath, BlogTitle;
+import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart'
     show BlogRepository;
 
@@ -19,9 +22,10 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     on<BlogEditorTitleChanged>(_onTitleChanged);
     on<BlogEditorAddImage>(_onAddImage);
     on<BlogEditorCategoryChanged>(_onCategoryChanged);
-    on<BlogEditorUploadBlog>(_onPostBlog);
+    on<BlogEditorUploadBlog>(_onSubmitBlog);
     on<BlogEditorSubmitContent>(_onSubmitContent);
     on<BlogEditorRemoveImage>(_onRemoveImage);
+    on<BlogEditorEditExistBlog>(_onEditExistBlog);
   }
 
   final BlogRepository _blogRepository;
@@ -42,7 +46,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     );
   }
 
-  Future<void> _onPostBlog(
+  Future<void> _onSubmitBlog(
     BlogEditorUploadBlog event,
     Emitter<BlogEditorState> emit,
   ) async {
@@ -51,19 +55,36 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
         uploadStatus: UploadBlogStatus.loading,
       ),
     );
+    if (state.existBlog != null) {}
     try {
-      await _blogRepository
-          .addBlog(
-        title: state.blogTitle.value,
-        category: state.category,
-        content: state.content,
-        imagePath: state.imagePath.value,
-      )
-          .then((_) {
-        emit(
-          state.copyWith(uploadStatus: UploadBlogStatus.done),
-        );
-      });
+      if (state.existBlog != null) {
+        await _blogRepository
+            .updateBlog(
+          blog: state.existBlog!,
+          title: state.blogTitle.value,
+          category: state.category,
+          content: state.content,
+          imagePath: state.imagePath.value,
+        )
+            .then((_) {
+          emit(
+            state.copyWith(uploadStatus: UploadBlogStatus.done),
+          );
+        });
+      } else {
+        await _blogRepository
+            .addBlog(
+          title: state.blogTitle.value,
+          category: state.category,
+          content: state.content,
+          imagePath: state.imagePath.value,
+        )
+            .then((_) {
+          emit(
+            state.copyWith(uploadStatus: UploadBlogStatus.done),
+          );
+        });
+      }
     } catch (e) {
       emit(
         state.copyWith(uploadStatus: UploadBlogStatus.error),
@@ -75,7 +96,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     BlogEditorCategoryChanged event,
     Emitter<BlogEditorState> emit,
   ) {
-    final category = event.category;
+    final category = event.category!;
     emit(
       state.copyWith(category: category),
     );
@@ -95,7 +116,10 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     BlogEditorTitleChanged event,
     Emitter<BlogEditorState> emit,
   ) {
-    final blogTitle = BlogTitle.dirty(event.title);
+    if (event.title == null) {
+      return;
+    }
+    final blogTitle = BlogTitle.dirty(event.title!);
     emit(
       state.copyWith(
         blogTitle: blogTitle,
@@ -111,6 +135,19 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     BlogEditorAddImage event,
     Emitter<BlogEditorState> emit,
   ) async {
+    if (event.imageUrl != null) {
+      final imagePath = ImagePath.dirty(event.imageUrl!);
+      emit(
+        state.copyWith(
+          imagePath: imagePath,
+          validationStatus: Formz.validate([
+            state.blogTitle,
+            imagePath,
+          ]),
+        ),
+      );
+      return;
+    }
     final imagePickedPath =
         await ImagePickerHelper.pickImageFromSource(ImageSource.gallery);
     if (imagePickedPath != null) {
@@ -122,6 +159,27 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
             state.blogTitle,
             imagePath,
           ]),
+        ),
+      );
+    }
+  }
+
+  void _onEditExistBlog(
+    BlogEditorEditExistBlog event,
+    Emitter<BlogEditorState> emit,
+  ) {
+    if (event.existBlog != null) {
+      final blogTitle = BlogTitle.dirty(event.existBlog!.title);
+      final imagePath = ImagePath.dirty(event.existBlog!.imageUrl);
+      final category = event.existBlog!.category;
+
+      emit(
+        state.copyWith(
+          blogTitle: blogTitle,
+          imagePath: imagePath,
+          existBlog: event.existBlog,
+          category: category,
+          validationStatus: Formz.validate([blogTitle, imagePath]),
         ),
       );
     }

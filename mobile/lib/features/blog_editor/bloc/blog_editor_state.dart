@@ -10,6 +10,7 @@ class BlogEditorState extends Equatable {
     this.content = '',
     this.imagePath = const ImagePath.pure(),
     this.category = '',
+    this.existBlog,
   });
 
   final FormzStatus validationStatus;
@@ -18,6 +19,7 @@ class BlogEditorState extends Equatable {
   final String content;
   final ImagePath imagePath;
   final String category;
+  final BlogModel? existBlog;
 
   BlogEditorState copyWith({
     FormzStatus? validationStatus,
@@ -26,6 +28,7 @@ class BlogEditorState extends Equatable {
     String? content,
     ImagePath? imagePath,
     String? category,
+    BlogModel? existBlog,
   }) {
     return BlogEditorState(
       validationStatus: validationStatus ?? this.validationStatus,
@@ -34,6 +37,7 @@ class BlogEditorState extends Equatable {
       content: content ?? this.content,
       imagePath: imagePath ?? this.imagePath,
       category: category ?? this.category,
+      existBlog: existBlog ?? this.existBlog,
     );
   }
 

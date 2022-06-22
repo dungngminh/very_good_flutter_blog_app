@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
 
 enum AuthenticationStatus {

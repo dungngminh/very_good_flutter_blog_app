@@ -84,7 +84,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     EditProfileEvent event,
     Emitter<EditProfileState> emit,
   ) {
-    emit(state.copyWith(enableEditing: !state.enableEditing));
+    emit(state.copyWith(enableEditing: true));
   }
 
   Future<void> _chooseImageButtonPressed(

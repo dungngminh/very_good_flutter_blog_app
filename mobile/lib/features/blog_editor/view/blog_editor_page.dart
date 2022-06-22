@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart'
-    show ContextExtension, AppPalette, AppRoute, AppTextTheme, ExtraParams3;
+    show AppPalette, AppRoute, AppTextTheme, ContextExtension, ExtraParams4;
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
-    show BlogEditorBloc, BlogEditorSubmitContent;
+    show BlogEditorBloc, BlogEditorEditExistBlog, BlogEditorSubmitContent;
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/repository/blog_repository.dart';
@@ -26,14 +26,16 @@ class BlogEditorPage extends StatelessWidget {
     return BlocProvider<BlogEditorBloc>(
       create: (context) => BlogEditorBloc(
         blogRepository: context.read<BlogRepository>(),
-      ),
-      child: const _AddBlogView(),
+      )..add(BlogEditorEditExistBlog(existBlog: blog)),
+      child: _AddBlogView(blog),
     );
   }
 }
 
 class _AddBlogView extends StatefulWidget {
-  const _AddBlogView();
+  const _AddBlogView(this.blog);
+
+  final BlogModel? blog;
 
   @override
   State<_AddBlogView> createState() => _AddBlogViewState();
@@ -46,7 +48,14 @@ class _AddBlogViewState extends State<_AddBlogView> {
   @override
   void initState() {
     super.initState();
-    _quillController = QuillController.basic();
+    if (widget.blog != null) {
+      _quillController = QuillController(
+        document: Document.fromJson(jsonDecode(widget.blog!.content!) as List),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    } else {
+      _quillController = QuillController.basic();
+    }
     _textEditorFocusNode = FocusNode();
   }
 
@@ -103,11 +112,12 @@ class _AddBlogViewState extends State<_AddBlogView> {
                           .add(BlogEditorSubmitContent(editorContent));
                       context.push(
                         '${AppRoute.blogEditor}/${AppRoute.uploadBlog}',
-                        extra:
-                            ExtraParams3<BlogEditorBloc, BlogBloc, ProfileBloc>(
+                        extra: ExtraParams4<BlogEditorBloc, BlogBloc,
+                            ProfileBloc, BlogModel?>(
                           param1: context.read<BlogEditorBloc>(),
                           param2: context.read<BlogBloc>(),
                           param3: context.read<ProfileBloc>(),
+                          param4: widget.blog,
                         ),
                       );
                     },

@@ -2,19 +2,23 @@ part of 'profile_bloc.dart';
 
 enum ProfileStatus { initial, loading, done, error }
 
+enum DeleteStatus { initial, loading, done, error }
+
 class ProfileState extends Equatable {
   const ProfileState({
     this.user,
     this.messageError = '',
-    this.status = ProfileStatus.initial,
+    this.profileStatus = ProfileStatus.initial,
+    this.deleteStatus = DeleteStatus.initial,
     this.userBlogs = const <BlogModel>[],
     this.userLikedBlogs = const <BlogModel>[],
-    this.imagePath = '', 
+    this.imagePath = '',
   });
 
   final UserModel? user;
   final String messageError;
-  final ProfileStatus status;
+  final ProfileStatus profileStatus;
+  final DeleteStatus deleteStatus;
   final List<BlogModel> userBlogs;
   final List<BlogModel> userLikedBlogs;
   final String imagePath;
@@ -23,8 +27,9 @@ class ProfileState extends Equatable {
   List<Object?> get props => [
         user,
         messageError,
-        status,
+        profileStatus,
         userBlogs,
+        deleteStatus,
         userLikedBlogs,
         imagePath,
       ];
@@ -32,19 +37,20 @@ class ProfileState extends Equatable {
   ProfileState copyWith({
     UserModel? user,
     String? messageError,
-    ProfileStatus? status,
+    ProfileStatus? profileStatus,
+    DeleteStatus? deleteStatus,
     List<BlogModel>? userBlogs,
     List<BlogModel>? userLikedBlogs,
-    String? imagePath, 
+    String? imagePath,
   }) {
     return ProfileState(
       user: user ?? this.user,
       messageError: messageError ?? this.messageError,
-      status: status ?? this.status,
+      profileStatus: profileStatus ?? this.profileStatus,
+      deleteStatus: deleteStatus ?? this.deleteStatus,
       userBlogs: userBlogs ?? this.userBlogs,
       userLikedBlogs: userLikedBlogs ?? this.userLikedBlogs,
       imagePath: imagePath ?? this.imagePath,
-      
     );
   }
 }

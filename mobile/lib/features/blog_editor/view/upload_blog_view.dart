@@ -2,10 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart'
-    show AppPalette, AppRoute, AppTextTheme, Assets, ContextExtension;
+    show
+        AppPalette,
+        AppRoute,
+        AppTextTheme,
+        Assets,
+        ContextExtension,
+        ExtraParams3;
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
     show
@@ -18,7 +25,7 @@ import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
         BlogEditorUploadBlog,
         UploadBlogStatus;
 import 'package:very_good_blog_app/features/profile/profile.dart'
-    show ProfileBloc;
+    show ProfileBloc, ProfileGetUserInformation;
 import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
@@ -30,11 +37,23 @@ class UploadBlogView extends StatelessWidget {
     return BlocListener<BlogEditorBloc, BlogEditorState>(
       listener: (context, state) {
         if (state.uploadStatus == UploadBlogStatus.done) {
+          Fluttertoast.showToast(
+            msg: state.existBlog == null
+                ? 'Đăng bài viết thành công'
+                : 'Cập nhật bài viết thành công',
+          );
           context
             ..pop()
             ..pop();
-
+          if (state.existBlog != null) context.pop();
           context.read<BlogBloc>().add(const BlogGetBlogs());
+          context.read<ProfileBloc>().add(ProfileGetUserInformation());
+        } else if (state.uploadStatus == UploadBlogStatus.error) {
+          Fluttertoast.showToast(
+            msg: state.existBlog == null
+                ? 'Đăng bài viết thất bài'
+                : 'Cập nhật bài viết thất bại',
+          );
         }
       },
       child: TapHideKeyboard(
@@ -46,71 +65,84 @@ class UploadBlogView extends StatelessWidget {
             ),
             child: Column(
               children: [
-                ActionBar(
-                  actions: [
-                    Builder(
-                      builder: (context) {
-                        final validationStatus = context.select(
-                          (BlogEditorBloc blogEditorBloc) =>
-                              blogEditorBloc.state.validationStatus,
-                        );
-                        final category = context.select(
-                          (BlogEditorBloc blogEditorBloc) =>
-                              blogEditorBloc.state.category,
-                        );
-                        return Visibility(
-                          visible:
-                              validationStatus.isValid && category.isNotEmpty,
-                          child: Tooltip(
-                            message: 'Bạn có thể xem trước bài viết'
-                                ' trước khi đăng',
-                            child: InkWell(
-                              onTap: () {
-                                final title = context
-                                    .read<BlogEditorBloc>()
-                                    .state
-                                    .blogTitle
-                                    .value;
-                                final content = context
-                                    .read<BlogEditorBloc>()
-                                    .state
-                                    .content;
-                                final user =
-                                    context.read<ProfileBloc>().state.user;
-                                final imagePath = context
-                                    .read<BlogEditorBloc>()
-                                    .state
-                                    .imagePath
-                                    .value;
-                                final category = context
-                                    .read<BlogEditorBloc>()
-                                    .state
-                                    .category;
-                                final previewBlog = BlogModel.preview(
-                                  title: title,
-                                  category: category,
-                                  content: content,
-                                  imageUrl: imagePath,
-                                  user: user!,
-                                  createdAt: DateTime.now(),
-                                );
-
-                                context.push(AppRoute.blog, extra: previewBlog);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  'Xem trước bài viết',
-                                  style: AppTextTheme.darkW700TextStyle
-                                      .copyWith(fontSize: 16),
-                                ),
-                              ),
+                Builder(
+                  builder: (context) {
+                    final validationStatus = context.select(
+                      (BlogEditorBloc blogEditorBloc) =>
+                          blogEditorBloc.state.validationStatus,
+                    );
+                    final category = context.select(
+                      (BlogEditorBloc blogEditorBloc) =>
+                          blogEditorBloc.state.category,
+                    );
+                    final existBlog = context.select(
+                      (BlogEditorBloc blogEditorBloc) =>
+                          blogEditorBloc.state.existBlog,
+                    );
+                    return ActionBar(
+                      title: existBlog == null
+                          ? 'Đăng bài viết'
+                          : 'Cập nhật bài viết',
+                      actions: [
+                        Visibility(
+                          replacement: const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: SizedBox.square(
+                              dimension: 30,
                             ),
                           ),
-                        );
-                      },
-                    )
-                  ],
+                          visible: validationStatus.isValid &&
+                              category.isNotEmpty &&
+                              existBlog == null,
+                          child: IconButton(
+                            tooltip: 'Bạn có thể xem trước bài viết'
+                                ' trước khi đăng',
+                            splashRadius: 24,
+                            icon: Assets.icons.search.svg(
+                              color: AppPalette.deepPurpleColor,
+                              height: 28,
+                            ),
+                            onPressed: () {
+                              final title = context
+                                  .read<BlogEditorBloc>()
+                                  .state
+                                  .blogTitle
+                                  .value;
+                              final content =
+                                  context.read<BlogEditorBloc>().state.content;
+                              final user =
+                                  context.read<ProfileBloc>().state.user;
+                              final imagePath = context
+                                  .read<BlogEditorBloc>()
+                                  .state
+                                  .imagePath
+                                  .value;
+                              final category =
+                                  context.read<BlogEditorBloc>().state.category;
+                              final previewBlog = BlogModel.preview(
+                                title: title,
+                                category: category,
+                                content: content,
+                                imageUrl: imagePath,
+                                user: user!,
+                                createdAt: DateTime.now(),
+                              );
+
+                              context.push(
+                                AppRoute.blog,
+                                extra: ExtraParams3<BlogModel, ProfileBloc,
+                                    BlogBloc>(
+                                  param1: previewBlog,
+                                  param2: context.read<ProfileBloc>(),
+                                  param3: context.read<BlogBloc>(),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    );
+                  },
                 ),
                 const _ImagePlacer(),
                 const SizedBox(
@@ -132,7 +164,8 @@ class _ImagePlacer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.read<BlogEditorBloc>().add(BlogEditorAddImage()),
+      onTap: () =>
+          context.read<BlogEditorBloc>().add(const BlogEditorAddImage()),
       child: Center(
         child: Builder(
           builder: (context) {
@@ -143,6 +176,7 @@ class _ImagePlacer extends StatelessWidget {
             if (pickedImage.isEmpty) {
               return _buildImagePlaceHoder();
             }
+            final isImageUploaded = pickedImage.contains('firebasestorage');
             return Stack(
               alignment: Alignment.topRight,
               children: [
@@ -153,7 +187,9 @@ class _ImagePlacer extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                      image: Image.file(File(pickedImage)).image,
+                      image: isImageUploaded
+                          ? Image.network(pickedImage).image
+                          : Image.file(File(pickedImage)).image,
                       fit: BoxFit.fill,
                     ),
                   ),

@@ -35,6 +35,27 @@ class GoodBlogClient {
     }
   }
 
+  Future<T> delete<T>(
+    String path, {
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final uri = Uri.https(
+        _baseUrl,
+        '/api/v1$path',
+      );
+      log(uri.toString());
+
+      final response = await _client.delete(uri, headers: headers).timeout(
+            Constant.timeOutDuration,
+            onTimeout: () => throw TimeoutException('Ah shjt timeout'),
+          );
+      return _returnResponseResult(response);
+    } on SocketException {
+      throw ConnectionExpcetion('No internet connection');
+    }
+  }
+
   Future<T> post<T>(
     String path, {
     Map<String, dynamic>? body,
@@ -98,7 +119,7 @@ class GoodBlogClient {
     switch (response.statusCode) {
       case 200:
       case 201:
-        return jsonDecode(response.body) as T;
+        return jsonDecode(utf8.decode(response.bodyBytes)) as T;
       case 403:
         throw UnauthorizedException(
           'authorization fail',

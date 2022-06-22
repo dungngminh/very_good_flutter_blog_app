@@ -1,10 +1,10 @@
 part of 'blog_bloc.dart';
 
-enum GetBlogStatus { loading, idle, error }
+enum GetBlogStatus { loading, done, error }
 
-enum LikeBlogStatus { initial, loading, idle, error }
+enum LikeBlogStatus { initial, loading, done, error }
 
-enum ContentBlogStatus { initial, loading, idle, error }
+enum ContentBlogStatus { initial, loading, done, error }
 
 class BlogState extends Equatable {
   const BlogState({
@@ -13,6 +13,7 @@ class BlogState extends Equatable {
     this.contentBlogStatus = ContentBlogStatus.initial,
     this.blogs = const <BlogModel>[],
     this.filterBlogs = const <BlogModel>[],
+    this.popularBlogs = const <BlogModel>[],
     this.errorMessage = '',
     this.category = 'Tất cả',
     this.isSearching = false,
@@ -23,6 +24,7 @@ class BlogState extends Equatable {
   final ContentBlogStatus contentBlogStatus;
   final List<BlogModel> blogs;
   final List<BlogModel> filterBlogs;
+  final List<BlogModel> popularBlogs;
   final String errorMessage;
   final String category;
   final bool isSearching;
@@ -33,6 +35,7 @@ class BlogState extends Equatable {
     ContentBlogStatus? contentBlogStatus,
     List<BlogModel>? blogs,
     List<BlogModel>? filterBlogs,
+    List<BlogModel>? popularBlogs,
     bool? isSearching,
     String? errorMessage,
     String? category,
@@ -43,6 +46,7 @@ class BlogState extends Equatable {
       blogs: blogs ?? this.blogs,
       likeBlogStatus: likeBlogStatus ?? this.likeBlogStatus,
       filterBlogs: filterBlogs ?? this.filterBlogs,
+      popularBlogs: popularBlogs ?? this.popularBlogs,
       isSearching: isSearching ?? this.isSearching,
       errorMessage: errorMessage ?? this.errorMessage,
       category: category ?? this.category,
