@@ -32,12 +32,7 @@ class FollowView(APIView):
             else:
                 direction = [direction]
 
-            if not user_id:
-                return HttpResponse.response(
-                    data = {},
-                    message = ResponseMessage.INVALID_DATA,
-                    status = status.HTTP_400_BAD_REQUEST
-                )
+            
             
             followers = []
             followings = []
