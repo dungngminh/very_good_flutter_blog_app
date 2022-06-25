@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
 
 class BookmarkView extends StatelessWidget {
   const BookmarkView({super.key});
@@ -15,24 +17,45 @@ class BookmarkView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.only(left: 24),
                 child: Text(
                   'Danh sách bài viết đã lưu',
                   style: AppTextTheme.darkW700TextStyle,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
+
               Expanded(
-                child: Center(
-                  child: Text(
-                    'Danh sách bài viết đã lưu không có ',
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(
+                      bottom: 36,
+                      // left: 24,
+                      // right: 24,
+                    ),
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return const BlogCardPlaceholder(
+                        needMargin: true,
+                      );
+                    },
                   ),
                 ),
-              )
+              ),
+              // const Expanded(
+              //   child: Center(
+              //     child: Text(
+              //       'Danh sách bài viết đã lưu không có ',
+              //     ),
+              //   ),
+              // )
               // _BookmarkList(),
             ],
           ),

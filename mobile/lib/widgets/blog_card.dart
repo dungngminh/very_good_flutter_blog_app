@@ -25,23 +25,6 @@ class BlogCard extends StatelessWidget {
 
   final BlogModel blog;
   final bool enableBookmarkButton;
-
-  // const BlogCard({
-  //   super.key,
-  //   required this.title,
-  //   required this.imageUrl,
-  //   this.likeCount,
-  //   this.author,
-  //   required this.dateAdded,
-  //   this.cardType = CardType.titleAuthorTime,
-  //   this.needMargin = false,
-  // });
-
-  // final String title;
-  // final String imageUrl;
-  // final int? likeCount;
-  // final String? author;
-  // final String dateAdded;
   final bool needMargin;
 
   /// This setting for order of content display from top to bottom
@@ -80,8 +63,6 @@ class BlogCard extends StatelessWidget {
           color: AppPalette.fieldColor,
         ),
         child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Column(

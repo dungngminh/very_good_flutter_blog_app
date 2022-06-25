@@ -23,14 +23,37 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   final BlogRepository _blogRepository;
 
-
-
   Future<void> _onSearchChanged(
     BlogSearchChanged event,
     Emitter<BlogState> emit,
   ) async {
     try {
       if (event.value.isEmpty) {
+        if (state.category != 'Tất cả') {
+          emit(
+            state.copyWith(
+              getBlogStatus: GetBlogStatus.loading,
+              isSearching: false,
+            ),
+          );
+          await _blogRepository
+              .getBlogsByCategory(
+            state.category,
+            page: event.page,
+          )
+              .then(
+            (blogs) {
+              log(blogs.toString());
+              emit(
+                state.copyWith(
+                  getBlogStatus: GetBlogStatus.done,
+                  filterBlogs: blogs,
+                ),
+              );
+            },
+          );
+          return;
+        }
         emit(
           state.copyWith(
             isSearching: false,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
@@ -56,7 +57,7 @@ class _MainViewState extends State<MainView> {
           body: ValueListenableBuilder<int>(
             valueListenable: _currentIndex,
             builder: (context, value, child) {
-              return IndexedStack(
+              return LazyLoadIndexedStack(
                 index: value,
                 children: const [
                   HomeView(),
