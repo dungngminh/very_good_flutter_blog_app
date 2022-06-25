@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('users', views.UserView.as_view()),
     path('users/<str:id>', views.UserView.as_view()),
+    path('users/<str:id>/device-token', views.UserDeviceToken.as_view()),
 ]

@@ -144,4 +144,3 @@ class UserView(APIView):
             message = 'error',
             status = status.HTTP_400_BAD_REQUEST,
         )
-        
