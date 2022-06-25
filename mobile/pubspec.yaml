@@ -7,10 +7,10 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  cache_manager: ^1.0.0+4
   cached_network_image: ^3.2.1
   connectivity_plus: ^2.3.5
-  draggable_home: ^1.0.3
+  draggable_home:
+    path: packages/draggable_home
   easy_debounce: ^2.0.2+1
   equatable: ^2.0.3
   firebase_core: ^1.18.0
@@ -18,6 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_cache_manager: ^3.3.0
   flutter_dotenv: ^5.0.2
   flutter_quill: ^5.0.3
   flutter_secure_storage: ^5.0.2

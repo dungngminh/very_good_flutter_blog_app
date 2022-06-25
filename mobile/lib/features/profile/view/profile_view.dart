@@ -37,6 +37,7 @@ class ProfileView extends StatelessWidget {
             color: AppPalette.whiteBackgroundColor,
           )
         ],
+        physics: const NeverScrollableScrollPhysics(),
         leading: Padding(
           padding: const EdgeInsets.all(4),
           child: Align(
@@ -442,7 +443,6 @@ class _AvatarDecoration extends StatelessWidget {
                           color: AppPalette.primaryColor,
                         ),
                         splashRadius: 24,
-                        // TODO(dungngminh): add function user picture
                         onPressed: () {},
                       ),
                     ),
@@ -496,6 +496,7 @@ class _BlogPanelState extends State<_BlogPanel> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
@@ -513,8 +514,11 @@ class _BlogPanelState extends State<_BlogPanel> {
           builder: (context) {
             final userBlogs = context.watch<ProfileBloc>().state.userBlogs;
             if (userBlogs.isEmpty) {
-              return const Center(
-                child: Text('Bạn chưa có blog nào'),
+              return const Padding(
+                padding: EdgeInsets.only(top: 32),
+                child: Center(
+                  child: Text('Bạn chưa có blog nào'),
+                ),
               );
             }
             return ListView.separated(
