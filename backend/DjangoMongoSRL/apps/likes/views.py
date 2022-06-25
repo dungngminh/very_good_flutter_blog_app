@@ -40,6 +40,14 @@ class LikesView(APIView):
             )
 
             likes.save()
+
+            self.database.blogs_blog.update_one(
+                { '_id': ObjectId(blog_id) }, 
+                { 
+                    '$inc': { 'likes': 1 },
+                }
+            );
+
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
         except Exception as e:
@@ -82,6 +90,13 @@ class LikesView(APIView):
                 'user_id': user_id,
                 'blog_id': blog_id,
             });
+
+            self.database.blogs_blog.update_one(
+                { '_id': ObjectId(blog_id) }, 
+                { 
+                    '$inc': { 'likes': -1 },
+                }
+            );
 
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 

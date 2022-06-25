@@ -78,7 +78,7 @@ class BlogManage(APIView):
             pipelines = [
                 { 
                     "$match": {
-                        "title": { "$exists": True } if len(search) == 0 else '/' + search + '/',
+                        "title": { "$exists": True } if len(search) == 0 else { '$regex': search, '$options': 'i' },
                         "category": { "$exists": True } if len(categories) == 0 else { "$in": categories },
                         "author_id": { "$exists": True } if len(author_id) == 0 else author_id, 
                     },
@@ -181,6 +181,14 @@ class BlogManage(APIView):
                 blog_dict['created_at'] = convert_timestamp(blog_dict['created_at'])
                 blog_dict['updated_at'] = convert_timestamp(blog_dict['updated_at'])
 
+                self.db.users_user.update_one({
+                    "_id": ObjectId(payload['_id'])
+                }, {
+                    "$inc": {
+                        "num_blog": 1,
+                    }
+                });
+
                 return HttpResponse.response(
                     data=blog_dict,
                     message='',
@@ -208,9 +216,26 @@ class BlogManage(APIView):
 
         try:
             if id:
+
+                jwt = request.META['HTTP_AUTHORIZATION']
+                payload = middleware.BlogMiddleware.authorization(jwt)
+                if not payload:
+                    return HttpResponse.response(
+                        data={},
+                        message=ResponseMessage.UNAUTHORIZED,
+                        status=status.HTTP_401_UNAUTHORIZED,
+                    )
+
                 blog = models.Blog.objects.get(_id=ObjectId(id))
                 if blog:
                     blog.delete()
+                    self.db.users_user.update_one({
+                        "_id": ObjectId(payload['_id'])
+                    }, {
+                        "$inc": {
+                            "num_blog": -1,
+                        }
+                    });
                 return HttpResponse.response(
                     data={},
                     message='delete_succeed',
@@ -236,22 +261,41 @@ class BlogManage(APIView):
             id = ''
 
         try:
-            blog = models.Blog.objects.get(_id=ObjectId(id))
-            data = BlogPostSerializer(request.data).data
+            if id:
+                jwt = request.META['HTTP_AUTHORIZATION']
+                payload = middleware.BlogMiddleware.authorization(jwt)
+                if not payload:
+                    return HttpResponse.response(
+                        data={},
+                        message=ResponseMessage.UNAUTHORIZED,
+                        status=status.HTTP_401_UNAUTHORIZED)
 
-            blog.content = data['content']
-            blog.title = data['title']
-            blog.image_url = data['image_url']
-            blog.category = data['category']
+                blog = models.Blog.objects.get(_id=ObjectId(id))
+                data = BlogPostSerializer(request.data).data
 
-            blog.save()
-            data = BlogViewSerializer(blog).data
+                blog_data = (model_to_dict(blog))
 
-            return HttpResponse.response(
-                data=data,
-                message=ResponseMessage.SUCCESS,
-                status=status.HTTP_200_OK,
-            )
+                if payload['_id'] != str(blog_data['author_id']):
+                    return HttpResponse.response(
+                        data={},
+                        message=ResponseMessage.UNAUTHORIZED,
+                        status=status.HTTP_401_UNAUTHORIZED)
+
+                blog.content = data['content']
+                blog.title = data['title']
+                blog.image_url = data['image_url']
+                blog.category = data['category']
+
+                blog.save()
+                data = BlogViewSerializer(blog).data
+
+                data['category'] = data['category'][0]
+            
+                return HttpResponse.response(
+                    data=data,
+                    message=ResponseMessage.SUCCESS,
+                    status=status.HTTP_200_OK,
+                )
 
         except Exception as e:
             print(e)

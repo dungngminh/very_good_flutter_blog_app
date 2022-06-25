@@ -4,7 +4,7 @@ from rest_framework import status
 from bson.objectid import ObjectId
 from apps.utils.response import ResponseMessage
 from .models import User
-from .serializers import UserViewSerializer
+from .serializers import UserViewSerializer, UserViewPutSerializer
 from apps.utils.response import HttpResponse
 from .middleware import UserMiddleware
 
@@ -68,7 +68,8 @@ class UserView(APIView):
                         status = status.HTTP_401_UNAUTHORIZED
                     )
 
-                serialize = UserViewSerializer(data = request.data)
+                print(request.data)
+                serialize = UserViewPutSerializer(data = request.data)
 
                 if serialize.is_valid(raise_exception=False):
                     user = User.objects.get(_id = ObjectId(serialize.data['_id']))
@@ -92,6 +93,7 @@ class UserView(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             except Exception as e:
+                print(e)
                 return HttpResponse.response(
                     data={},
                     message='error',
