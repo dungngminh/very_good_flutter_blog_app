@@ -29,4 +29,4 @@ requests
 bson
 pyjwt
 django-rest-swagger
-drf_yasg
+django_mongodb_engine

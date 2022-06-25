@@ -2,8 +2,8 @@ from djongo import models
 
 # Create your models here.
 class Following(models.Model):
-    # sender = models.ObjectIdField()
-    # receiver = models.ObjectIdField()
-    id_follow = models.ObjectIdField(null=False)
-    following = models.JSONField(default=[])
-    follower = models.JSONField(default=[])
+    _id = models.ObjectIdField(null=False)
+    sender = models.CharField(null=False, max_length=26)
+    receiver = models.CharField(null=True, max_length=26)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
