@@ -6,8 +6,7 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/register/bloc/register_bloc.dart';
 import 'package:very_good_blog_app/features/register/view/register_form.dart';
-import 'package:very_good_blog_app/repository/repository.dart'
-    show AuthenticationRepository, AuthenticationStatus;
+import 'package:very_good_blog_app/repository/repository.dart';
 import 'package:very_good_blog_app/widgets/tap_hide_keyboard.dart';
 
 class RegisterView extends StatelessWidget {

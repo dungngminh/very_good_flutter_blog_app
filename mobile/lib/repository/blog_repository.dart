@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
 import 'package:very_good_blog_app/data/firebase/storage_firebase_service.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
-import 'package:very_good_blog_app/models/models.dart' show BlogModel;
+import 'package:very_good_blog_app/models/models.dart';
 
 class BlogRepository {
   BlogRepository({

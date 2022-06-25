@@ -4,18 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/app/app.dart'
-    show AppPalette, AppRoute, AppTextTheme, ContextExtension, ExtraParams4;
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
-import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
-    show BlogEditorBloc, BlogEditorEditExistBlog, BlogEditorSubmitContent;
+import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
-import 'package:very_good_blog_app/models/models.dart' show BlogModel;
+import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/blog_repository.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart'
-    show TapHideKeyboard, ActionBar;
+import 'package:very_good_blog_app/widgets/widgets.dart';
 
-// TODO(dungngminh): handle edit blog
 class BlogEditorPage extends StatelessWidget {
   const BlogEditorPage({super.key, this.blog});
 

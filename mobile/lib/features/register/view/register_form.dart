@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/register/register.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart'
-    show TextFieldDecoration, TitleOfTextField;
+import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});

@@ -15,67 +15,6 @@ import 'package:very_good_blog_app/di/di.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
-// class VeryGoodBlogApp extends StatelessWidget {
-//   const VeryGoodBlogApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MultiRepositoryProvider(
-//       providers: [
-//         RepositoryProvider.value(
-//           value: Client(),
-//         ),
-//         RepositoryProvider.value(
-//           value: FirebaseStorage.instance,
-//         ),
-//       ],
-//       child: Builder(
-//         builder: (context) {
-//           return MultiRepositoryProvider(
-//             providers: [
-//               RepositoryProvider(
-//                 create: (context) => GoodBlogClient(
-//                   client: context.read<Client>(),
-//                 ),
-//               ),
-//               RepositoryProvider(
-//                 create: (context) => StorageFirebase(
-//                   firebaseStorage: context.read<FirebaseStorage>(),
-//                 ),
-//               ),
-//             ],
-//             child: Builder(
-//               builder: (context) {
-//                 return MultiRepositoryProvider(
-//                   providers: [
-//                     RepositoryProvider<AuthenticationRepository>(
-//                       create: (_) => AuthenticationRepository(
-//                         blogClient: context.read<GoodBlogClient>(),
-//                       ),
-//                     ),
-//                     RepositoryProvider<UserRepository>(
-//                       create: (_) => UserRepository(
-//                         blogClient: context.read<GoodBlogClient>(),
-//                       ),
-//                     ),
-//                     RepositoryProvider<BlogRepository>(
-//                       create: (_) => BlogRepository(
-//                         blogClient: context.read<GoodBlogClient>(),
-//                         storageFirebase: context.read<StorageFirebase>(),
-//                       ),
-//                     ),
-//                   ],
-//                   child: const VeryGoodBlogAppView(),
-//                 );
-//               },
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
 class VeryGoodBlogApp extends StatelessWidget {
   const VeryGoodBlogApp({super.key});
 

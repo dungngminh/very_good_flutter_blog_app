@@ -7,8 +7,7 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/home/home.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
-import 'package:very_good_blog_app/widgets/widgets.dart'
-    show BlogCard, TapHideKeyboard;
+import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

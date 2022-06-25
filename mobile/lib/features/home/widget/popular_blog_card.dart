@@ -5,7 +5,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
-import 'package:very_good_blog_app/models/models.dart' show BlogModel;
+import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class PopularBlogCard extends StatelessWidget {

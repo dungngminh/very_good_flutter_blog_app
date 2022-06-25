@@ -4,13 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart'
-    show ImagePickerHelper;
-import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
-    show ImagePath, BlogTitle;
+import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart';
+import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
 import 'package:very_good_blog_app/models/models.dart';
-import 'package:very_good_blog_app/repository/repository.dart'
-    show BlogRepository;
+import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'blog_editor_event.dart';
 part 'blog_editor_state.dart';
