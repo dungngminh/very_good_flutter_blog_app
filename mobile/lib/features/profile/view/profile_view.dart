@@ -9,7 +9,6 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
-// TODO(dung.nguyen): handle lock scroll body when listBlog isEmpty
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
@@ -30,44 +29,54 @@ class ProfileView extends StatelessWidget {
           Fluttertoast.showToast(msg: 'Cập nhật dữ liệu thành công');
         }
       },
-      child: DraggableHome(
-        title: const _TitleTile(),
-        actions: const [
-          _SettingButton(
-            color: AppPalette.whiteBackgroundColor,
-          )
-        ],
-        physics: const NeverScrollableScrollPhysics(),
-        leading: Padding(
-          padding: const EdgeInsets.all(4),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Builder(
-              builder: (context) {
-                final status = context.select(
-                  (ProfileBloc profileBloc) => profileBloc.state.profileStatus,
-                );
-                return _RotateIconButton(
-                  icon: Assets.icons.refresh.svg(
-                    color: AppPalette.whiteBackgroundColor,
-                    height: 28,
-                  ),
-                  isLoading: status == ProfileStatus.loading,
-                  onPressed: () => context.read<ProfileBloc>().add(
-                        ProfileGetUserInformation(),
+      child: Builder(
+        builder: (context) {
+          final userBlogsLength = context.select(
+            (ProfileBloc profileBloc) => profileBloc.state.userBlogs.length,
+          );
+          return DraggableHome(
+            title: const _TitleTile(),
+            actions: const [
+              _SettingButton(
+                color: AppPalette.whiteBackgroundColor,
+              )
+            ],
+            physics: userBlogsLength > 0
+                ? const BouncingScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
+            leading: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Builder(
+                  builder: (context) {
+                    final status = context.select(
+                      (ProfileBloc profileBloc) =>
+                          profileBloc.state.profileStatus,
+                    );
+                    return _RotateIconButton(
+                      icon: Assets.icons.refresh.svg(
+                        color: AppPalette.whiteBackgroundColor,
+                        height: 28,
                       ),
-                );
-              },
+                      isLoading: status == ProfileStatus.loading,
+                      onPressed: () => context.read<ProfileBloc>().add(
+                            ProfileGetUserInformation(),
+                          ),
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-        headerWidget: const _ProfilePanel(),
-        headerExpandedHeight: 0.56,
-        curvedBodyRadius: 40,
-        appBarColor: AppPalette.primaryColor,
-        body: const [
-          _BlogPanel(),
-        ],
+            headerWidget: const _ProfilePanel(),
+            headerExpandedHeight: 0.56,
+            curvedBodyRadius: 40,
+            appBarColor: AppPalette.primaryColor,
+            body: const [
+              _BlogPanel(),
+            ],
+          );
+        },
       ),
     );
   }
@@ -398,7 +407,7 @@ class _AvatarDecoration extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         ClipPath(
-          clipper: BackgroundClipper(),
+          clipper: _BackgroundClipper(),
           child: LayoutBuilder(
             builder: (context, constraints) {
               return Container(
@@ -457,7 +466,7 @@ class _AvatarDecoration extends StatelessWidget {
   }
 }
 
-class BackgroundClipper extends CustomClipper<Path> {
+class _BackgroundClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final h = size.height;
@@ -496,7 +505,6 @@ class _BlogPanelState extends State<_BlogPanel> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
@@ -530,11 +538,6 @@ class _BlogPanelState extends State<_BlogPanel> {
                 final blog = userBlogs[index];
                 return BlogCard(
                   blog: blog,
-                  // title: blog.title,
-                  // imageUrl: blog.imageUrl,
-                  // likeCount: blog.likeCount,
-                  // dateAdded: '${blog.createdAt.day} tháng '
-                  //     '${blog.createdAt.month}, ${blog.createdAt.year}',
                   cardType: CardType.titleStatsTime,
                 );
               },

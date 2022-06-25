@@ -120,9 +120,12 @@ class _MoreBlogList extends StatelessWidget {
           previous.getBlogStatus != current.getBlogStatus,
       builder: (context, state) {
         if (state.getBlogStatus == GetBlogStatus.loading) {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: AppPalette.primaryColor,
+          return const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: AppPalette.primaryColor,
+              ),
             ),
           );
         } else if (state.getBlogStatus == GetBlogStatus.error) {
