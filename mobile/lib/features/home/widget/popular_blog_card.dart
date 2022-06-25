@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/features/blog/blog.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class PopularBlogCard extends StatelessWidget {
   const PopularBlogCard({
     super.key,
-    required this.username,
-    required this.title,
+    required this.blog,
   });
 
-  final String username;
-  final String title;
+  final BlogModel blog;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push(AppRoute.blog),
+      onTap: () => context.push(
+        AppRoute.blog,
+        extra: ExtraParams3<BlogModel, ProfileBloc, BlogBloc>(
+          param1: blog,
+          param2: context.read<ProfileBloc>(),
+          param3: context.read<BlogBloc>(),
+        ),
+      ),
       child: Container(
         width: context.screenHeight * 0.35,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           image: DecorationImage(
             image: Image.network(
-              'https://vissaihotel.vn/photo/trang-an-ha-long-bay-on-land.png',
+              blog.imageUrl,
             ).image,
             fit: BoxFit.cover,
           ),
@@ -34,12 +44,16 @@ class PopularBlogCard extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: InkEffectWidget(
-                child: Assets.icons.bookmark.svg(
-                  color: AppPalette.whiteBackgroundColor,
-                  height: 24,
+              child: CircleAvatar(
+                backgroundColor:
+                    AppPalette.whiteBackgroundColor.withOpacity(0.4),
+                child: InkEffectIconButton(
+                  child: Assets.icons.bookmark.svg(
+                    color: AppPalette.purple700Color,
+                    height: 24,
+                  ),
+                  onPressed: () {},
                 ),
-                onTapEvent: () {},
               ),
             ),
             const Spacer(),
@@ -57,7 +71,9 @@ class PopularBlogCard extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: Assets.images.komkat.image().image,
+                        backgroundImage: blog.user.avatarUrl.isEmpty
+                            ? Assets.images.blankAvatar.image().image
+                            : NetworkImage(blog.user.avatarUrl),
                       ),
                       const SizedBox(
                         width: 12,
@@ -68,12 +84,14 @@ class PopularBlogCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              username,
+                              blog.user.username,
                               style: AppTextTheme.titleTextStyle
                                   .copyWith(fontSize: 14),
                             ),
                             Text(
-                              '20 phút trước',
+                              timeago.format(
+                                blog.createdAt,
+                              ),
                               style: AppTextTheme.regularTextStyle
                                   .copyWith(fontSize: 12),
                             ),
@@ -84,8 +102,10 @@ class PopularBlogCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    title,
+                    blog.title,
                     style: AppTextTheme.titleTextStyle.copyWith(fontSize: 15),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

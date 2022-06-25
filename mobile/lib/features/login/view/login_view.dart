@@ -6,6 +6,7 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
+import 'package:very_good_blog_app/widgets/tap_hide_keyboard.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -18,15 +19,14 @@ class LoginView extends StatelessWidget {
           context.go(AppRoute.home);
         }
       },
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: TapHideKeyboard(
         child: Scaffold(
+          backgroundColor: AppPalette.whiteBackgroundColor,
           body: SingleChildScrollView(
+            padding: EdgeInsets.only(top: context.padding.top + 32),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
-                  height: context.screenHeight * 0.1,
-                ),
                 Center(
                   child: Container(
                     width: 120,

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
@@ -13,48 +14,70 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableHome(
-      title: const _TitleTile(),
-      actions: [
-        IconButton(
-          icon: Assets.icons.setting.svg(
-            color: AppPalette.whiteBackgroundColor,
-            height: 30,
-          ),
-          splashRadius: 24,
-          onPressed: () => context.push(AppRoute.setting),
-        ),
-      ],
-      leading: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Builder(
-            builder: (context) {
-              final status = context.select(
-                (ProfileBloc profileBloc) => profileBloc.state.status,
-              );
-              return _RotateIconButton(
-                icon: Assets.icons.refresh.svg(
-                  color: AppPalette.whiteBackgroundColor,
-                  height: 28,
+    return BlocListener<ProfileBloc, ProfileState>(
+      listenWhen: (previous, current) =>
+          previous.profileStatus != current.profileStatus,
+      listener: (context, state) {
+        if (state.profileStatus == ProfileStatus.loading) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Đang cập nhật dữ liệu');
+        } else if (state.profileStatus == ProfileStatus.error) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
+        } else if (state.profileStatus == ProfileStatus.done) {
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(msg: 'Cập nhật dữ liệu thành công');
+        }
+      },
+      child: Builder(
+        builder: (context) {
+          final userBlogsLength = context.select(
+            (ProfileBloc profileBloc) => profileBloc.state.userBlogs.length,
+          );
+          return DraggableHome(
+            title: const _TitleTile(),
+            actions: const [
+              _SettingButton(
+                color: AppPalette.whiteBackgroundColor,
+              )
+            ],
+            physics: userBlogsLength > 0
+                ? const BouncingScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
+            leading: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Builder(
+                  builder: (context) {
+                    final status = context.select(
+                      (ProfileBloc profileBloc) =>
+                          profileBloc.state.profileStatus,
+                    );
+                    return _RotateIconButton(
+                      icon: Assets.icons.refresh.svg(
+                        color: AppPalette.whiteBackgroundColor,
+                        height: 28,
+                      ),
+                      isLoading: status == ProfileStatus.loading,
+                      onPressed: () => context.read<ProfileBloc>().add(
+                            ProfileGetUserInformation(),
+                          ),
+                    );
+                  },
                 ),
-                isLoading: status == ProfileStatus.loading,
-                onPressed: () => context.read<ProfileBloc>().add(
-                      ProfileGetUserInformation(),
-                    ),
-              );
-            },
-          ),
-        ),
+              ),
+            ),
+            headerWidget: const _ProfilePanel(),
+            headerExpandedHeight: 0.56,
+            curvedBodyRadius: 40,
+            appBarColor: AppPalette.primaryColor,
+            body: const [
+              _BlogPanel(),
+            ],
+          );
+        },
       ),
-      headerWidget: const _ProfilePanel(),
-      headerExpandedHeight: 0.56,
-      curvedBodyRadius: 40,
-      appBarColor: AppPalette.primaryColor,
-      body: const [
-        _PostPanel(),
-      ],
     );
   }
 }
@@ -142,8 +165,8 @@ class _TitleTile extends StatelessWidget {
                 );
 
                 return CircleAvatar(
-                  backgroundImage: avatarUrl == null
-                      ? Assets.images.komkat.image().image
+                  backgroundImage: avatarUrl == null || avatarUrl.isEmpty
+                      ? Assets.images.blankAvatar.image().image
                       : NetworkImage(avatarUrl),
                 );
               },
@@ -192,7 +215,8 @@ class _ProfilePanel extends StatelessWidget {
                   child: Builder(
                     builder: (context) {
                       final status = context.select(
-                        (ProfileBloc profileBloc) => profileBloc.state.status,
+                        (ProfileBloc profileBloc) =>
+                            profileBloc.state.profileStatus,
                       );
                       return _RotateIconButton(
                         icon: Assets.icons.refresh.svg(
@@ -208,17 +232,12 @@ class _ProfilePanel extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(4),
+              const Padding(
+                padding: EdgeInsets.all(4),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Assets.icons.setting.svg(
-                      color: AppPalette.primaryColor,
-                      height: 30,
-                    ),
-                    splashRadius: 24,
-                    onPressed: () => context.push(AppRoute.setting),
+                  child: _SettingButton(
+                    color: AppPalette.primaryColor,
                   ),
                 ),
               ),
@@ -243,6 +262,29 @@ class _ProfilePanel extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingButton extends StatelessWidget {
+  const _SettingButton({
+    required this.color,
+  });
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Assets.icons.setting.svg(
+        color: color,
+        height: 30,
+      ),
+      splashRadius: 24,
+      onPressed: () => context.push(
+        AppRoute.setting,
+        extra: context.read<ProfileBloc>(),
       ),
     );
   }
@@ -279,14 +321,14 @@ class _BasicUserInformation extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    final blogCount = context.select(
+                    final userBlogs = context.select(
                       (ProfileBloc profileBloc) =>
-                          profileBloc.state.user?.blogCount,
+                          profileBloc.state.user?.blogs,
                     );
                     return _ProfileStat(
                       key: const ValueKey('post'),
                       content: 'Bài viết',
-                      count: blogCount ?? 0,
+                      count: userBlogs?.length ?? 0,
                     );
                   },
                 ),
@@ -365,7 +407,7 @@ class _AvatarDecoration extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         ClipPath(
-          clipper: BackgroundClipper(),
+          clipper: _BackgroundClipper(),
           child: LayoutBuilder(
             builder: (context, constraints) {
               return Container(
@@ -389,25 +431,29 @@ class _AvatarDecoration extends StatelessWidget {
                   );
                   return CircleAvatar(
                     radius: 60,
-                    backgroundImage: avatarUrl == null
-                        ? Assets.images.komkat.image().image
+                    backgroundColor: AppPalette.purple700SupportColor,
+                    backgroundImage: avatarUrl == null || avatarUrl.isEmpty
+                        ? Assets.images.blankAvatar.image().image
                         : NetworkImage(avatarUrl),
                   );
                 },
               ),
-              Positioned(
-                bottom: -4,
-                right: -4,
-                child: CircleAvatar(
-                  backgroundColor: AppPalette.purpleSupportColor,
-                  radius: 18,
-                  child: Align(
-                    child: IconButton(
-                      icon: Assets.icons.camera.svg(
-                        color: AppPalette.primaryColor,
+              Visibility(
+                visible: false,
+                child: Positioned(
+                  bottom: -4,
+                  right: -4,
+                  child: CircleAvatar(
+                    backgroundColor: AppPalette.purpleSupportColor,
+                    radius: 18,
+                    child: Align(
+                      child: IconButton(
+                        icon: Assets.icons.camera.svg(
+                          color: AppPalette.primaryColor,
+                        ),
+                        splashRadius: 24,
+                        onPressed: () {},
                       ),
-                      splashRadius: 24,
-                      onPressed: () {},
                     ),
                   ),
                 ),
@@ -420,7 +466,7 @@ class _AvatarDecoration extends StatelessWidget {
   }
 }
 
-class BackgroundClipper extends CustomClipper<Path> {
+class _BackgroundClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final h = size.height;
@@ -440,14 +486,14 @@ class BackgroundClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
 
-class _PostPanel extends StatefulWidget {
-  const _PostPanel();
+class _BlogPanel extends StatefulWidget {
+  const _BlogPanel();
 
   @override
-  State<_PostPanel> createState() => _PostPanelState();
+  State<_BlogPanel> createState() => _BlogPanelState();
 }
 
-class _PostPanelState extends State<_PostPanel> {
+class _BlogPanelState extends State<_BlogPanel> {
   late ValueNotifier<int> _currentTabIndex;
 
   @override
@@ -472,24 +518,34 @@ class _PostPanelState extends State<_PostPanel> {
             ],
           ),
         ),
-        ListView.separated(
-          padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
-          itemCount: 10,
-          primary: false,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return const BlogCard(
-              title: 'How i hack Google, Microsoft,dadadadad,..',
-              imageUrl: 'https://i.kym-cdn.com/'
-                  'photos/images/facebook/001/839/197/2ad.png',
-              likeCount: 300,
-              dateAdded: '20 tháng 9, 2022',
-              cardType: CardType.titleStatsTime,
-            );
-          },
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
+        Builder(
+          builder: (context) {
+            final userBlogs = context.watch<ProfileBloc>().state.userBlogs;
+            if (userBlogs.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 32),
+                child: Center(
+                  child: Text('Bạn chưa có blog nào'),
+                ),
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
+              itemCount: userBlogs.length,
+              primary: false,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final blog = userBlogs[index];
+                return BlogCard(
+                  blog: blog,
+                  cardType: CardType.titleStatsTime,
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 16,
+                );
+              },
             );
           },
         ),

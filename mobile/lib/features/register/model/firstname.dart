@@ -9,7 +9,7 @@ class Firstname extends FormzInput<String, FirstnameValidationError> {
   @override
   FirstnameValidationError? validator(String? value) {
     if (value?.isNotEmpty == true) {
-      return value!.length > 3 ? null : FirstnameValidationError.tooShort;
+      return value!.isNotEmpty ? null : FirstnameValidationError.tooShort;
     } else {
       return FirstnameValidationError.empty;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:very_good_blog_app/app/app.dart' show AppPalette;
+import 'package:very_good_blog_app/app/app.dart';
 
 class AppTextTheme {
   static const darkW700TextStyle = TextStyle(
@@ -22,6 +22,10 @@ class AppTextTheme {
 
   static const regularTextStyle = TextStyle(
     color: AppPalette.primaryTextColor,
+  );
+
+  static const reqularDarkTextStyle = TextStyle(
+    color: AppPalette.primaryDarkTextColor,
   );
 
   static const decriptionTextStyle = TextStyle(
