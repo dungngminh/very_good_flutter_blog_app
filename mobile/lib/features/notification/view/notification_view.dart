@@ -13,11 +13,9 @@ class NotificationView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Center(
-              child: Text(
-                'Thông báo',
-                style: AppTextTheme.darkW700TextStyle,
-              ),
+            const Text(
+              'Thông báo',
+              style: AppTextTheme.darkW700TextStyle,
             ),
             const SizedBox(
               height: 16,

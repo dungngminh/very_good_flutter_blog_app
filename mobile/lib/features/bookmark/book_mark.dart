@@ -1,1 +1,1 @@
-export 'view/bookmarks_view.dart';
+export 'view/bookmark_view.dart';

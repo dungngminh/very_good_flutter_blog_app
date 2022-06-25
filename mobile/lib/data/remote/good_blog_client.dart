@@ -6,9 +6,9 @@ import 'package:http/http.dart';
 import 'package:very_good_blog_app/app/app.dart';
 
 class GoodBlogClient {
-  GoodBlogClient({Client? client}) : _client = client ?? Client();
+  GoodBlogClient({required Client client}) : _client = client;
 
-  late final Client _client;
+  final Client _client;
 
   static const _baseUrl = 'lequocthinh.com';
 
@@ -122,7 +122,7 @@ class GoodBlogClient {
         return jsonDecode(utf8.decode(response.bodyBytes)) as T;
       case 403:
         throw UnauthorizedException(
-          'authorization fail',
+          'Authorization fail',
         );
       default:
         throw Exception(

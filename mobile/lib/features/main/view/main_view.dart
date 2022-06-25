@@ -61,7 +61,7 @@ class _MainViewState extends State<MainView> {
                 children: const [
                   HomeView(),
                   NotificationView(),
-                  BookmarksView(),
+                  BookmarkView(),
                   ProfileView(),
                 ],
               );

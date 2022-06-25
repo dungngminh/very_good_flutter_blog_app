@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_blog_app/app/app.dart';
 
-class BookmarksView extends StatelessWidget {
-  const BookmarksView({super.key});
+class BookmarkView extends StatelessWidget {
+  const BookmarkView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,26 +15,23 @@ class BookmarksView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Padding(
+            children: const [
+              Padding(
                 padding: EdgeInsets.only(left: 24),
                 child: Text(
                   'Danh sách bài viết đã lưu',
                   style: AppTextTheme.darkW700TextStyle,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 16,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Center(
-                    child: Text(
-                      'Danh sách bài viết đã lưu không có ',
-                    ),
-                  )
-                ],
+              Expanded(
+                child: Center(
+                  child: Text(
+                    'Danh sách bài viết đã lưu không có ',
+                  ),
+                ),
               )
               // _BookmarkList(),
             ],

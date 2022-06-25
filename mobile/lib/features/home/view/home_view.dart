@@ -59,7 +59,7 @@ class HomeView extends StatelessWidget {
                             const _CategoryChoiceBar(),
                             _buildHeadTitle('Phổ biến'),
                             const _PopularBlogList(),
-                            _buildHeadTitle('tất cả bài viết'),
+                            _buildHeadTitle('Tất cả bài viết'),
                             const _MoreBlogList(),
                           ],
                         );

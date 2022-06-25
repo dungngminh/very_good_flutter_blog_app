@@ -15,8 +15,8 @@ enum AuthenticationStatus {
 
 class AuthenticationRepository {
   AuthenticationRepository({
-    GoodBlogClient? blogClient,
-  }) : _blogClient = blogClient ?? GoodBlogClient();
+    required GoodBlogClient blogClient,
+  }) : _blogClient = blogClient;
 
   final GoodBlogClient _blogClient;
 

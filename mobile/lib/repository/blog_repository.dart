@@ -2,16 +2,19 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
-import 'package:very_good_blog_app/app/config/helpers/storage_firebase_helper.dart';
+import 'package:very_good_blog_app/data/firebase/storage_firebase_service.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
 import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 
 class BlogRepository {
   BlogRepository({
-    GoodBlogClient? blogClient,
-  }) : _blogClient = blogClient ?? GoodBlogClient();
+    required GoodBlogClient blogClient,
+    required StorageFirebaseService storageFirebaseService,
+  })  : _blogClient = blogClient,
+        _storageFirebaseService = storageFirebaseService;
 
   final GoodBlogClient _blogClient;
+  final StorageFirebaseService _storageFirebaseService;
 
   Future<List<BlogModel>> getBlogs({
     required int page,
@@ -230,7 +233,7 @@ class BlogRepository {
     try {
       final now = DateTime.now();
       final formatedDate = '${now.millisecondsSinceEpoch}';
-      final imageUrl = await StorageFirebaseHelper.saveImageToStorage(
+      final imageUrl = await _storageFirebaseService.saveImageToStorage(
         folder: 'blogs',
         name: formatedDate,
         file: File(imagePath),

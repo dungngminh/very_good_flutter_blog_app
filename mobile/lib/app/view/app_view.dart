@@ -8,6 +8,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/data/firebase/storage_firebase_service.dart';
+import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
+import 'package:very_good_blog_app/di/di.dart';
 
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
@@ -82,17 +85,19 @@ class VeryGoodBlogApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthenticationRepository>(
           create: (_) => AuthenticationRepository(
-
+            blogClient: injector<GoodBlogClient>(),
           ),
         ),
         RepositoryProvider<UserRepository>(
           create: (_) => UserRepository(
-     
+            blogClient: injector<GoodBlogClient>(),
+            storageFirebaseService: injector<StorageFirebaseService>(),
           ),
         ),
         RepositoryProvider<BlogRepository>(
           create: (_) => BlogRepository(
-         
+            blogClient: injector<GoodBlogClient>(),
+            storageFirebaseService: injector<StorageFirebaseService>(),
           ),
         ),
       ],
