@@ -73,17 +73,48 @@ class FollowView(APIView):
                 status = status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            follow_id = kwargs['id']
+            if not follow_id:
+                return HttpResponse.response(data={}, message='failed', status=status.HTTP_400_BAD_REQUEST)
+
+            payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
+
+            if not payload:
+                return HttpResponse.response(data={}, message='failed', status=status.HTTP_400_BAD_REQUEST)
+
+            sender_id = payload['_id']
+
+            follow_record = self.database.followings_following.find_one({ '_id': ObjectId(follow_id) })
+
+            if not follow_record:
+                return HttpResponse.response(data={}, message='failed', status=status.HTTP_400_BAD_REQUEST)
+
+            receiver_id = follow_record['receiver']
+            sender = self.database.users_user.find_one({ '_id': ObjectId(sender_id) })
+
+            if not sender:
+                return HttpResponse.response(
+                    data = {},
+                    message = ResponseMessage.INVALID_DATA,
+                    status = status.HTTP_400_BAD_REQUEST
+                )
+            
+            self.database.followings_following.delete_one({ 'sender': sender_id, '_id': ObjectId(follow_id) })
+            return HttpResponse.response(
+                data = {},
+                message = ResponseMessage.SUCCESS,
+                status = status.HTTP_200_OK
+            )
+
+        except:
+            return HttpResponse.response(
+                data = {},
+                message = ResponseMessage.UNAUTHORIZED,
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     
-    def add(self, request):
-        following_model = models.Following.objects
-        data = request.data
-        new_follow = models.Following.objects.create(
-            follower = data['follower'],
-            following = data['following'],   
-        )
-        new_follow.save()
-        serializer = BlogSerializer(new_blog)
-        return Response(serializer.data)
         
     def post(self, request, *args, **kwargs):
         try:
