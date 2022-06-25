@@ -1,15 +1,16 @@
 from array import array
+from turtle import pu
 from django.forms import model_to_dict
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from apps.utils.response import ResponseMessage
 from apps.utils.response import HttpResponse
+from apps.utils.topic import get_post_topic
+from apps.notifications.service import pubsub
 from .serializers import BlogSerializer, BlogPostSerializer, BlogViewSerializer, BlogGetSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from bson.objectid import ObjectId
-from bson import json_util
-from django.core import serializers
 import json
 from apps.utils.database import mongo_extension
 from . import models
@@ -188,6 +189,10 @@ class BlogManage(APIView):
                         "num_blog": 1,
                     }
                 });
+
+                current_user = dict(current_user)
+
+                pubsub.publish(get_post_topic(payload['_id']), current_user['username'] + 'has a new post for you', {})
 
                 return HttpResponse.response(
                     data=blog_dict,
