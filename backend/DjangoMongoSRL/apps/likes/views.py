@@ -101,5 +101,15 @@ class LikesView(APIView):
             print(e)
             
             return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    # def patch(self, request, pk, format=None):
+    #     rating_obj = models.Likes.objects.get(pk=pk)
+    #     serializer = RatingSerializer(
+    #         data=request.data, instance=rating_obj, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response({"Message": "Data updated successfully !!"})
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
