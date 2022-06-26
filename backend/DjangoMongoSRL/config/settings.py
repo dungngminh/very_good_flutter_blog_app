@@ -26,7 +26,9 @@ SECRET_KEY = 'irlnskjv2oypv)b5t#-l7xk=vnl@3q1k7b8m(4%nj6_9%$13b$'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+	'*'
+]
 
 APPEND_SLASH = False
 
@@ -43,7 +45,9 @@ INSTALLED_APPS = [
     'drf_yasg',
     'apps.users',
     'apps.blogs',
+
     'apps.authentication',
+    'apps.likes',
     'rest_framework',
     'rest_framework_swagger',
 ]

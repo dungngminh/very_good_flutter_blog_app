@@ -1,13 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import status
+from bson.objectid import ObjectId
+from apps.utils.response import ResponseMessage
+from apps.utils.jwt import JsonWebTokenHelper
 from .models import User
-from .serializers import UserViewSerializer
-from .response import HttpResponse
+from .serializers import UserViewSerializer, UserViewPutSerializer
+from apps.utils.response import HttpResponse
+from .middleware import UserMiddleware
+from apps.utils.database import mongo_extension
 
 
 class UserView(APIView):
     permission_classes = (AllowAny, )
+    db = mongo_extension.get_database()
 
     def get(self, request, *args, **kwargs):
         id = ''
@@ -18,8 +24,10 @@ class UserView(APIView):
 
         try:
             if id:
-                user = User.objects.get(_id=id)
+                user = User.objects.get(_id = ObjectId(id))
                 data = (UserViewSerializer(user).data)
+
+                print(dict(self.db.users_user.find_one({ '_id': ObjectId(id) })))
 
                 return HttpResponse.response(
                     data=data,
@@ -34,7 +42,8 @@ class UserView(APIView):
                     message='error',
                     status=status.HTTP_200_OK,
                 )
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponse.response(
                     data={},
                     message='error',
@@ -57,18 +66,22 @@ class UserView(APIView):
 
         else:
             try:
-                serialize = UserViewSerializer(data = request.data)
+                if not UserMiddleware.authorization(request.META['HTTP_AUTHORIZATION'], id):
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.UNAUTHORIZED,
+                        status = status.HTTP_401_UNAUTHORIZED
+                    )
+
+                print(request.data)
+                serialize = UserViewPutSerializer(data = request.data)
 
                 if serialize.is_valid(raise_exception=False):
-                    print(serialize.data)
-                    user = User.objects.get(_id = serialize.data['_id'])
+                    user = User.objects.get(_id = ObjectId(serialize.data['_id']))
 
                     user.first_name = serialize.data['first_name']
                     user.last_name = serialize.data['last_name']
-                    user.email = serialize.data['email']
-                    user.username = serialize.data['username']
-
-                    print(user, 'ad')
+                    user.avatar = serialize.data['avatar']
 
                     user.save()
 
@@ -85,7 +98,12 @@ class UserView(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             except Exception as e:
-                print(str(e))
+                print(e)
+                return HttpResponse.response(
+                    data={},
+                    message='error',
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
 
     def delete(self, request, *args, **kwargs):
         try:
@@ -100,17 +118,54 @@ class UserView(APIView):
                     message='error',
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+            if not UserMiddleware.authorization(request.META['HTTP_AUTHORIZATION'], id):
+                    return HttpResponse.response(
+                        data = {},
+                        message = ResponseMessage.UNAUTHORIZED,
+                        status = status.HTTP_401_UNAUTHORIZED
+                    )
+
             else:
-                user = User.objects.get(_id = id)
+                user = User.objects.get(_id = ObjectId(id))
                 user.delete()
                 return HttpResponse.response(
                     data={},
                     message='success',
                     status=status.HTTP_200_OK,
                 )   
-        except:
+        except Exception as e:
             return HttpResponse.response(
                 data={},
                 message='error',
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+class UserDeviceToken(APIView):
+    permission_classes = (AllowAny, )
+    database = mongo_extension.get_database()
+
+    def put(self, request, *a, **b):
+        id = ''
+        try:
+            id = b['id']
+            if not id:
+                return HttpResponse.response({}, 'unauthorized', status.HTTP_401_UNAUTHORIZED)
+            else:
+                user = User.objects.get(_id = ObjectId(id))
+                if not user:
+                    return HttpResponse.response({}, '', status.HTTP_400_BAD_REQUEST)
+                payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
+                if not payload or payload['_id'] != id:
+                    return HttpResponse.response({}, 'unauthorized', status.HTTP_401_UNAUTHORIZED)
+                device_token = request.data['device_token']
+                self.database.users_user.update_one({ '_id': ObjectId(id) }, 
+                    { 
+                        '$set': {
+                            'device_token': device_token,
+                        },
+                });
+                return HttpResponse.response({}, 'success', status.HTTP_200_OK)
+        except:
+            return HttpResponse.response({}, '', status.HTTP_500_INTERNAL_SERVER_ERROR)
+                

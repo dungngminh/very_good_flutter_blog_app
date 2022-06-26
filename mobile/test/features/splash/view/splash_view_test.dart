@@ -26,7 +26,7 @@ void main() {
 
     testWidgets('renders Very Good Ventures Logo', (tester) async {
       when(() => authenticationBloc.state).thenReturn(
-        const AuthenticationState.unknown(),
+        const AuthenticationState(),
       );
       await tester.pumpWidget(
         RepositoryProvider.value(

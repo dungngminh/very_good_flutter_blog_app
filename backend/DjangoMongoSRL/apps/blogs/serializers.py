@@ -1,15 +1,49 @@
-from attr import field
 from rest_framework import serializers
-from ..blogs import models
+
+from .models import Blog
 
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Blog
-        fields = ('id',
-                 'title',
-                 'content',
-                 'id_user',
-                 'like_count',
-                 'imageUrl',
-                 'category',
-                 'date_added')
+        model = Blog
+        field = ('id', 'content', 'id_user', 'category')
+
+class BlogPostSerializer(serializers.Serializer):
+    content = serializers.CharField()
+    title = serializers.CharField()
+    image_url = serializers.CharField()
+    category = serializers.JSONField()
+
+class BlogViewSerializer(serializers.Serializer):
+    _id = serializers.CharField()
+    content = serializers.CharField(required=True)
+    title = serializers.CharField(required=True)
+    image_url = serializers.CharField()
+    category = serializers.JSONField()
+    author_id = serializers.CharField()
+    likes = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+
+class BlogViewSerializer(serializers.Serializer):
+    _id = serializers.CharField()
+    content = serializers.JSONField(required=True)
+    title = serializers.CharField(required=True)
+    image_url = serializers.CharField()
+    category = serializers.JSONField()
+    author_id = serializers.CharField()
+    likes = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()    
+
+class BlogGetSerializer(serializers.Serializer):
+    _id = serializers.CharField()
+    content = serializers.CharField()
+    title = serializers.CharField()
+    image_url = serializers.CharField()
+    category = serializers.JSONField()
+    author_id = serializers.CharField()
+    likes = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    author_detail = serializers.JSONField()
+

@@ -7,27 +7,51 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  cached_network_image: ^3.2.1
+  connectivity_plus: ^2.3.5
+  draggable_home:
+    path: packages/draggable_home
   easy_debounce: ^2.0.2+1
   equatable: ^2.0.3
+  firebase_core: ^1.18.0
+  firebase_storage: ^10.2.18
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
-  flutter_svg: ^1.0.3
+  flutter_cache_manager: ^3.3.0
+  flutter_dotenv: ^5.0.2
+  flutter_quill: ^5.0.3
+  flutter_secure_storage: ^5.0.2
+  flutter_slidable: ^1.3.0
+  flutter_svg: ^1.1.0
+  fluttertoast: ^8.0.9
   formz: ^0.4.1
-  go_router: ^3.1.0
+  get_it: ^7.2.0
+  go_router: ^4.0.0
+  hive: ^2.2.1
+  hive_flutter: ^1.1.0
+  http: ^0.13.4
+  image_picker: ^0.8.5+3
   intl: ^0.17.0
+  json_annotation: ^4.5.0
+  path_provider: ^2.0.11
   phosphor_flutter: ^1.4.0
+  shimmer: ^2.0.0
+  timeago: ^3.2.2
 
 dev_dependencies:
   bloc_test: ^9.0.3
+  build_runner: ^2.1.11
+  flutter_gen_runner: ^4.3.0
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.2.0
   mocktail: ^0.3.0
   very_good_analysis: ^3.0.0
 
 flutter:
   uses-material-design: true
-  generate: true
+  # generate: true
 
   assets:
     - assets/fonts/
