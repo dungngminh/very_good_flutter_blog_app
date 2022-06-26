@@ -1,6 +1,6 @@
 from djongo import models
 
-# Create your models here.
+
 class Likes(models.Model):
     _id = models.ObjectIdField(null=False)
     user_id = models.CharField(null=False, max_length=26)

@@ -16,8 +16,11 @@ def convert_timestamp(data: datetime):
 
 def convert_data(data):
     data['created_at'] = convert_timestamp(data['created_at'])
+    
     data['updated_at'] = convert_timestamp(data['updated_at'])
+  
     data['_id'] = str(data['_id'])
+   
     return data
 
 class LikesView(APIView):
@@ -81,6 +84,7 @@ class LikesView(APIView):
         try:
             payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
             if not payload:
+                
                 return HttpResponse.response({}, ResponseMessage.UNAUTHORIZED, status.HTTP_401_UNAUTHORIZED)
             
             user_id = payload['_id']
@@ -101,7 +105,7 @@ class LikesView(APIView):
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
         except Exception as e:
+
             print(e)
             return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Create your views here.
