@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Blog
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -45,3 +46,4 @@ class BlogGetSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
     author_detail = serializers.JSONField()
+

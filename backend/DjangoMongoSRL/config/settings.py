@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'apps.users',
     'apps.blogs',
-    'apps.bookmarks',
-    'apps.followings',
+
     'apps.authentication',
     'apps.likes',
     'rest_framework',
