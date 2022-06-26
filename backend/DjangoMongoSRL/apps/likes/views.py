@@ -57,7 +57,7 @@ class LikesView(APIView):
 
             blogs = self.database.likes_likes.find({
                 'user_id': user_id,
-            });
+            })
 
             blogs = list(blogs)
             blogs = list(map(convert_data, blogs))
@@ -81,7 +81,7 @@ class LikesView(APIView):
             self.database.likes_likes.delete_one({
                 'user_id': user_id,
                 'blog_id': blog_id,
-            });
+            })
 
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
@@ -89,4 +89,4 @@ class LikesView(APIView):
             print(e)
             return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Create your views here.
+
