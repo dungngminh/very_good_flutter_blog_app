@@ -9,9 +9,11 @@ from apps.utils.response import ResponseMessage, HttpResponse
 from apps.utils.hashing import HashingHelper
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
+from apps.utils.database import mongo_extension
 
 class UserView(APIView):
     permission_classes = (AllowAny, )
+    db = mongo_extension.get_database()
 
     # Changing password
     def put(self, request):
@@ -92,7 +94,7 @@ class UserView(APIView):
                 token = JsonWebTokenHelper.generate(payload)
 
                 return HttpResponse.response(
-                    data = {'jwt': token },
+                    data = {'jwt': token, 'id': str(data['_id']) },
                     message = ResponseMessage.LOGIN_SUCCESS,
                     status = status.HTTP_200_OK,
                 )
@@ -111,6 +113,10 @@ class UserView(APIView):
 
                 # Hash password
                 hashed_password = HashingHelper.encrypt(serialize.data['password'])
+                user = self.db.users_user.find_one({ 'username': serialize.data['username'] })
+
+                if user:
+                    return HttpResponse.response(data={}, message=ResponseMessage.DUPLICATED, status=status.HTTP_400_BAD_REQUEST)
 
                 # Save user
                 new_user = User.objects.create(
@@ -128,9 +134,11 @@ class UserView(APIView):
                 return HttpResponse.response(
                     data = user_serializer.data,
                     message = ResponseMessage.LOGIN_SUCCESS,
-                    status = status.HTTP_200_OK,
+                    status = status.HTTP_201_CREATED,
                 )
         
+        # TODO: Add likes
+
         return HttpResponse.response(
             data = {},
             message = 'error',

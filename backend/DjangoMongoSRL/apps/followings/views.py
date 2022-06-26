@@ -32,8 +32,6 @@ class FollowView(APIView):
             else:
                 direction = [direction]
 
-            
-            
             followers = []
             followings = []
             
@@ -87,19 +85,6 @@ class FollowView(APIView):
             sender_id = payload['_id']
 
             follow_record = self.database.followings_following.find_one({ '_id': ObjectId(follow_id) })
-
-            if not follow_record:
-                return HttpResponse.response(data={}, message='failed', status=status.HTTP_400_BAD_REQUEST)
-
-            receiver_id = follow_record['receiver']
-            sender = self.database.users_user.find_one({ '_id': ObjectId(sender_id) })
-
-            if not sender:
-                return HttpResponse.response(
-                    data = {},
-                    message = ResponseMessage.INVALID_DATA,
-                    status = status.HTTP_400_BAD_REQUEST
-                )
             
             self.database.followings_following.delete_one({ 'sender': sender_id, '_id': ObjectId(follow_id) })
             return HttpResponse.response(
@@ -168,11 +153,3 @@ class FollowView(APIView):
                 message = "missing_receiver",
                 status = status.HTTP_400_BAD_REQUEST,
             )
-    def patch(self, request, id=None):
-        item = models.Following.objects.get(id = id)
-        item.following = request.data["following"]
-        item.follower = request.data["follower"]
-        item.save(update_fields=["following", "follower"])
-        
-        serializer = FollowingSerializer(item)
-        return Response(serializer.data)
