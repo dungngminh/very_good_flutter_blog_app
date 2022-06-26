@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:very_good_blog_app/features/authentication/authentication.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart';
+import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
 import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
@@ -13,34 +15,64 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({
     required UserRepository userRepository,
     required AuthenticationRepository authenticationRepository,
-    required AuthenticationBloc authenticationBloc,
+    required BlogRepository blogRepository,
   })  : _userRepository = userRepository,
         _authenticationRepository = authenticationRepository,
-        _authenticationBloc = authenticationBloc,
+        _blogRepository = blogRepository,
         super(const ProfileState()) {
     on<ProfileGetUserInformation>(_onGetUserInformation);
     on<ProfileUserLogoutRequested>(_onUserRequestedLogout);
-    on<ProfileConfirmEditUserInformation>(_onConfirmEditUserInformation);
+    on<ProfileConfirmEditInformation>(_onConfirmEditUserInformation);
+    on<ProfileAvatarButtonPressed>(_onAvatarButtonPressed);
+    on<ProfileOnLongPressedBlog>(_onBlogLongPressed);
     add(ProfileGetUserInformation());
   }
 
   final UserRepository _userRepository;
   final AuthenticationRepository _authenticationRepository;
-  final AuthenticationBloc _authenticationBloc;
+  final BlogRepository _blogRepository;
 
-  late final StreamSubscription<AuthenticationState> _authenticationStateStream;
+  Future<void> _onBlogLongPressed(
+    ProfileOnLongPressedBlog event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(deleteStatus: DeleteStatus.loading));
+      await _blogRepository.deleteBlog(event.blog);
+      emit(state.copyWith(deleteStatus: DeleteStatus.done));
+      add(ProfileGetUserInformation());
+    } catch (e) {
+      emit(
+        state.copyWith(
+          deleteStatus: DeleteStatus.error,
+          messageError: e.toString(),
+        ),
+      );
+    }
+  }
 
   Future<void> _onGetUserInformation(
     ProfileGetUserInformation event,
     Emitter<ProfileState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: ProfileStatus.loading));
-      final user = await _userRepository.getUserInformation();
-      emit(state.copyWith(user: user, status: ProfileStatus.done));
+      emit(state.copyWith(profileStatus: ProfileStatus.loading));
+      final userId = await SecureStorageHelper.getValueByKey('id');
+      final user = await _userRepository.getUserInformationByUserId(userId!);
+      final userBlogs = await _blogRepository.getBlogsByUserId(userId);
+      emit(
+        state.copyWith(
+          user: user,
+          profileStatus: ProfileStatus.done,
+          userBlogs: userBlogs,
+        ),
+      );
     } catch (e) {
       emit(
-        state.copyWith(messageError: e.toString(), status: ProfileStatus.error),
+        state.copyWith(
+          messageError: e.toString(),
+          profileStatus: ProfileStatus.error,
+        ),
       );
     }
   }
@@ -52,17 +84,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     return _authenticationRepository.logOut();
   }
 
-  Future<FutureOr<void>> _onConfirmEditUserInformation(
-    ProfileConfirmEditUserInformation event,
+  Future<void> _onConfirmEditUserInformation(
+    ProfileConfirmEditInformation event,
     Emitter<ProfileState> emit,
   ) async {
-    await _authenticationRepository.logOut();
+    return _authenticationRepository.logOut();
   }
 
-  @override
-  Future<void> close() {
-    _authenticationStateStream.cancel();
-    _authenticationBloc.close();
-    return super.close();
+  Future<void> _onAvatarButtonPressed(
+    ProfileAvatarButtonPressed event,
+    Emitter<ProfileState> emit,
+  ) async {
+    final imagePickedPath =
+        await ImagePickerHelper.pickImageFromSource(ImageSource.gallery);
+    if (imagePickedPath != null) {
+      emit(
+        state.copyWith(
+          imagePath: imagePickedPath,
+        ),
+      );
+    }
   }
 }

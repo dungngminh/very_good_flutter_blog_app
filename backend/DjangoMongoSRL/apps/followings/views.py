@@ -8,10 +8,12 @@ from apps.utils.response import ResponseMessage
 from rest_framework import status
 from apps.utils.response import HttpResponse
 from apps.utils.jwt import JsonWebTokenHelper
+from apps.utils.topic import get_follow_topic, get_post_topic
 from apps.utils.database import mongo_extension
 from .models import Following
 from apps.users.models import User
 from apps.users.serializers import UserViewSerializer
+from apps.notifications.service import pubsub
 # Create your views here.
 
 def convert_objectId(x):
@@ -97,7 +99,7 @@ class FollowView(APIView):
                 return HttpResponse.response(data={}, message='failed', status=status.HTTP_400_BAD_REQUEST)
 
             receiver_id = follow_record['receiver']
-            sender = self.database.users_user.find_one({ '_id': ObjectId(sender_id) })
+            sender = dict(self.database.users_user.find_one({ '_id': ObjectId(sender_id) }))
 
             if not sender:
                 return HttpResponse.response(
@@ -107,6 +109,8 @@ class FollowView(APIView):
                 )
             
             self.database.followings_following.delete_one({ 'sender': sender_id, '_id': ObjectId(follow_id) })
+            pubsub.unsubscribe(sender['device_token'], receiver_id)
+
             return HttpResponse.response(
                 data = {},
                 message = ResponseMessage.SUCCESS,
@@ -134,8 +138,8 @@ class FollowView(APIView):
             receiver_id = request.data['receiver_id']
             sender_id = payload['_id']
             # Check receiver, sender
-            receiver = self.database.users_user.find_one({ '_id': ObjectId(receiver_id) })
-            sender = self.database.users_user.find_one({ '_id': ObjectId(sender_id) })
+            receiver = dict(self.database.users_user.find_one({ '_id': ObjectId(receiver_id) }))
+            sender = dict(self.database.users_user.find_one({ '_id': ObjectId(sender_id) }))
 
             if not sender or not receiver:
                 return HttpResponse.response(
@@ -159,6 +163,9 @@ class FollowView(APIView):
             )
 
             following_obj.save()
+
+            pubsub.subscribe(sender['device_token'], get_post_topic(str(receiver['_id'])))
+            pubsub.publish(get_follow_topic(receiver_id), sender['username'] + 'has just follwed you', {})
 
             return HttpResponse.response(
                 data = {},

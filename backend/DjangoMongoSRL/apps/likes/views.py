@@ -10,8 +10,6 @@ from apps.utils.database import mongo_extension
 from .models import Likes
 from datetime import datetime, timedelta
 
-# add code view like
-
 def convert_timestamp(data: datetime):
     local_time = (data + timedelta(hours=7))
     return int(datetime.timestamp(local_time))
@@ -20,14 +18,13 @@ def convert_data(data):
     data['created_at'] = convert_timestamp(data['created_at'])
     
     data['updated_at'] = convert_timestamp(data['updated_at'])
-    
+  
     data['_id'] = str(data['_id'])
-    
+   
     return data
 
 class LikesView(APIView):
     permission_classes = (AllowAny, )
-    
     database = mongo_extension.get_database()
 
     def post(self, request, *a, **b):
@@ -41,14 +38,19 @@ class LikesView(APIView):
 
             likes = Likes.objects.create(
                 _id = ObjectId(),
-                
                 blog_id = blog_id,
-                
                 user_id = user_id,
-                
             )
 
             likes.save()
+
+            self.database.blogs_blog.update_one(
+                { '_id': ObjectId(blog_id) }, 
+                { 
+                    '$inc': { 'likes': 1 },
+                }
+            );
+
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
         except Exception as e:
@@ -66,7 +68,7 @@ class LikesView(APIView):
 
             blogs = self.database.likes_likes.find({
                 'user_id': user_id,
-            })
+            });
 
             blogs = list(blogs)
             blogs = list(map(convert_data, blogs))
@@ -81,7 +83,6 @@ class LikesView(APIView):
     def delete(self, request, *a, **b):
         try:
             payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
-            
             if not payload:
                 
                 return HttpResponse.response({}, ResponseMessage.UNAUTHORIZED, status.HTTP_401_UNAUTHORIZED)
@@ -92,29 +93,19 @@ class LikesView(APIView):
             self.database.likes_likes.delete_one({
                 'user_id': user_id,
                 'blog_id': blog_id,
-            })
+            });
+
+            self.database.blogs_blog.update_one(
+                { '_id': ObjectId(blog_id) }, 
+                { 
+                    '$inc': { 'likes': -1 },
+                }
+            );
 
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
         except Exception as e:
-            
-            print(e)
-            
-            return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    # def delete(self, request, pk, format=None):
-    #     item = get_object_or_404(models.Likes, pk=pk)
-    #     item.delete()
-    #     return Response({"status": "success", "data": "Item Deleted"})
-        
-    # def patch(self, request, pk, format=None):
-    #     rating_obj = models.Likes.objects.get(pk=pk)
-    #     serializer = RatingSerializer(
-    #         data=request.data, instance=rating_obj, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response({"Message": "Data updated successfully !!"})
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+            print(e)
+            return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
 

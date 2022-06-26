@@ -30,18 +30,20 @@ class PubSub:
     def load(self):
         pass
 
-    def add_topic(self):
-        pass
+    def subscribe(self, device_token, topic_name):
+        messaging.subscribe_to_topic(tokens=device_token, topic=topic_name)
 
-    def publish(self):
+    def unsubscribe(self, device_token, topic_name):
+        messaging.unsubscribe_from_topic(tokens=device_token, topic=topic_name)
+
+    def publish(self, topic_name, title, body):
         message = messaging.Message(
             data = {
-                'title': 'Haha',
-                'body': 'test',
+                'title': title,
+                'body': body,
             },
-            topic = 'asdasd'
+            topic =  topic_name
         )
-
         messaging.send(message = message)
 
 pubsub = PubSub()

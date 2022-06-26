@@ -40,6 +40,8 @@ version
 # packages file containing multi-root paths
 .packages.generated
 
+.VSCodeCounter/
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id

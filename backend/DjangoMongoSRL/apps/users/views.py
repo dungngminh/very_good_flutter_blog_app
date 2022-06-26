@@ -3,14 +3,17 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from bson.objectid import ObjectId
 from apps.utils.response import ResponseMessage
+from apps.utils.jwt import JsonWebTokenHelper
 from .models import User
-from .serializers import UserViewSerializer
+from .serializers import UserViewSerializer, UserViewPutSerializer
 from apps.utils.response import HttpResponse
 from .middleware import UserMiddleware
+from apps.utils.database import mongo_extension
 
 
 class UserView(APIView):
     permission_classes = (AllowAny, )
+    db = mongo_extension.get_database()
 
     def get(self, request, *args, **kwargs):
         id = ''
@@ -23,6 +26,8 @@ class UserView(APIView):
             if id:
                 user = User.objects.get(_id = ObjectId(id))
                 data = (UserViewSerializer(user).data)
+
+                print(dict(self.db.users_user.find_one({ '_id': ObjectId(id) })))
 
                 return HttpResponse.response(
                     data=data,
@@ -68,7 +73,8 @@ class UserView(APIView):
                         status = status.HTTP_401_UNAUTHORIZED
                     )
 
-                serialize = UserViewSerializer(data = request.data)
+                print(request.data)
+                serialize = UserViewPutSerializer(data = request.data)
 
                 if serialize.is_valid(raise_exception=False):
                     user = User.objects.get(_id = ObjectId(serialize.data['_id']))
@@ -92,6 +98,7 @@ class UserView(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             except Exception as e:
+                print(e)
                 return HttpResponse.response(
                     data={},
                     message='error',
@@ -133,3 +140,32 @@ class UserView(APIView):
                 message='error',
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+class UserDeviceToken(APIView):
+    permission_classes = (AllowAny, )
+    database = mongo_extension.get_database()
+
+    def put(self, request, *a, **b):
+        id = ''
+        try:
+            id = b['id']
+            if not id:
+                return HttpResponse.response({}, 'unauthorized', status.HTTP_401_UNAUTHORIZED)
+            else:
+                user = User.objects.get(_id = ObjectId(id))
+                if not user:
+                    return HttpResponse.response({}, '', status.HTTP_400_BAD_REQUEST)
+                payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
+                if not payload or payload['_id'] != id:
+                    return HttpResponse.response({}, 'unauthorized', status.HTTP_401_UNAUTHORIZED)
+                device_token = request.data['device_token']
+                self.database.users_user.update_one({ '_id': ObjectId(id) }, 
+                    { 
+                        '$set': {
+                            'device_token': device_token,
+                        },
+                });
+                return HttpResponse.response({}, 'success', status.HTTP_200_OK)
+        except:
+            return HttpResponse.response({}, '', status.HTTP_500_INTERNAL_SERVER_ERROR)
+                

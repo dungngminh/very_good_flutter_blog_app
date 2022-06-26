@@ -1,4 +1,11 @@
 from rest_framework import serializers
 
-class BookmarkBodySerializer(serializers.Serializer):
-    blog_id = serializers.CharField()
+class BookmarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Boorkmark
+        field = ('id',
+                 'user_id',
+                 'blog_id',
+                 'created_at',
+                 'updated_at')
+        depth = 1

@@ -44,7 +44,7 @@ urlpatterns = [\
     re_path(r'.well-known/pki-validation/(?P<path>.*)$', another_static.serve, {'document_root': settings.STATIC_ROOT + "/ssl-cert"}),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', swagger_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', swagger_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('swagger-ui/', TemplateView.as_view()),
+    path('api/swagger-ui/', TemplateView.as_view()),
     path('documentation/', schema_view),
     path('admin/', admin.site.urls),
     path('api/v1/auth/', include('apps.authentication.urls')),
