@@ -11,6 +11,20 @@ from .serializers import BookmarkBodySerializer
 from .models import Boorkmark
 from datetime import datetime, timedelta
 
+def convert_timestamp(data: datetime):
+    local_time = (data + timedelta(hours=7))
+    return int(datetime.timestamp(local_time))
+
+def conver_bookmark_func(x):
+    x['_id'] = str(x['_id'])
+    x['blog_detail']['_id'] = str(x['blog_detail']['_id'])
+    x['created_at'] = convert_timestamp(x['created_at'])
+    x['updated_at'] = convert_timestamp(x['updated_at'])
+    x['blog_detail']['updated_at'] = convert_timestamp(x['blog_detail']['updated_at'])
+    x['blog_detail']['created_at'] = convert_timestamp(x['blog_detail']['created_at'])
+    x['blog_detail']['category'] = x['blog_detail']['category'][0]
+    return x
+
 class BookmarksView(APIView):
     permission_classes = (AllowAny, )
     database = mongo_extension.get_database()
@@ -136,16 +150,3 @@ class BookmarksView(APIView):
         except Exception as e:
             logger.error(e)
             return HttpResponse.response(data = {}, message=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-    def patch(self, request, id=None):
-        item = models.Boorkmark.objects.get(id = id)
-        
-        # item.user_id = request.data["user_id"]
-        item.blog_id = request.data["blog_id"]
-        item.created_at = request.data["created_at"]
-        item.updated_at = request.data["updated_at"]
-        
-        item.save(update_fields=["blog_id", "created_at", "updated_at"])
-        
-        serializer = BookmarkSerializer(item)
-        return Response(serializer.data)
