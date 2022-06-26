@@ -46,7 +46,7 @@ class LikesView(APIView):
                 { 
                     '$inc': { 'likes': 1 },
                 }
-            );
+            )
 
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
@@ -65,7 +65,7 @@ class LikesView(APIView):
 
             blogs = self.database.likes_likes.find({
                 'user_id': user_id,
-            });
+            })
 
             blogs = list(blogs)
             blogs = list(map(convert_data, blogs))
@@ -89,14 +89,14 @@ class LikesView(APIView):
             self.database.likes_likes.delete_one({
                 'user_id': user_id,
                 'blog_id': blog_id,
-            });
+            })
 
             self.database.blogs_blog.update_one(
                 { '_id': ObjectId(blog_id) }, 
                 { 
                     '$inc': { 'likes': -1 },
                 }
-            );
+            )
 
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
