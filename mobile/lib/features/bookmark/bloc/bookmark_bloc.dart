@@ -12,7 +12,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
         super(const BookmarkState()) {
     on<BookmarkFetching>(_onGetBookmarks);
     on<BookmarkAddBlog>(_onAddBlog);
-    on<BookmartRemoveBlog>(_onRemoveBlog);
+    on<BookmarkRemoveBlog>(_onRemoveBlog);
 
     add(BookmarkFetching());
   }
@@ -30,6 +30,14 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
         ),
       );
       final bookmarks = await _bookmarkRepository.getBookmarks();
+      final bookmarksInLocal = _bookmarkRepository.getBookmarksInLocalBox();
+      if (bookmarks != bookmarksInLocal) {
+        for (final blog in bookmarks) {
+          final isExist = bookmarksInLocal.any((e) => blog.id == e.id);
+          if (isExist) continue;
+          await _bookmarkRepository.addBookmarkToLocal(blog: blog);
+        }
+      }
       emit(
         state.copyWith(
           getBookmarkStatus: GetBookmarkStatus.done,
@@ -57,7 +65,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
           actionBookmarkStatus: ActionBookmarkStatus.loading,
         ),
       );
-      await _bookmarkRepository.addBookmark(blogId: event.blog.id);
+      await _bookmarkRepository.addBookmark(blog: event.blog);
       emit(
         state.copyWith(
           bookmarks: [...state.bookmarks, event.blog],
@@ -76,7 +84,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   }
 
   Future<void> _onRemoveBlog(
-    BookmartRemoveBlog event,
+    BookmarkRemoveBlog event,
     Emitter<BookmarkState> emit,
   ) async {
     try {
@@ -85,11 +93,12 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
           actionBookmarkStatus: ActionBookmarkStatus.loading,
         ),
       );
-      await _bookmarkRepository.removeBookmark(blogId: event.blog.id);
-      final currentBookmark = state.bookmarks..remove(event.blog);
+      await _bookmarkRepository.removeBookmark(blog: event.blog);
       emit(
         state.copyWith(
-          bookmarks: currentBookmark,
+          bookmarks: state.bookmarks
+              .where((bookmark) => bookmark.id != event.blog.id)
+              .toList(),
           actionBookmarkStatus: ActionBookmarkStatus.done,
         ),
       );

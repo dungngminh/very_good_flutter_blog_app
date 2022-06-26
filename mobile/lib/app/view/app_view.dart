@@ -7,9 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/data/firebase/storage_firebase_service.dart';
-import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
+import 'package:very_good_blog_app/data/data.dart';
 import 'package:very_good_blog_app/di/di.dart';
 
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
@@ -25,6 +25,7 @@ class VeryGoodBlogApp extends StatelessWidget {
         RepositoryProvider<AuthenticationRepository>(
           create: (_) => AuthenticationRepository(
             blogClient: injector<GoodBlogClient>(),
+            bookmarkLocalBox: injector<BookmarkLocalBox>(),
           ),
         ),
         RepositoryProvider<UserRepository>(
@@ -42,6 +43,7 @@ class VeryGoodBlogApp extends StatelessWidget {
         RepositoryProvider<BookmarkRepository>(
           create: (_) => BookmarkRepository(
             blogClient: injector<GoodBlogClient>(),
+            bookmarkLocalBox: injector<BookmarkLocalBox>(),
           ),
         ),
       ],
@@ -50,9 +52,14 @@ class VeryGoodBlogApp extends StatelessWidget {
   }
 }
 
-class VeryGoodBlogAppView extends StatelessWidget {
+class VeryGoodBlogAppView extends StatefulWidget {
   const VeryGoodBlogAppView({super.key});
 
+  @override
+  State<VeryGoodBlogAppView> createState() => _VeryGoodBlogAppViewState();
+}
+
+class _VeryGoodBlogAppViewState extends State<VeryGoodBlogAppView> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -83,5 +90,11 @@ class VeryGoodBlogAppView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
   }
 }

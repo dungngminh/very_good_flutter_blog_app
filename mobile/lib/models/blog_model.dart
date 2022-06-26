@@ -50,7 +50,7 @@ class BlogModel extends Equatable {
   Map<String, dynamic> toJson() => _$BlogModelToJson(this);
 
   static DateTime _fromJson(int timestamp) =>
-      DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+      DateTime.fromMillisecondsSinceEpoch(timestamp * 1000, isUtc: true);
   static int _toJson(DateTime time) => time.millisecondsSinceEpoch;
 
   @override

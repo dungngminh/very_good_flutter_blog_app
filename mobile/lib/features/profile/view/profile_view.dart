@@ -54,7 +54,7 @@ class ProfileView extends StatelessWidget {
                       (ProfileBloc profileBloc) =>
                           profileBloc.state.profileStatus,
                     );
-                    return _RotateIconButton(
+                    return RotateIconButton(
                       icon: Assets.icons.refresh.svg(
                         color: AppPalette.whiteBackgroundColor,
                         height: 28,
@@ -82,67 +82,7 @@ class ProfileView extends StatelessWidget {
   }
 }
 
-class _RotateIconButton extends StatefulWidget {
-  const _RotateIconButton({
-    required this.icon,
-    this.isLoading = false,
-    required this.onPressed,
-  });
 
-  final Widget icon;
-  final bool isLoading;
-  final VoidCallback onPressed;
-
-  @override
-  State<_RotateIconButton> createState() => _RotateIconButtonState();
-}
-
-class _RotateIconButtonState extends State<_RotateIconButton>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        seconds: 1,
-      ),
-    );
-
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant _RotateIconButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isLoading != oldWidget.isLoading) {
-      if (widget.isLoading) {
-        _animationController.repeat();
-      } else {
-        _animationController.stop();
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, _) {
-        return Transform.rotate(
-          angle:
-              widget.isLoading ? _animationController.value * 2 * math.pi : 0,
-          child: IconButton(
-            icon: widget.icon,
-            splashRadius: 24,
-            onPressed: widget.onPressed,
-          ),
-        );
-      },
-    );
-  }
-}
 
 class _TitleTile extends StatelessWidget {
   const _TitleTile();
@@ -218,7 +158,7 @@ class _ProfilePanel extends StatelessWidget {
                         (ProfileBloc profileBloc) =>
                             profileBloc.state.profileStatus,
                       );
-                      return _RotateIconButton(
+                      return RotateIconButton(
                         icon: Assets.icons.refresh.svg(
                           color: AppPalette.primaryColor,
                           height: 28,

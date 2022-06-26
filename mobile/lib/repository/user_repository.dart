@@ -44,7 +44,8 @@ class UserRepository {
           file: File(imagePath),
         );
       }
-      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       final body = <String, String>{
         'first_name': firstName,
         'last_name': lastName,

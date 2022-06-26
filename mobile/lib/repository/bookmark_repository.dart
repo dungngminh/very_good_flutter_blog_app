@@ -1,17 +1,23 @@
+import 'dart:convert';
+
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
+import 'package:very_good_blog_app/data/data.dart';
 import 'package:very_good_blog_app/models/models.dart';
 
 class BookmarkRepository {
   const BookmarkRepository({
     required GoodBlogClient blogClient,
-  }) : _blogClient = blogClient;
+    required BookmarkLocalBox bookmarkLocalBox,
+  })  : _blogClient = blogClient,
+        _bookmarkLocalBox = bookmarkLocalBox;
 
   final GoodBlogClient _blogClient;
+  final BookmarkLocalBox _bookmarkLocalBox;
 
   Future<List<BlogModel>> getBookmarks() async {
     try {
-      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
 
       final jsonBody = await _blogClient.get(
         '/bookmarks',
@@ -31,12 +37,60 @@ class BookmarkRepository {
   }
 
   Future<void> addBookmark({
-    required String blogId,
-  }) async {}
+    required BlogModel blog,
+  }) async {
+    try {
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
+
+      await _blogClient.post(
+        '/bookmarks',
+        body: {'blog_id': blog.id},
+        headers: <String, String>{
+          'Authorization': token!,
+          'Content-Type': 'application/json',
+        },
+      );
+      await _bookmarkLocalBox.add(blog: blog);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> addBookmarkToLocal({
+    required BlogModel blog,
+  }) =>
+      _bookmarkLocalBox.add(blog: blog);
 
   Future<void> removeBookmark({
-    required String blogId,
+    required BlogModel blog,
   }) async {
-    try {} catch (e) {}
+    try {
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
+      await _bookmarkLocalBox.delete(blogId: blog.id);
+      await _blogClient.delete(
+        '/bookmarks',
+        body: {'blog_id': blog.id},
+        headers: <String, String>{
+          'Authorization': token!,
+          'Content-Type': 'application/json',
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  List<BlogModel> getBookmarksInLocalBox() {
+    final dataInBox = _bookmarkLocalBox.rawBookmarkData;
+    final bookmarks = dataInBox
+        .map(
+          (e) => BlogModel.fromJson(
+            jsonDecode(e as String) as Map<String, dynamic>,
+          ),
+        )
+        .toList();
+    return bookmarks;
   }
 }

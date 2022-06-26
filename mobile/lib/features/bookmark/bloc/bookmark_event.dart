@@ -18,8 +18,8 @@ class BookmarkAddBlog extends BookmarkEvent {
   List<Object> get props => [blog];
 }
 
-class BookmartRemoveBlog extends BookmarkEvent {
-  const BookmartRemoveBlog({required this.blog});
+class BookmarkRemoveBlog extends BookmarkEvent {
+  const BookmarkRemoveBlog({required this.blog});
 
   final BlogModel blog;
 

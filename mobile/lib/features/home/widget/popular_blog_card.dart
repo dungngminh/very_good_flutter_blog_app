@@ -100,7 +100,7 @@ class PopularBlogCard extends StatelessWidget {
                                 ? () {
                                     context
                                         .read<BookmarkBloc>()
-                                        .add(BookmartRemoveBlog(blog: blog));
+                                        .add(BookmarkRemoveBlog(blog: blog));
                                   }
                                 : () {
                                     context

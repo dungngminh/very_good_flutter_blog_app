@@ -13,54 +13,72 @@ class BookmarkView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 24),
-                child: Text(
-                  'Danh sách bài viết đã lưu',
-                  style: AppTextTheme.darkW700TextStyle,
-                ),
+      body: Padding(
+        padding: EdgeInsets.only(top: context.padding.top + 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 24, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Danh sách bài viết đã lưu',
+                    style: AppTextTheme.darkW700TextStyle,
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final getBookmarkStatus = context.select(
+                        (BookmarkBloc bookmarkBloc) =>
+                            bookmarkBloc.state.getBookmarkStatus,
+                      );
+                      return RotateIconButton(
+                        icon: Assets.icons.refresh
+                            .svg(height: 26, color: AppPalette.primaryColor),
+                        onPressed: () => context
+                            .read<BookmarkBloc>()
+                            .add(BookmarkFetching()),
+                        isLoading:
+                            getBookmarkStatus == GetBookmarkStatus.loading,
+                      );
+                    },
+                  )
+                ],
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              Builder(
-                builder: (context) {
-                  final bookmarkStatus = context.select(
-                    (BookmarkBloc bookmarkBloc) =>
-                        bookmarkBloc.state.getBookmarkStatus,
-                  );
-                  final messageError = context.select(
-                    (BookmarkBloc bookmarkBloc) =>
-                        bookmarkBloc.state.messageError,
-                  );
-                  if (bookmarkStatus == GetBookmarkStatus.loading) {
-                    return const _BookmarkPlaceholder();
-                  } else if (bookmarkStatus == GetBookmarkStatus.error) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(
-                          messageError,
-                        ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Builder(
+              builder: (context) {
+                final bookmarkStatus = context.select(
+                  (BookmarkBloc bookmarkBloc) =>
+                      bookmarkBloc.state.getBookmarkStatus,
+                );
+                final messageError = context.select(
+                  (BookmarkBloc bookmarkBloc) =>
+                      bookmarkBloc.state.messageError,
+                );
+                if (bookmarkStatus == GetBookmarkStatus.loading) {
+                  return const _BookmarkPlaceholder();
+                } else if (bookmarkStatus == GetBookmarkStatus.error) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        messageError,
                       ),
-                    );
-                  } else {
-                    return const _BookmarkList();
-                  }
-                },
-              ),
+                    ),
+                  );
+                } else {
+                  return const _BookmarkList();
+                }
+              },
+            ),
 
-              // _BookmarkList(),
-            ],
-          ),
+            // _BookmarkList(),
+          ],
         ),
       ),
     );

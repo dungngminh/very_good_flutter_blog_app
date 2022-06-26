@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
+import 'package:very_good_blog_app/data/data.dart';
 
 enum AuthenticationStatus {
   unknown,
@@ -16,16 +16,20 @@ enum AuthenticationStatus {
 class AuthenticationRepository {
   AuthenticationRepository({
     required GoodBlogClient blogClient,
-  }) : _blogClient = blogClient;
+    required BookmarkLocalBox bookmarkLocalBox,
+  })  : _blogClient = blogClient,
+        _bookmarkLocalBox = bookmarkLocalBox;
 
   final GoodBlogClient _blogClient;
+  final BookmarkLocalBox _bookmarkLocalBox;
 
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
-    final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+    final token =
+        await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
     log('token $token');
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 2));
     if (token == null) {
       yield AuthenticationStatus.unauthenticated;
     } else {
@@ -101,8 +105,9 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    await SecureStorageHelper.deleteValueFromKey(AppContants.jwt);
-    await SecureStorageHelper.deleteValueFromKey(AppContants.userId);
+    await SecureStorageHelper.deleteValueFromKey(SecureStorageHelper.jwt);
+    await SecureStorageHelper.deleteValueFromKey(SecureStorageHelper.userId);
+    await _bookmarkLocalBox.deleteAll();
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

@@ -52,12 +52,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> _onGetUserInformation(
     ProfileGetUserInformation event,
-    Emitter<ProfileState> emit,
+  Emitter<ProfileState> emit,
   ) async {
     try {
       emit(state.copyWith(profileStatus: ProfileStatus.loading));
       final userId =
-          await SecureStorageHelper.getValueByKey(AppContants.userId);
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.userId);
       final user = await _userRepository.getUserInformationByUserId(userId!);
       final userBlogs = await _blogRepository.getBlogsByUserId(userId);
       emit(

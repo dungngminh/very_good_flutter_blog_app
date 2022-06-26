@@ -42,39 +42,32 @@ class _BlogViewState extends State<BlogView> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Builder(
-              builder: (context) {
-                final user = context.read<ProfileBloc>().state.user;
-                return ActionBar(
-                  title: widget.blog.title,
-                  titleFontSize: 20,
-                  actions: [
-                          IconButton(
-                            icon: Assets.icons.editSquare.svg(
-                              color: AppPalette.purple700Color,
-                              height: 28,
-                            ),
-                            splashRadius: 24,
-                            onPressed: () => context.push(
-                              AppRoute.blogEditor,
-                              extra: ExtraParams3<ProfileBloc, BlogBloc,
-                                  BlogModel>(
-                                param1: context.read<ProfileBloc>(),
-                                param2: context.read<BlogBloc>(),
-                                param3: widget.blog,
-                              ),
-                            ),
-                          ),
-                  ],
-                );
-              },
+            ActionBar(
+              title: widget.blog.title,
+              titleFontSize: 20,
+              actions: [
+                IconButton(
+                  icon: Assets.icons.editSquare.svg(
+                    color: AppPalette.purple700Color,
+                    height: 28,
+                  ),
+                  splashRadius: 24,
+                  onPressed: () => context.push(
+                    AppRoute.blogEditor,
+                    extra: ExtraParams3<ProfileBloc, BlogBloc, BlogModel>(
+                      param1: context.read<ProfileBloc>(),
+                      param2: context.read<BlogBloc>(),
+                      param3: widget.blog,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding:
@@ -117,9 +110,7 @@ class _BlogViewState extends State<BlogView> {
                   ),
                   _BlogImage(blog: widget.blog),
                   Padding(
-                    padding: 
-                        const EdgeInsets.symmetric(vertical: 8),
-                       
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       children: [
                         IconButton(
@@ -131,8 +122,8 @@ class _BlogViewState extends State<BlogView> {
                           ),
                           splashRadius: 24,
                           onPressed: () => context
-                                  .read<BlogBloc>()
-                                  .add(BlogLikePressed(id: widget.blog.id)),
+                              .read<BlogBloc>()
+                              .add(BlogLikePressed(id: widget.blog.id)),
                         ),
                         const SizedBox(
                           width: 4,
@@ -143,15 +134,14 @@ class _BlogViewState extends State<BlogView> {
                               .copyWith(fontSize: 15),
                         ),
                         const Spacer(),
-                        
-                          IconButton(
-                            icon: Assets.icons.bookmark.svg(
-                              color: AppPalette.purple700Color,
-                              height: 24,
-                            ),
-                            splashRadius: 24,
-                            onPressed: () {},
-                          )
+                        IconButton(
+                          icon: Assets.icons.bookmark.svg(
+                            color: AppPalette.purple700Color,
+                            height: 24,
+                          ),
+                          splashRadius: 24,
+                          onPressed: () {},
+                        )
                       ],
                     ),
                   ),

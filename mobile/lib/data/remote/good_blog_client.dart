@@ -37,6 +37,7 @@ class GoodBlogClient {
 
   Future<T> delete<T>(
     String path, {
+    Map<String, String>? body,
     Map<String, String>? headers,
   }) async {
     try {
@@ -46,7 +47,9 @@ class GoodBlogClient {
       );
       log(uri.toString());
 
-      final response = await _client.delete(uri, headers: headers).timeout(
+      final response = await _client
+          .delete(uri, headers: headers, body: jsonEncode(body))
+          .timeout(
             AppContants.timeOutDuration,
             onTimeout: () => throw TimeoutException('Ah shjt timeout'),
           );

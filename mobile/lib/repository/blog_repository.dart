@@ -41,7 +41,8 @@ class BlogRepository {
 
   Future<void> deleteBlog(BlogModel blog) async {
     try {
-      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       await _blogClient.delete(
         '/blogs/${blog.id}',
         headers: <String, String>{
@@ -119,7 +120,8 @@ class BlogRepository {
     required String content,
   }) async {
     try {
-      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       final uploadedImageUrl = await _uploadImageToFirebaseStorage(imagePath);
 
       await _blogClient.post(
@@ -150,7 +152,8 @@ class BlogRepository {
   }) async {
     try {
       String? finalImage;
-      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       if (imagePath != blog.imageUrl) {
         finalImage = await _uploadImageToFirebaseStorage(imagePath);
       } else {
@@ -212,7 +215,8 @@ class BlogRepository {
 
   Future<void> addBlogToBookmark(BlogModel blog) async {
     try {
-      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       await _blogClient.post(
         '/bookmarks',
         body: <String, dynamic>{
