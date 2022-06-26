@@ -50,7 +50,6 @@ class LikesView(APIView):
                     '$inc': { 'likes': 1 },
                 }
             );
-
             return HttpResponse.response({}, ResponseMessage.SUCCESS, status.HTTP_200_OK)
 
         except Exception as e:
@@ -108,4 +107,3 @@ class LikesView(APIView):
 
             print(e)
             return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
