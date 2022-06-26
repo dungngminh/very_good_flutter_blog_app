@@ -77,9 +77,13 @@ class BlogManage(APIView):
         
                 
 class postFilter(generics.ListAPIView):
+    
     queryset = Blog.objects.all()
+    
     serializer_class = BlogSerializer
+    
     filter_backends = (SearchFilter, OrderingFilter)
+    
     search_fields = ['^title', '^content']
         
         
