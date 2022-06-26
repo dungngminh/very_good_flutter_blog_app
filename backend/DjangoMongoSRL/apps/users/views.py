@@ -21,13 +21,6 @@ class UserView(APIView):
 
         try:
             if id:
-                if not UserMiddleware.authorization(request.META['HTTP_AUTHORIZATION'], id):
-                    return HttpResponse.response(
-                        data = {},
-                        message = ResponseMessage.UNAUTHORIZED,
-                        status = status.HTTP_401_UNAUTHORIZED
-                    )
-
                 user = User.objects.get(_id = ObjectId(id))
                 data = (UserViewSerializer(user).data)
 

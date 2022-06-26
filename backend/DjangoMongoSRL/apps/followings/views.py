@@ -32,6 +32,13 @@ class FollowView(APIView):
             else:
                 direction = [direction]
 
+            if not user_id:
+                return HttpResponse.response(
+                    data = {},
+                    message = ResponseMessage.INVALID_DATA,
+                    status = status.HTTP_400_BAD_REQUEST
+                )
+            
             followers = []
             followings = []
             
@@ -125,10 +132,7 @@ class FollowView(APIView):
                     status = status.HTTP_400_BAD_REQUEST
                 )
 
-            is_existed = self.database.followings_following.find_one({
-                "sender": sender_id,
-                "receiver": receiver_id,
-            })
+            
 
             if is_existed:
                 return HttpResponse.response(data={}, message='existed', status=status.HTTP_200_OK)
