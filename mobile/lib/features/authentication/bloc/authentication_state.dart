@@ -5,7 +5,6 @@ class AuthenticationState extends Equatable {
     this.status = AuthenticationStatus.unknown,
   });
 
-
   final AuthenticationStatus status;
 
   @override

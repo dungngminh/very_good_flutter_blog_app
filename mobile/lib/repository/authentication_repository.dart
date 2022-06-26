@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
 
 enum AuthenticationStatus {
@@ -11,18 +10,18 @@ enum AuthenticationStatus {
   unauthenticated,
   successfullyRegistered,
   existed,
-  unsuccessfullyRegistered,
+  unsuccessfullyRegistered;
 }
 
 class AuthenticationRepository {
   AuthenticationRepository({
-    GoodBlogClient? blogClient,
-  }) : _blogClient = blogClient ?? GoodBlogClient();
+    required GoodBlogClient blogClient,
+  }) : _blogClient = blogClient;
 
   final GoodBlogClient _blogClient;
+
   final _controller = StreamController<AuthenticationStatus>();
 
-  //action
   Stream<AuthenticationStatus> get status async* {
     final token = await SecureStorageHelper.getValueByKey('jwt');
     log('token $token');
@@ -32,6 +31,7 @@ class AuthenticationRepository {
     } else {
       yield AuthenticationStatus.authenticated;
     }
+    // yield AuthenticationStatus.authenticated;
     yield* _controller.stream;
   }
 
@@ -52,9 +52,9 @@ class AuthenticationRepository {
         },
       ) as Map<String, dynamic>;
       final token = jsonBody['jwt'] as String;
-      log('token $token');
-
+      final userId = jsonBody['id'] as String;
       await SecureStorageHelper.writeValueToKey(key: 'jwt', value: token);
+      await SecureStorageHelper.writeValueToKey(key: 'id', value: userId);
       _controller.add(AuthenticationStatus.authenticated);
     } on ConnectionExpcetion catch (e1) {
       log(e1.toString());
@@ -102,6 +102,7 @@ class AuthenticationRepository {
 
   Future<void> logOut() async {
     await SecureStorageHelper.deleteValueFromKey('jwt');
+    await SecureStorageHelper.deleteValueFromKey('id');
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

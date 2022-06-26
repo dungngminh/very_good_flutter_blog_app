@@ -48,6 +48,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/add_user.svg
   SvgGenImage get addUser => const SvgGenImage('assets/icons/add_user.svg');
 
+  /// File path: assets/icons/arrow_down.svg
+  SvgGenImage get arrowDown => const SvgGenImage('assets/icons/arrow_down.svg');
+
   /// File path: assets/icons/bell.svg
   SvgGenImage get bell => const SvgGenImage('assets/icons/bell.svg');
 
@@ -60,6 +63,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/circle_arrow_left.svg
   SvgGenImage get circleArrowLeft =>
       const SvgGenImage('assets/icons/circle_arrow_left.svg');
+
+  /// File path: assets/icons/close_square.svg
+  SvgGenImage get closeSquare =>
+      const SvgGenImage('assets/icons/close_square.svg');
+
+  /// File path: assets/icons/edit.svg
+  SvgGenImage get edit => const SvgGenImage('assets/icons/edit.svg');
+
+  /// File path: assets/icons/edit_square.svg
+  SvgGenImage get editSquare =>
+      const SvgGenImage('assets/icons/edit_square.svg');
 
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
@@ -81,6 +95,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/plus.svg
   SvgGenImage get plus => const SvgGenImage('assets/icons/plus.svg');
+
+  /// File path: assets/icons/plus_border.svg
+  SvgGenImage get plusBorder =>
+      const SvgGenImage('assets/icons/plus_border.svg');
 
   /// File path: assets/icons/profile.svg
   SvgGenImage get profile => const SvgGenImage('assets/icons/profile.svg');
@@ -104,8 +122,15 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/blank_avatar.png
+  AssetGenImage get blankAvatar =>
+      const AssetGenImage('assets/images/blank_avatar.png');
+
   /// File path: assets/images/komkat.png
   AssetGenImage get komkat => const AssetGenImage('assets/images/komkat.png');
+
+  /// File path: assets/images/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
   /// File path: assets/images/very_good.svg
   SvgGenImage get veryGood => const SvgGenImage('assets/images/very_good.svg');

@@ -14,8 +14,10 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
-    _authenticationSubcription = _authenticationRepository.status
-        .listen((status) => add(AuthenticationStatusChanged(status)));
+    _authenticationSubcription =
+        _authenticationRepository.status.listen((status) {
+      add(AuthenticationStatusChanged(status));
+    });
   }
 
   final AuthenticationRepository _authenticationRepository;
@@ -23,11 +25,11 @@ class AuthenticationBloc
   late final StreamSubscription<AuthenticationStatus>
       _authenticationSubcription;
 
-  Future<void> _onAuthenticationStatusChanged(
+  void _onAuthenticationStatusChanged(
     AuthenticationStatusChanged event,
     Emitter<AuthenticationState> emit,
-  ) async {
-    return emit(AuthenticationState(status: event.status));
+  ) {
+    emit(AuthenticationState(status: event.status));
   }
 
   @override

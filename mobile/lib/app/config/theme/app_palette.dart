@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppPalette {
+abstract class AppPalette {
   static const primaryColor = Color(0xFF864AFC);
   static const fieldColor = Color(0xFFF6F6F6);
   static const primaryTextColor = Color(0xFF585858);
@@ -19,4 +19,5 @@ class AppPalette {
   static const purple700Color = Color(0xFF23005c);
   static const mintColor = Color(0xFF157E72);
   static const deepPurpleColor = Color(0xFF200E32);
+  static const red300Color = Color(0xFFEC4D4D);
 }

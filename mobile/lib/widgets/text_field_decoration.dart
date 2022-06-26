@@ -5,17 +5,24 @@ class TextFieldDecoration extends StatelessWidget {
   const TextFieldDecoration({
     super.key,
     required this.child,
+    this.margin = const EdgeInsets.only(top: 10),
+    this.padding,
+    this.fieldColor = AppPalette.fieldColor,
   });
 
-  final TextField child;
+  final Widget child;
+  final EdgeInsets margin;
+  final EdgeInsets? padding;
+  final Color fieldColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      margin: margin,
+      padding: padding,
       width: context.screenWidth,
       decoration: BoxDecoration(
-        color: AppPalette.fieldColor,
+        color: fieldColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: child,

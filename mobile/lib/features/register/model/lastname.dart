@@ -9,7 +9,7 @@ class Lastname extends FormzInput<String, LastnameValidationError> {
   @override
   LastnameValidationError? validator(String? value) {
     if (value?.isNotEmpty == true) {
-      return value!.length > 3 ? null : LastnameValidationError.tooShort;
+      return value!.isNotEmpty ? null : LastnameValidationError.tooShort;
     } else {
       return LastnameValidationError.empty;
     }

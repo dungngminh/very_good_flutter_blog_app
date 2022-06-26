@@ -9,5 +9,4 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('following', FollowView.as_view()),
-    path('following/<str:id>', FollowView.as_view()),
-]
+    path('following/<str:id>', FollowView.as_view()),]

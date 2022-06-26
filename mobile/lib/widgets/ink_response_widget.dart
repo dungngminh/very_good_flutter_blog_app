@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class InkEffectWidget extends StatelessWidget {
-  const InkEffectWidget({
+class InkEffectIconButton extends StatelessWidget {
+  const InkEffectIconButton({
     super.key,
     required this.child,
-    this.onTapEvent,
+    this.onPressed,
   });
 
   final Widget child;
-  final VoidCallback? onTapEvent;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class InkEffectWidget extends StatelessWidget {
             ),
             child: child,
           ),
-          onPressed: onTapEvent,
+          onPressed: onPressed,
         ),
       ),
     );
