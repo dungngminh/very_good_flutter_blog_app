@@ -181,7 +181,6 @@ class BlogManage(APIView):
                 blog_dict['_id'] = str(blog_dict['_id'])
                 blog_dict['created_at'] = convert_timestamp(blog_dict['created_at'])
                 blog_dict['updated_at'] = convert_timestamp(blog_dict['updated_at'])
-
                 self.db.users_user.update_one({
                     "_id": ObjectId(payload['_id'])
                 }, {
