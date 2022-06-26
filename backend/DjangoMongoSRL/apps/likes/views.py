@@ -102,6 +102,11 @@ class LikesView(APIView):
             
             return HttpResponse.response({}, ResponseMessage.INTERNAL_SERVER_ERROR, status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+    # def delete(self, request, pk, format=None):
+    #     item = get_object_or_404(models.Likes, pk=pk)
+    #     item.delete()
+    #     return Response({"status": "success", "data": "Item Deleted"})
+        
     # def patch(self, request, pk, format=None):
     #     rating_obj = models.Likes.objects.get(pk=pk)
     #     serializer = RatingSerializer(
