@@ -1,6 +1,4 @@
-from attr import field
 from rest_framework import serializers
-from ..bookmarks import models
 
 class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
