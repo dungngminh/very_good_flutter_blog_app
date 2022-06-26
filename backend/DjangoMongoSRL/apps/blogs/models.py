@@ -1,7 +1,4 @@
-from statistics import mode
 from django.db import models
-from matplotlib.pyplot import title
-from pytz import timezone
 from ..users.models import User
 # Create your models here.
 

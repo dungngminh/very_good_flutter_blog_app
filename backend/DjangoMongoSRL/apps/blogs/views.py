@@ -60,7 +60,7 @@ class BlogManage(APIView):
         serializer = BlogSerializer(data = request.data, instance=blog_obj)
         if serializer.is_valid():
             serializer.save()
-            return Response({"Message":"Data updated successfully !!"})
+            return Response({"Message":"Data updated successfully !!"})  
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

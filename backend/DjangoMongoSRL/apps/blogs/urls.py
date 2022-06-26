@@ -8,6 +8,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('blog/', views.BlogManage.as_view(),name='blog'),
     path('blog/<int:pk>/', views.BlogManage.as_view()),
-    path('blog/<str:pk>/', views.BlogManage.as_view()),
     path('search/',views.postFilter.as_view(),name='blogsearch')
 ]
