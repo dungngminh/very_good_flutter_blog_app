@@ -45,6 +45,7 @@ void main() {
             password: password2,
             lastname: lastname,
             firstname: firstname,
+            confirmationPassword: repasswordCorret2,
           ),
           // ignore: void_checks
         ).thenAnswer((_) => Future.value());
@@ -210,6 +211,7 @@ void main() {
             password: password2,
             lastname: lastname,
             firstname: firstname,
+            confirmationPassword: repasswordCorret2,
           ),
           // ignore: void_checks
         ).thenThrow(Exception('register failed'));

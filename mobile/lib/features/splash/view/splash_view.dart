@@ -13,10 +13,10 @@ class SplashView extends StatelessWidget {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
-          context.go('/');
+          context.go(AppRoute.home);
         } else if (state.status == AuthenticationStatus.unauthenticated ||
             state.status == AuthenticationStatus.unknown) {
-          context.go('/login');
+          context.go(AppRoute.login);
         }
       },
       child: Scaffold(
