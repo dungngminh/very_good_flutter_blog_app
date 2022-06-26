@@ -25,10 +25,13 @@ class UploadBlogView extends StatelessWidget {
                 ? 'Đăng bài viết thành công'
                 : 'Cập nhật bài viết thành công',
           );
-          context
-            ..pop()
-            ..pop();
-          if (state.existBlog != null) context.pop();
+          Future.delayed(const Duration(milliseconds: 300), () {
+            context
+              ..pop()
+              ..pop();
+            if (state.existBlog != null) context.pop();
+          });
+
           context.read<BlogBloc>().add(const BlogGetBlogs());
           context.read<ProfileBloc>().add(ProfileGetUserInformation());
         } else if (state.uploadStatus == UploadBlogStatus.error) {
@@ -112,13 +115,8 @@ class UploadBlogView extends StatelessWidget {
                               );
 
                               context.push(
-                                AppRoute.blog,
-                                extra: ExtraParams3<BlogModel, ProfileBloc,
-                                    BlogBloc>(
-                                  param1: previewBlog,
-                                  param2: context.read<ProfileBloc>(),
-                                  param3: context.read<BlogBloc>(),
-                                ),
+                                '${context.currentLocation}/${AppRoute.previewBlog}',
+                                extra: previewBlog,
                               );
                             },
                           ),
@@ -318,7 +316,7 @@ class _CategoryDropdownField extends StatelessWidget {
                 .toList(),
             value: category.isNotEmpty ? category : null,
             onChanged: (category) => context.read<BlogEditorBloc>().add(
-                  BlogEditorCategoryChanged(category!),
+                  BlogEditorCategoryChanged(category),
                 ),
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.only(left: 16, right: 16),
@@ -351,6 +349,9 @@ class _UploadButton extends StatelessWidget {
             (BlogEditorBloc blogEditorBloc) =>
                 blogEditorBloc.state.uploadStatus,
           );
+          final existBlog = context.select(
+            (BlogEditorBloc blogEditorBloc) => blogEditorBloc.state.existBlog,
+          );
           return uploadStatus == UploadBlogStatus.loading
               ? const CircularProgressIndicator(
                   color: AppPalette.primaryColor,
@@ -365,15 +366,15 @@ class _UploadButton extends StatelessWidget {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(130, 50),
+                    fixedSize: Size(existBlog == null ? 130 : 160, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
                     primary: Theme.of(context).primaryColor,
                   ),
-                  child: const Text(
-                    'Đăng bài viết',
-                    style: TextStyle(
+                  child: Text(
+                    existBlog == null ? 'Đăng bài viết' : 'Cập nhật bài viết',
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                       color: AppPalette.whiteBackgroundColor,

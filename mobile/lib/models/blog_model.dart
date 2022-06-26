@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:very_good_blog_app/app/app.dart';
 
 import 'package:very_good_blog_app/models/models.dart' show UserModel;
 
@@ -20,7 +21,7 @@ class BlogModel extends Equatable {
   });
 
   const BlogModel.preview({
-    this.id = 'preview',
+    this.id = AppContants.previewBlogId,
     required this.title,
     this.likeCount = 0,
     required this.imageUrl,

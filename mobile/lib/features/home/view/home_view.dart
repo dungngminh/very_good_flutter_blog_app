@@ -114,8 +114,8 @@ class _MoreBlogList extends StatelessWidget {
       builder: (context, state) {
         if (state.getBlogStatus == GetBlogStatus.loading) {
           return Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+            baseColor: AppPalette.shimmerBaseColor,
+            highlightColor: AppPalette.shimmerHighlightColor,
             child: ListView.builder(
               primary: false,
               shrinkWrap: true,

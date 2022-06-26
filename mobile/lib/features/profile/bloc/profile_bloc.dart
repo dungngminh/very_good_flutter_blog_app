@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart';
-import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
@@ -57,7 +56,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) async {
     try {
       emit(state.copyWith(profileStatus: ProfileStatus.loading));
-      final userId = await SecureStorageHelper.getValueByKey('id');
+      final userId =
+          await SecureStorageHelper.getValueByKey(AppContants.userId);
       final user = await _userRepository.getUserInformationByUserId(userId!);
       final userBlogs = await _blogRepository.getBlogsByUserId(userId);
       emit(

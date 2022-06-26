@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
@@ -40,6 +42,7 @@ class _BlogViewState extends State<BlogView> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(16, context.padding.top + 16, 16, 24),
@@ -52,27 +55,24 @@ class _BlogViewState extends State<BlogView> {
                 return ActionBar(
                   title: widget.blog.title,
                   titleFontSize: 20,
-                  actions:
-                      widget.blog.user == user! && widget.blog.id != 'preview'
-                          ? [
-                              IconButton(
-                                icon: Assets.icons.editSquare.svg(
-                                  color: AppPalette.purple700Color,
-                                  height: 28,
-                                ),
-                                splashRadius: 24,
-                                onPressed: () => context.push(
-                                  AppRoute.blogEditor,
-                                  extra: ExtraParams3<ProfileBloc, BlogBloc,
-                                      BlogModel>(
-                                    param1: context.read<ProfileBloc>(),
-                                    param2: context.read<BlogBloc>(),
-                                    param3: widget.blog,
-                                  ),
-                                ),
+                  actions: [
+                          IconButton(
+                            icon: Assets.icons.editSquare.svg(
+                              color: AppPalette.purple700Color,
+                              height: 28,
+                            ),
+                            splashRadius: 24,
+                            onPressed: () => context.push(
+                              AppRoute.blogEditor,
+                              extra: ExtraParams3<ProfileBloc, BlogBloc,
+                                  BlogModel>(
+                                param1: context.read<ProfileBloc>(),
+                                param2: context.read<BlogBloc>(),
+                                param3: widget.blog,
                               ),
-                            ]
-                          : null,
+                            ),
+                          ),
+                  ],
                 );
               },
             ),
@@ -115,27 +115,11 @@ class _BlogViewState extends State<BlogView> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    height: context.screenHeight / 3.8,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: widget.blog.id != 'preview'
-                            ? Image.network(
-                                widget.blog.imageUrl,
-                              ).image
-                            : Image.file(
-                                File(widget.blog.imageUrl),
-                              ).image,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+                  _BlogImage(blog: widget.blog),
                   Padding(
-                    padding: widget.blog.id != 'preview'
-                        ? const EdgeInsets.symmetric(vertical: 6)
-                        : const EdgeInsets.symmetric(vertical: 16),
+                    padding: 
+                        const EdgeInsets.symmetric(vertical: 8),
+                       
                     child: Row(
                       children: [
                         IconButton(
@@ -146,9 +130,7 @@ class _BlogViewState extends State<BlogView> {
                             height: 24,
                           ),
                           splashRadius: 24,
-                          onPressed: widget.blog.id != 'preview'
-                              ? () {}
-                              : () => context
+                          onPressed: () => context
                                   .read<BlogBloc>()
                                   .add(BlogLikePressed(id: widget.blog.id)),
                         ),
@@ -161,7 +143,7 @@ class _BlogViewState extends State<BlogView> {
                               .copyWith(fontSize: 15),
                         ),
                         const Spacer(),
-                        if (widget.blog.id != 'preview')
+                        
                           IconButton(
                             icon: Assets.icons.bookmark.svg(
                               color: AppPalette.purple700Color,
@@ -190,5 +172,71 @@ class _BlogViewState extends State<BlogView> {
         ),
       ),
     );
+  }
+}
+
+class _BlogImage extends StatelessWidget {
+  const _BlogImage({required this.blog});
+
+  final BlogModel blog;
+
+  @override
+  Widget build(BuildContext context) {
+    return blog.id != AppContants.previewBlogId
+        ? CachedNetworkImage(
+            imageUrl: blog.imageUrl,
+            imageBuilder: (context, imageProvider) => Hero(
+              tag: blog.imageUrl,
+              child: Container(
+                height: context.screenHeight / 3.8,
+                margin: const EdgeInsets.only(top: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            progressIndicatorBuilder: (context, url, progress) =>
+                Shimmer.fromColors(
+              baseColor: AppPalette.shimmerBaseColor,
+              highlightColor: AppPalette.shimmerHighlightColor,
+              child: Container(
+                margin: const EdgeInsets.only(top: 16),
+                height: context.screenHeight / 3.8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppPalette.whiteBackgroundColor,
+                ),
+              ),
+            ),
+            errorWidget: (context, url, error) => Container(
+              height: context.screenHeight / 3.8,
+              margin: const EdgeInsets.only(top: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: Assets.images.blankImage.image().image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            cacheManager: AppCacheManager.customCacheManager,
+          )
+        : Container(
+            margin: const EdgeInsets.only(top: 16),
+            height: context.screenHeight / 3.8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: Image.file(
+                  File(blog.imageUrl),
+                ).image,
+                fit: BoxFit.fill,
+              ),
+            ),
+          );
   }
 }

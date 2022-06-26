@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 extension ContextExtension on BuildContext {
   EdgeInsets get padding {
@@ -11,5 +12,9 @@ extension ContextExtension on BuildContext {
 
   double get screenHeight {
     return MediaQuery.of(this).size.height;
+  }
+
+  String get currentLocation {
+    return GoRouter.of(this).location;
   }
 }

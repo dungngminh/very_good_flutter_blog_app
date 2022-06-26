@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
+import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
 import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/models/models.dart' show BlogModel;
 import 'package:very_good_blog_app/widgets/ink_response_widget.dart';
@@ -42,22 +45,22 @@ class BlogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () => context.push(
         AppRoute.blog,
-        extra: ExtraParams3<BlogModel, ProfileBloc, BlogBloc>(
+        extra: ExtraParams4<BlogModel, ProfileBloc, BlogBloc, BookmarkBloc>(
           param1: blog,
           param2: context.read<ProfileBloc>(),
           param3: context.read<BlogBloc>(),
+          param4: context.read<BookmarkBloc>(),
         ),
       ),
-      onLongPress: () {
-        context.read<ProfileBloc>().add(ProfileOnLongPressedBlog(blog: blog));
-      },
       child: Container(
         // height: 135,
-        margin: needMargin ? const EdgeInsets.symmetric(horizontal: 24) : null,
         padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+        margin: needMargin
+            ? const EdgeInsets.symmetric(horizontal: 24)
+            : EdgeInsets.zero,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: AppPalette.fieldColor,
@@ -65,20 +68,41 @@ class BlogCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.network(
-                        blog.imageUrl,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: CachedNetworkImage(
+                  imageUrl: blog.imageUrl,
+                  imageBuilder: (context, imageProvider) => DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: imageProvider,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                ],
+                  progressIndicatorBuilder: (context, url, progress) =>
+                      Shimmer.fromColors(
+                    baseColor: AppPalette.shimmerBaseColor,
+                    highlightColor: AppPalette.shimmerHighlightColor,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppPalette.whiteBackgroundColor,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: Assets.images.blankImage.image().image,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  cacheManager: AppCacheManager.customCacheManager,
+                ),
               ),
             ),
             _buildCardContent(cardType),
@@ -113,7 +137,7 @@ class BlogCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(
-                  height: 6,
+                  height: 8,
                 ),
                 Text(
                   blog.user.username,

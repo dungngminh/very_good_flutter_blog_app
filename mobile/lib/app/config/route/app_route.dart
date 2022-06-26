@@ -1,20 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/features/blog/blog.dart'
-    show BlogBloc, BlogView;
-import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart'
-    show BlogEditorPage, UploadBlogView, BlogEditorBloc;
-import 'package:very_good_blog_app/features/login/login.dart' show LoginView;
-import 'package:very_good_blog_app/features/main/main.dart' show MainView;
-import 'package:very_good_blog_app/features/profile/profile.dart'
-    show ProfileBloc;
-import 'package:very_good_blog_app/features/register/register.dart'
-    show RegisterView;
-import 'package:very_good_blog_app/features/setting/setting.dart'
-    show SettingView;
-import 'package:very_good_blog_app/features/setting/view/edit_profile_page.dart';
-import 'package:very_good_blog_app/features/splash/splash.dart' show SplashView;
-import 'package:very_good_blog_app/models/models.dart' show BlogModel;
+import 'package:very_good_blog_app/features/blog/blog.dart';
+import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
+import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
+import 'package:very_good_blog_app/features/login/login.dart';
+import 'package:very_good_blog_app/features/main/main.dart';
+import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/features/register/register.dart';
+import 'package:very_good_blog_app/features/setting/setting.dart';
+import 'package:very_good_blog_app/features/splash/splash.dart';
+import 'package:very_good_blog_app/models/models.dart';
 
 class AppRoute {
   static const splash = '/';
@@ -26,6 +21,7 @@ class AppRoute {
   static const blogEditor = '/editor';
   static const blog = '/blog';
   static const uploadBlog = 'upload';
+  static const previewBlog = 'preview';
 
   static final route = GoRouter(
     routes: [
@@ -85,7 +81,7 @@ class AppRoute {
               BlocProvider.value(
                 value: extras.param1,
               ),
-              BlocProvider.value( 
+              BlocProvider.value(
                 value: extras.param2,
               ),
             ],
@@ -116,14 +112,26 @@ class AppRoute {
                 child: const UploadBlogView(),
               );
             },
-          )
+            routes: [
+              GoRoute(
+                path: previewBlog,
+                builder: (context, state) {
+                  final blog = state.extra! as BlogModel;
+
+                  return BlogPreviewView(
+                    blog: blog,
+                  );
+                },
+              )
+            ],
+          ),
         ],
       ),
       GoRoute(
         path: blog,
         builder: (context, state) {
-          final extras =
-              state.extra! as ExtraParams3<BlogModel, ProfileBloc, BlogBloc>;
+          final extras = state.extra!
+              as ExtraParams4<BlogModel, ProfileBloc, BlogBloc, BookmarkBloc>;
           return MultiBlocProvider(
             providers: [
               BlocProvider.value(
@@ -131,6 +139,9 @@ class AppRoute {
               ),
               BlocProvider.value(
                 value: extras.param3,
+              ),
+              BlocProvider.value(
+                value: extras.param4,
               ),
             ],
             child: BlogView(

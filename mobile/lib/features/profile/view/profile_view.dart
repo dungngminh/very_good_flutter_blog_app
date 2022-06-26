@@ -321,14 +321,13 @@ class _BasicUserInformation extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    final userBlogs = context.select(
-                      (ProfileBloc profileBloc) =>
-                          profileBloc.state.user?.blogs,
-                    );
+                    final userBlogs =
+                        context.watch<ProfileBloc>().state.userBlogs;
+
                     return _ProfileStat(
                       key: const ValueKey('post'),
                       content: 'Bài viết',
-                      count: userBlogs?.length ?? 0,
+                      count: userBlogs.length,
                     );
                   },
                 ),

@@ -126,6 +126,10 @@ class $AssetsImagesGen {
   AssetGenImage get blankAvatar =>
       const AssetGenImage('assets/images/blank_avatar.png');
 
+  /// File path: assets/images/blank_image.png
+  AssetGenImage get blankImage =>
+      const AssetGenImage('assets/images/blank_image.png');
+
   /// File path: assets/images/komkat.png
   AssetGenImage get komkat => const AssetGenImage('assets/images/komkat.png');
 

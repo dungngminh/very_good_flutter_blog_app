@@ -23,7 +23,7 @@ class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
-    final token = await SecureStorageHelper.getValueByKey('jwt');
+    final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
     log('token $token');
     await Future<void>.delayed(const Duration(seconds: 1));
     if (token == null) {
@@ -101,8 +101,8 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    await SecureStorageHelper.deleteValueFromKey('jwt');
-    await SecureStorageHelper.deleteValueFromKey('id');
+    await SecureStorageHelper.deleteValueFromKey(AppContants.jwt);
+    await SecureStorageHelper.deleteValueFromKey(AppContants.userId);
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

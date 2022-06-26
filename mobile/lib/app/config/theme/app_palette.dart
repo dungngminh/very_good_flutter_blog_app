@@ -20,4 +20,7 @@ abstract class AppPalette {
   static const mintColor = Color(0xFF157E72);
   static const deepPurpleColor = Color(0xFF200E32);
   static const red300Color = Color(0xFFEC4D4D);
+
+  static final shimmerBaseColor = Colors.grey.shade300;
+  static final shimmerHighlightColor = Colors.grey.shade100;
 }

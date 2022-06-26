@@ -39,6 +39,11 @@ class VeryGoodBlogApp extends StatelessWidget {
             storageFirebaseService: injector<StorageFirebaseService>(),
           ),
         ),
+        RepositoryProvider<BookmarkRepository>(
+          create: (_) => BookmarkRepository(
+            blogClient: injector<GoodBlogClient>(),
+          ),
+        ),
       ],
       child: const VeryGoodBlogAppView(),
     );

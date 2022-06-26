@@ -34,7 +34,7 @@ class _MainViewState extends State<MainView> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.unauthenticated) {
-          context.go('/login');
+          context.go(AppRoute.login);
         }
       },
       child: MultiBlocProvider(
@@ -50,6 +50,11 @@ class _MainViewState extends State<MainView> {
                   context.read<AuthenticationRepository>(),
               userRepository: context.read<UserRepository>(),
               blogRepository: context.read<BlogRepository>(),
+            ),
+          ),
+          BlocProvider<BookmarkBloc>(
+            create: (context) => BookmarkBloc(
+              bookmarkRepository: context.read<BookmarkRepository>(),
             ),
           ),
         ],

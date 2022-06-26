@@ -17,8 +17,8 @@ class ShimmerPopularBlogCard extends StatelessWidget {
       child: Stack(
         children: [
           Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+            baseColor: AppPalette.shimmerBaseColor,
+            highlightColor: AppPalette.shimmerHighlightColor,
             child: Container(
               width: context.screenHeight * 0.35,
               decoration: BoxDecoration(
@@ -49,8 +49,8 @@ class ShimmerPopularBlogCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                 child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
+                  baseColor: AppPalette.shimmerBaseColor,
+                  highlightColor: AppPalette.shimmerHighlightColor,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,

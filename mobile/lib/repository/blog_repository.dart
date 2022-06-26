@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/data/firebase/storage_firebase_service.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
 import 'package:very_good_blog_app/models/models.dart';
@@ -41,7 +41,7 @@ class BlogRepository {
 
   Future<void> deleteBlog(BlogModel blog) async {
     try {
-      final token = await SecureStorageHelper.getValueByKey('jwt');
+      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
       await _blogClient.delete(
         '/blogs/${blog.id}',
         headers: <String, String>{
@@ -119,7 +119,7 @@ class BlogRepository {
     required String content,
   }) async {
     try {
-      final token = await SecureStorageHelper.getValueByKey('jwt');
+      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
       final uploadedImageUrl = await _uploadImageToFirebaseStorage(imagePath);
 
       await _blogClient.post(
@@ -150,7 +150,7 @@ class BlogRepository {
   }) async {
     try {
       String? finalImage;
-      final token = await SecureStorageHelper.getValueByKey('jwt');
+      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
       if (imagePath != blog.imageUrl) {
         finalImage = await _uploadImageToFirebaseStorage(imagePath);
       } else {
@@ -212,7 +212,7 @@ class BlogRepository {
 
   Future<void> addBlogToBookmark(BlogModel blog) async {
     try {
-      final token = await SecureStorageHelper.getValueByKey('jwt');
+      final token = await SecureStorageHelper.getValueByKey(AppContants.jwt);
       await _blogClient.post(
         '/bookmarks',
         body: <String, dynamic>{
