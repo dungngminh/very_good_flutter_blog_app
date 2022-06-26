@@ -1,14 +1,3 @@
-from django.http import HttpResponse
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework import status
-from ..bookmarks import models
-from ..users.models import User
-from ..blogs.models import Blog
-from .serializers import BookmarkSerializer
-from ..users import serializers
-from ..blogs import serializers
 from asyncio.log import logger
 from bson import ObjectId
 from apps.utils.response import ResponseMessage
@@ -23,9 +12,9 @@ from .models import Boorkmark
 from datetime import datetime, timedelta
 
 class BookmarksView(APIView):
-    permission_classes = (AllowAny,)
-    serializer_class = BookmarkSerializer
-    
+    permission_classes = (AllowAny, )
+    database = mongo_extension.get_database()
+
     def post(self, request, *a, **b):
         try:
             payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
@@ -57,37 +46,96 @@ class BookmarksView(APIView):
             logger.error(e)
             return HttpResponse.response(data={}, message=ResponseMessage.INTERNAL_SERVER_ERROR, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        
-    def add(self, request):
-        data = request.data
-        new_bookmark = models.Boorkmark.objects.create(
-            # user_id = data['user_id'],
-            blog_id = data['blog_id'],
-            created_at = data['created_at'],       
-            updated_at = data['updated_at']         
-        )
-        new_bookmark.save()
-        serialize_user = serializers.UserViewSerializer(data = request.data)
-        id_user_obj = User.objects.get(_id = serialize_user.data['_id'])
-        new_bookmark.user_id.add(id_user_obj)
-        
-        serializer = BookmarkSerializer(new_bookmark)
-        return Response(serializer.data)
-    
-    def delete(self, request):
+
+
+    def get(self, request, *a, **b):
         try:
-            bookmark_model = models.Boorkmark.objects
-            if "id" in request.query_params:
-                bookmark_model = blog_model.filter(id=request.query_params["id"])
-                bookmark_model.delete()
-                return Response(status=status.HTTP_200_OK)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+            payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
+            
+            if not payload:
+                return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
+            current_user_id = payload['_id']
+                        
+            # print(user_id)
+            print(current_user_id)
+
+            # if (user_id != current_user_id):
+            #     return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+
+            pipeline = [
+                {
+                    "$match": {
+                        "user_id": current_user_id,
+                    },
+                },
+                {
+                    "$addFields": {
+                        "blog_object_id": {
+                            "$toObjectId": "$blog_id",
+                        },
+                    },
+                },
+                {
+                    "$lookup": {
+                        "from": "blogs_blog",
+                        "localField": "blog_object_id",
+                        "foreignField": "_id",
+                        "as": "blog_detail",
+                    }
+                },
+                {
+                    "$unwind": "$blog_detail",
+                },
+                {
+                    "$project": {
+                        "blog_detail": 1,
+                        "blog_id": 1,
+                        "_id": 1,
+                        "user_id": 1,
+                        "created_at": 1,
+                        "updated_at": 1,
+                    }
+                },
+            ]
+
+            bookmarks = list(self.database.bookmarks_boorkmark.aggregate(pipeline=pipeline))
+            print(bookmarks)
+
+            bookmarks = list(map(
+                conver_bookmark_func,
+                bookmarks
+            ))
+
+            print(bookmarks)
+            
+            return HttpResponse.response(data=bookmarks, message=ResponseMessage.SUCCESS, status=status.HTTP_200_OK)
+
         except Exception as e:
             print(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+            return HttpResponse.response(data={}, message=str(e), status=status.HTTP_401_UNAUTHORIZED)
+
+    # def post(self, request):
+    #     return True
+    
+    def delete(self, request, *a, **b):
+        try:
+            bookmark_id = b['id']
+            payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
+            if not payload:
+                return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                bookmark = self.database.bookmarks_boorkmark.find_one({ '_id': ObjectId(bookmark_id) })
+                if not bookmark:
+                    return HttpResponse.response(data={}, message='', status=status.HTTP_400_BAD_REQUEST)
+                if bookmark['user_id'] != payload['_id']:
+                    return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+                self.database.bookmarks_boorkmark.delete_one({ '_id': ObjectId(bookmark_id) })
+                return HttpResponse.response(data={}, message=ResponseMessage.SUCCESS, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.error(e)
+            return HttpResponse.response(data = {}, message=str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def patch(self, request, id=None):
         item = models.Boorkmark.objects.get(id = id)
