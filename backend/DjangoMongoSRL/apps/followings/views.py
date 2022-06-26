@@ -92,8 +92,23 @@ class FollowView(APIView):
             sender_id = payload['_id']
 
             follow_record = self.database.followings_following.find_one({ '_id': ObjectId(follow_id) })
+
+            if not follow_record:
+                return HttpResponse.response(data={}, message='failed', status=status.HTTP_400_BAD_REQUEST)
+
+            receiver_id = follow_record['receiver']
+            sender = dict(self.database.users_user.find_one({ '_id': ObjectId(sender_id) }))
+
+            if not sender:
+                return HttpResponse.response(
+                    data = {},
+                    message = ResponseMessage.INVALID_DATA,
+                    status = status.HTTP_400_BAD_REQUEST
+                )
             
             self.database.followings_following.delete_one({ 'sender': sender_id, '_id': ObjectId(follow_id) })
+            pubsub.unsubscribe(sender['device_token'], receiver_id)
+
             return HttpResponse.response(
                 data = {},
                 message = ResponseMessage.SUCCESS,
@@ -106,36 +121,17 @@ class FollowView(APIView):
                 message = ResponseMessage.UNAUTHORIZED,
                 status = status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-    
-        
+       
     def post(self, request, *args, **kwargs):
         try:
             jwt = request.META['HTTP_AUTHORIZATION']
             # Author
             payload = JsonWebTokenHelper.decode(jwt)
-            if not payload:
-                return HttpResponse.response(
-                    data = {},
-                    message = ResponseMessage.UNAUTHORIZED,
-                    status = status.HTTP_401_UNAUTHORIZED,
-                )
             receiver_id = request.data['receiver_id']
             sender_id = payload['_id']
             # Check receiver, sender
             receiver = self.database.users_user.find_one({ '_id': ObjectId(receiver_id) })
             sender = self.database.users_user.find_one({ '_id': ObjectId(sender_id) })
-
-            if not sender or not receiver:
-                return HttpResponse.response(
-                    data = {},
-                    message = ResponseMessage.INVALID_DATA,
-                    status = status.HTTP_400_BAD_REQUEST
-                )
-
-            
-
-            if is_existed:
-                return HttpResponse.response(data={}, message='existed', status=status.HTTP_200_OK)
 
             following_obj = Following.objects.create(
                 _id = ObjectId(),

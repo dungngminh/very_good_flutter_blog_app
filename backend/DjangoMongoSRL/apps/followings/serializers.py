@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-class FollowViewSerializer(serializers.Serializer):
-    _id = serializers.CharField()
-    sender = serializers.CharField()
-    receiver = serializers.CharField()
+class FollowingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Following
+        field = ('id_follow', 'following', 'follower')
