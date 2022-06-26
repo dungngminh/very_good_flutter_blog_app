@@ -37,3 +37,13 @@ class UserViewSerializer(serializers.Serializer):
     first_name = serializers.CharField(required=False)
     _id = serializers.CharField(required=True)
     avatar = serializers.CharField()
+    follower_count = serializers.IntegerField()
+    following_count = serializers.IntegerField()
+    num_blog = serializers.IntegerField()
+
+class UserViewPutSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
+    _id = serializers.CharField(required=True)
+    avatar = serializers.CharField()

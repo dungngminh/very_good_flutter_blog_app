@@ -11,6 +11,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=500)
     last_name = models.CharField(max_length=100)
     avatar = models.CharField(max_length=1000)
+    device_token = models.CharField(max_length=10000, default='')
     num_blog = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

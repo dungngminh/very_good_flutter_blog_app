@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from apps.utils.database import mongo_extension
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -17,5 +17,9 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+def load_db():
+    mongo_extension.load_client()
+
 if __name__ == '__main__':
     main()
+    load_db()
