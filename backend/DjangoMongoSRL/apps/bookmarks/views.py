@@ -9,35 +9,54 @@ from ..blogs.models import Blog
 from .serializers import BookmarkSerializer
 from ..users import serializers
 from ..blogs import serializers
+from asyncio.log import logger
+from bson import ObjectId
+from apps.utils.response import ResponseMessage
+from apps.utils.response import HttpResponse
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+from apps.utils.jwt import JsonWebTokenHelper
+from apps.utils.database import mongo_extension
+from .serializers import BookmarkBodySerializer
+from .models import Boorkmark
+from datetime import datetime, timedelta
+
 class BookmarksView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = BookmarkSerializer
     
-    def get(self, request, *args, **kwargs):
-        bookmark_model = models.Boorkmark.objects
-        
+    def post(self, request, *a, **b):
         try:
-            if "id" in request.query_params:
-                bookmark_model = bookmark_model.filter(id=request.query_params["id"])
-                
-            if "user_id" in request.query_params:
-                bookmark_model = bookmark_model.filter(user_id=request.query_params["user_id"])
-                
-            if "blog_id" in request.query_params:
-                bookmark_model = bookmark_model.filter(blog_id=request.query_params["blog_id"])
-                
-            if "created_at" in request.query_params:
-                bookmark_model = bookmark_model.filter(created_at=request.query_params["created_at"])
-                
-            if "updated_at" in request.query_params:
-                bookmark_model = bookmark_model.filter(updated_at=request.query_params["updated_at"])
-                
-            serializer = BookmarkSerializer(bookmark_model, many=True)
-            return Response(serializer.data)
-            
+            payload = JsonWebTokenHelper.decode(request.META['HTTP_AUTHORIZATION'])
+
+            if not payload:
+                return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                id = payload['_id']
+                user = self.database.users_user.find_one({ '_id': ObjectId(id) })
+                if not user:
+                    return HttpResponse.response(data={}, message=ResponseMessage.UNAUTHORIZED, status=status.HTTP_401_UNAUTHORIZED)
+                serializer = BookmarkBodySerializer(data = request.data)
+
+                if serializer.is_valid(raise_exception=True):
+                    print({ 'user_id': type(id), 'blog_id': type(serializer.data['blog_id']) })
+                    is_existed = self.database.bookmarks_boorkmark.find_one({ 'user_id': id, 'blog_id': serializer.data['blog_id'] })
+
+                    if is_existed:
+                        return HttpResponse.response(data = {}, message=ResponseMessage.DUPLICATED, status=status.HTTP_400_BAD_REQUEST)
+
+                    bookmark = Boorkmark.objects.create(
+                        _id = ObjectId(),
+                        user_id = id,
+                        blog_id = serializer.data['blog_id'] 
+                    )
+                    bookmark.save()
+                    return HttpResponse.response(data={}, message=ResponseMessage.SUCCESS, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            logger.error(e)
+            return HttpResponse.response(data={}, message=ResponseMessage.INTERNAL_SERVER_ERROR, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
     def add(self, request):
         data = request.data
