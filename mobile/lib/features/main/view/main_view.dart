@@ -35,6 +35,21 @@ class _MainViewState extends State<MainView> {
       listener: (context, state) {
         if (state.status == AuthenticationStatus.unauthenticated) {
           context.go(AppRoute.login);
+        } else if (state.status == AuthenticationStatus.authenticatedOffline) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Builder(
+                  builder: (context) {
+                    return const Text(
+                      'Hiện tại bạn đã offline, '
+                      'nhưng bạn có thể xem những blog đã lưu',
+                    );
+                  },
+                ),
+              ),
+            );
         }
       },
       child: MultiBlocProvider(

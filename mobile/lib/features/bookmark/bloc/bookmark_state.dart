@@ -2,7 +2,7 @@ part of 'bookmark_bloc.dart';
 
 enum GetBookmarkStatus { initial, loading, done, error }
 
-enum ActionBookmarkStatus { initial, loading, done, error }
+enum ActionBookmarkStatus { initial, loading, addDone, error, removeDone }
 
 class BookmarkState extends Equatable {
   const BookmarkState({

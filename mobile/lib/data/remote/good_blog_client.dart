@@ -37,7 +37,7 @@ class GoodBlogClient {
 
   Future<T> delete<T>(
     String path, {
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) async {
     try {

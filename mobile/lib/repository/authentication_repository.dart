@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/app/config/config.dart';
 import 'package:very_good_blog_app/data/data.dart';
 
 enum AuthenticationStatus {
   unknown,
   authenticated,
+  authenticatedOffline,
   unauthenticated,
   successfullyRegistered,
   existed,
@@ -33,7 +35,12 @@ class AuthenticationRepository {
     if (token == null) {
       yield AuthenticationStatus.unauthenticated;
     } else {
-      yield AuthenticationStatus.authenticated;
+      final isHasInternet = await ConnectivityHelper.isInternetOnline();
+      if (isHasInternet) {
+        yield AuthenticationStatus.authenticated;
+      } else {
+        yield AuthenticationStatus.authenticatedOffline;
+      }
     }
     // yield AuthenticationStatus.authenticated;
     yield* _controller.stream;
@@ -111,5 +118,7 @@ class AuthenticationRepository {
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void dispose() => _controller.close();
+  void dispose() {
+    _controller.close();
+  }
 }

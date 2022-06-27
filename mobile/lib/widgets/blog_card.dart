@@ -24,11 +24,13 @@ class BlogCard extends StatelessWidget {
     required this.blog,
     this.needMargin = false,
     this.enableBookmarkButton = false,
+    this.isOffline = false,
   });
 
   final BlogModel blog;
   final bool enableBookmarkButton;
   final bool needMargin;
+  final bool isOffline;
 
   /// This setting for order of content display from top to bottom
   ///
@@ -46,15 +48,21 @@ class BlogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push(
-        AppRoute.blog,
-        extra: ExtraParams4<BlogModel, ProfileBloc, BlogBloc, BookmarkBloc>(
-          param1: blog,
-          param2: context.read<ProfileBloc>(),
-          param3: context.read<BlogBloc>(),
-          param4: context.read<BookmarkBloc>(),
-        ),
-      ),
+      onTap: isOffline
+          ? () => context.push(
+                '${context.currentLocation}/${AppRoute.offlineBlog}',
+                extra: blog,
+              )
+          : () => context.push(
+                AppRoute.blog,
+                extra: ExtraParams4<BlogModel, ProfileBloc, BlogBloc,
+                    BookmarkBloc>(
+                  param1: blog,
+                  param2: context.read<ProfileBloc>(),
+                  param3: context.read<BlogBloc>(),
+                  param4: context.read<BookmarkBloc>(),
+                ),
+              ),
       child: Container(
         // height: 135,
         padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),

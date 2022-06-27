@@ -1,12 +1,13 @@
-import 'dart:math' as math;
-
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/features/profile/bloc/profile_bloc.dart';
+import 'package:very_good_blog_app/features/blog/blog.dart' hide LikeBlogStatus;
+import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class ProfileView extends StatelessWidget {
@@ -18,15 +19,9 @@ class ProfileView extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.profileStatus != current.profileStatus,
       listener: (context, state) {
-        if (state.profileStatus == ProfileStatus.loading) {
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(msg: 'Đang cập nhật dữ liệu');
-        } else if (state.profileStatus == ProfileStatus.error) {
+        if (state.profileStatus == ProfileStatus.error) {
           Fluttertoast.cancel();
           Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
-        } else if (state.profileStatus == ProfileStatus.done) {
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(msg: 'Cập nhật dữ liệu thành công');
         }
       },
       child: Builder(
@@ -34,6 +29,7 @@ class ProfileView extends StatelessWidget {
           final userBlogsLength = context.select(
             (ProfileBloc profileBloc) => profileBloc.state.userBlogs.length,
           );
+
           return DraggableHome(
             title: const _TitleTile(),
             actions: const [
@@ -81,8 +77,6 @@ class ProfileView extends StatelessWidget {
     );
   }
 }
-
-
 
 class _TitleTile extends StatelessWidget {
   const _TitleTile();
@@ -457,37 +451,53 @@ class _BlogPanelState extends State<_BlogPanel> {
             ],
           ),
         ),
-        Builder(
-          builder: (context) {
-            final userBlogs = context.watch<ProfileBloc>().state.userBlogs;
-            if (userBlogs.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 32),
-                child: Center(
-                  child: Text('Bạn chưa có blog nào'),
+        ValueListenableBuilder<int>(
+          valueListenable: _currentTabIndex,
+          builder: (context, index, child) {
+            return LazyLoadIndexedStack(
+              index: index,
+              children: [
+                Builder(
+                  builder: (context) {
+                    final userBlogs =
+                        context.watch<ProfileBloc>().state.userBlogs;
+                    if (userBlogs.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: Center(
+                          child: Text('Bạn chưa có blog nào'),
+                        ),
+                      );
+                    }
+                    return ListView.separated(
+                      padding: const EdgeInsets.only(
+                        bottom: 40,
+                        left: 24,
+                        right: 24,
+                      ),
+                      itemCount: userBlogs.length,
+                      primary: false,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final blog = userBlogs[index];
+                        return BlogCard(
+                          blog: blog,
+                          cardType: CardType.titleStatsTime,
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: 16,
+                        );
+                      },
+                    );
+                  },
                 ),
-              );
-            }
-            return ListView.separated(
-              padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
-              itemCount: userBlogs.length,
-              primary: false,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final blog = userBlogs[index];
-                return BlogCard(
-                  blog: blog,
-                  cardType: CardType.titleStatsTime,
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 16,
-                );
-              },
+                const _BuildLikedBlogList(),
+              ],
             );
           },
-        ),
+        )
       ],
     );
   }
@@ -530,6 +540,88 @@ class _BlogPanelState extends State<_BlogPanel> {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class _BuildLikedBlogList extends StatelessWidget {
+  const _BuildLikedBlogList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        final userLikedBlogs =
+            context.watch<ProfileBloc>().state.userLikedBlogs;
+        final likedBlogStatus = context.select(
+          (ProfileBloc profileBloc) => profileBloc.state.likeBlogStatus,
+        );
+        final listCurrentBlog = context.watch<BlogBloc>().state.blogs;
+        final listLikedBLogs = listCurrentBlog
+            .where(
+              (blog) => userLikedBlogs.any((likedBlog) => likedBlog == blog.id),
+            )
+            .toList();
+        if (likedBlogStatus == LikeBlogStatus.loading) {
+          return ListView.separated(
+            padding: const EdgeInsets.only(
+              bottom: 40,
+              left: 24,
+              right: 24,
+            ),
+            itemCount: 3,
+            physics: const NeverScrollableScrollPhysics(),
+            primary: false,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return const BlogCardPlaceholder();
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(
+                height: 16,
+              );
+            },
+          );
+        }
+        if (likedBlogStatus == LikeBlogStatus.error) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: Center(
+              child: Text('Đã có lỗi xảy ra vui lòng thử lại'),
+            ),
+          );
+        }
+        if (userLikedBlogs.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: Center(
+              child: Text('Bạn chưa thích blog nào'),
+            ),
+          );
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.only(
+            bottom: 40,
+            left: 24,
+            right: 24,
+          ),
+          itemCount: listLikedBLogs.length,
+          primary: false,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            final blog = listLikedBLogs[index];
+            return BlogCard(
+              blog: blog,
+              cardType: CardType.titleStatsTime,
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(
+              height: 16,
+            );
+          },
         );
       },
     );

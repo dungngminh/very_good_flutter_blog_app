@@ -42,16 +42,13 @@ class PopularBlogCard extends StatelessWidget {
           children: [
             CachedNetworkImage(
               imageUrl: blog.imageUrl,
-              imageBuilder: (context, imageProvider) => Hero(
-                tag: blog.imageUrl,
-                child: Container(
-                  width: context.screenHeight * 0.35,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
+              imageBuilder: (context, imageProvider) => Container(
+                width: context.screenHeight * 0.35,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

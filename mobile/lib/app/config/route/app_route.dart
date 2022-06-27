@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
+import 'package:very_good_blog_app/features/blog/view/blog_view_offline.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
 import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
@@ -20,8 +21,10 @@ class AppRoute {
   static const editProfile = 'edit-profile';
   static const blogEditor = '/editor';
   static const blog = '/blog';
+  static const bookmarkOffline = '/bookmark-off';
   static const uploadBlog = 'upload';
   static const previewBlog = 'preview';
+  static const offlineBlog = 'blog-off';
 
   static final route = GoRouter(
     routes: [
@@ -48,6 +51,23 @@ class AppRoute {
         builder: (context, state) {
           return const RegisterView();
         },
+      ),
+      GoRoute(
+        path: bookmarkOffline,
+        builder: (context, state) {
+          return const BookmarkPageOffline();
+        },
+        routes: [
+          GoRoute(
+            path: offlineBlog,
+            builder: (context, state) {
+              final blog = state.extra as BlogModel?;
+              return BlogViewOffline(
+                blog: blog!,
+              );
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: setting,

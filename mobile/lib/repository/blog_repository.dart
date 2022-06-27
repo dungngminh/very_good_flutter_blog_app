@@ -180,12 +180,37 @@ class BlogRepository {
 
   Future<void> likeBlog(String blogId) async {
     try {
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       await _blogClient.post(
-        '/blogs',
+        '/likes',
         body: <String, dynamic>{
           'blog_id': blogId,
         },
-        headers: <String, String>{'Content-Type': 'application/json'},
+        headers: <String, String>{
+          'Authorization': token!,
+          'Content-Type': 'application/json'
+        },
+      );
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> unlikeBlog(String blogId) async {
+    try {
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
+      await _blogClient.delete(
+        '/likes',
+        body: <String, dynamic>{
+          'blog_id': blogId,
+        },
+        headers: <String, String>{
+          'Authorization': token!,
+          'Content-Type': 'application/json'
+        },
       );
     } catch (e) {
       log(e.toString());
@@ -194,23 +219,45 @@ class BlogRepository {
   }
 
   Future<List<BlogModel>> getBlogsByUserId(String userId) async {
-    // try {
-    final jsonBody = await _blogClient.get(
-      '/blogs',
-      queryParams: <String, dynamic>{
-        'author_id': userId,
-      },
-    ) as List;
-    final blogs = jsonBody
-        .map(
-          (e) => BlogModel.fromJson(e as Map<String, dynamic>),
-        )
-        .toList();
-    return blogs;
-    // } catch (e) {
-    //   log(e.toString());
-    //   rethrow;
-    // }
+    try {
+      final jsonBody = await _blogClient.get(
+        '/blogs',
+        queryParams: <String, dynamic>{
+          'author_id': userId,
+        },
+      ) as List;
+      final blogs = jsonBody
+          .map(
+            (e) => BlogModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+      return blogs;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<List<String>> getLikedBlog() async {
+    try {
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
+      final jsonBody = await _blogClient.get(
+        '/likes',
+        headers: <String, String>{
+          'Authorization': token!,
+        },
+      ) as List;
+      final blogs = jsonBody
+          .map(
+            (e) => (e as Map<String, dynamic>)['blog_id'] as String,
+          )
+          .toList();
+      return blogs;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   Future<void> addBlogToBookmark(BlogModel blog) async {

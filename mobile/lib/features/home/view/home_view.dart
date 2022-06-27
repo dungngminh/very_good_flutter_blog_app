@@ -6,6 +6,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
+import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
 import 'package:very_good_blog_app/features/home/widget/widget.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
@@ -16,13 +17,35 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BlogBloc, BlogState>(
-      listener: (context, state) {
-        if (state.getBlogStatus == GetBlogStatus.error) {
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BlogBloc, BlogState>(
+          listener: (context, state) {
+            if (state.getBlogStatus == GetBlogStatus.error) {
+              Fluttertoast.cancel();
+              Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
+            }
+          },
+        ),
+        BlocListener<BookmarkBloc, BookmarkState>(
+          listenWhen: (previous, current) =>
+              previous.actionBookmarkStatus != current.actionBookmarkStatus,
+          listener: (context, state) {
+            if (state.actionBookmarkStatus == ActionBookmarkStatus.addDone) {
+              Fluttertoast.cancel();
+              Fluttertoast.showToast(
+                msg: 'Đã thêm vào danh sách đã lưu',
+              );
+            }
+            if (state.actionBookmarkStatus == ActionBookmarkStatus.removeDone) {
+              Fluttertoast.cancel();
+              Fluttertoast.showToast(
+                msg: 'Đã xóa khỏi danh sách đã lưu',
+              );
+            }
+          },
+        ),
+      ],
       child: TapHideKeyboard(
         child: Scaffold(
           body: RefreshIndicator(
@@ -204,7 +227,7 @@ class _PopularBlogList extends StatelessWidget {
               : ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   scrollDirection: Axis.horizontal,
-                  itemCount: state.filterBlogs.length,
+                  itemCount: 4,
                   itemBuilder: (context, index) {
                     final blog = state.filterBlogs.elementAt(index);
 

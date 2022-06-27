@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
@@ -161,20 +163,59 @@ class _ImagePlacer extends StatelessWidget {
             return Stack(
               alignment: Alignment.topRight,
               children: [
-                Container(
-                  height: 190,
-                  width: context.screenWidth,
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: isImageUploaded
-                          ? Image.network(pickedImage).image
-                          : Image.file(File(pickedImage)).image,
-                      fit: BoxFit.fill,
+                if (isImageUploaded)
+                  CachedNetworkImage(
+                    imageUrl: pickedImage,
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: context.screenHeight / 3.8,
+                      margin: const EdgeInsets.only(top: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        Shimmer.fromColors(
+                      baseColor: AppPalette.shimmerBaseColor,
+                      highlightColor: AppPalette.shimmerHighlightColor,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 16),
+                        height: context.screenHeight / 3.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: AppPalette.whiteBackgroundColor,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: context.screenHeight / 3.8,
+                      margin: const EdgeInsets.only(top: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: Assets.images.blankImage.image().image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    cacheManager: AppCacheManager.customCacheManager,
+                  )
+                else
+                  Container(
+                    height: 190,
+                    width: context.screenWidth,
+                    margin: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: Image.file(File(pickedImage)).image,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
                 Positioned(
                   top: 16,
                   right: 8,
