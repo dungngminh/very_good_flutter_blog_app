@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:very_good_blog_app/app/app.dart';
 
 import 'package:very_good_blog_app/models/models.dart' show UserModel;
 
@@ -20,7 +21,7 @@ class BlogModel extends Equatable {
   });
 
   const BlogModel.preview({
-    this.id = 'preview',
+    this.id = AppContants.previewBlogId,
     required this.title,
     this.likeCount = 0,
     required this.imageUrl,
@@ -49,7 +50,7 @@ class BlogModel extends Equatable {
   Map<String, dynamic> toJson() => _$BlogModelToJson(this);
 
   static DateTime _fromJson(int timestamp) =>
-      DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+      DateTime.fromMillisecondsSinceEpoch(timestamp * 1000, isUtc: true);
   static int _toJson(DateTime time) => time.millisecondsSinceEpoch;
 
   @override

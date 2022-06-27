@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
@@ -33,7 +34,22 @@ class _MainViewState extends State<MainView> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.unauthenticated) {
-          context.go('/login');
+          context.go(AppRoute.login);
+        } else if (state.status == AuthenticationStatus.authenticatedOffline) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Builder(
+                  builder: (context) {
+                    return const Text(
+                      'Hiện tại bạn đã offline, '
+                      'nhưng bạn có thể xem những blog đã lưu',
+                    );
+                  },
+                ),
+              ),
+            );
         }
       },
       child: MultiBlocProvider(
@@ -51,12 +67,17 @@ class _MainViewState extends State<MainView> {
               blogRepository: context.read<BlogRepository>(),
             ),
           ),
+          BlocProvider<BookmarkBloc>(
+            create: (context) => BookmarkBloc(
+              bookmarkRepository: context.read<BookmarkRepository>(),
+            ),
+          ),
         ],
         child: Scaffold(
           body: ValueListenableBuilder<int>(
             valueListenable: _currentIndex,
             builder: (context, value, child) {
-              return IndexedStack(
+              return LazyLoadIndexedStack(
                 index: value,
                 children: const [
                   HomeView(),

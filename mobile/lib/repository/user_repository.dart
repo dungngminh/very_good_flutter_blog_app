@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/data/firebase/storage_firebase_service.dart';
 import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
 import 'package:very_good_blog_app/models/models.dart';
@@ -44,7 +44,8 @@ class UserRepository {
           file: File(imagePath),
         );
       }
-      final token = await SecureStorageHelper.getValueByKey('jwt');
+      final token =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
       final body = <String, String>{
         'first_name': firstName,
         'last_name': lastName,

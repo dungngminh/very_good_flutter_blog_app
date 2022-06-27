@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/blog.dart';
-import 'package:very_good_blog_app/features/home/home.dart';
+import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
+import 'package:very_good_blog_app/features/home/widget/widget.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class HomeView extends StatelessWidget {
@@ -14,22 +17,35 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BlogBloc, BlogState>(
-      listenWhen: (previous, current) {
-        return previous.blogs != current.blogs;
-      },
-      listener: (context, state) {
-        if (state.getBlogStatus == GetBlogStatus.loading) {
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(msg: 'Đang cập nhật dữ liệu bài viết');
-        } else if (state.getBlogStatus == GetBlogStatus.error) {
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
-        } else if (state.getBlogStatus == GetBlogStatus.done) {
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(msg: 'Cập nhật dữ liệu thành công');
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BlogBloc, BlogState>(
+          listener: (context, state) {
+            if (state.getBlogStatus == GetBlogStatus.error) {
+              Fluttertoast.cancel();
+              Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
+            }
+          },
+        ),
+        BlocListener<BookmarkBloc, BookmarkState>(
+          listenWhen: (previous, current) =>
+              previous.actionBookmarkStatus != current.actionBookmarkStatus,
+          listener: (context, state) {
+            if (state.actionBookmarkStatus == ActionBookmarkStatus.addDone) {
+              Fluttertoast.cancel();
+              Fluttertoast.showToast(
+                msg: 'Đã thêm vào danh sách đã lưu',
+              );
+            }
+            if (state.actionBookmarkStatus == ActionBookmarkStatus.removeDone) {
+              Fluttertoast.cancel();
+              Fluttertoast.showToast(
+                msg: 'Đã xóa khỏi danh sách đã lưu',
+              );
+            }
+          },
+        ),
+      ],
       child: TapHideKeyboard(
         child: Scaffold(
           body: RefreshIndicator(
@@ -65,7 +81,7 @@ class HomeView extends StatelessWidget {
                       } else if (currentCategory != 'Tất cả' &&
                           isSearching == false) {
                         return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const _CategoryChoiceBar(),
@@ -120,12 +136,24 @@ class _MoreBlogList extends StatelessWidget {
           previous.getBlogStatus != current.getBlogStatus,
       builder: (context, state) {
         if (state.getBlogStatus == GetBlogStatus.loading) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 32),
-            child: Center(
-              child: CircularProgressIndicator(
-                color: AppPalette.primaryColor,
+          return Shimmer.fromColors(
+            baseColor: AppPalette.shimmerBaseColor,
+            highlightColor: AppPalette.shimmerHighlightColor,
+            child: ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(
+                bottom: 36,
+                // left: 24,
+                // right: 24,
               ),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return const BlogCardPlaceholder(
+                  needMargin: true,
+                );
+              },
             ),
           );
         } else if (state.getBlogStatus == GetBlogStatus.error) {
@@ -173,10 +201,19 @@ class _PopularBlogList extends StatelessWidget {
             previous.filterBlogs != current.filterBlogs,
         builder: (context, state) {
           if (state.getBlogStatus == GetBlogStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppPalette.primaryColor,
-              ),
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return const ShimmerPopularBlogCard();
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  width: 16,
+                );
+              },
             );
           } else if (state.getBlogStatus == GetBlogStatus.error) {
             return Center(
@@ -190,9 +227,10 @@ class _PopularBlogList extends StatelessWidget {
               : ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   scrollDirection: Axis.horizontal,
-                  itemCount: state.filterBlogs.length,
+                  itemCount: 4,
                   itemBuilder: (context, index) {
                     final blog = state.filterBlogs.elementAt(index);
+
                     return PopularBlogCard(
                       blog: blog,
                     );

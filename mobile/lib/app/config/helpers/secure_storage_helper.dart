@@ -3,6 +3,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 abstract class SecureStorageHelper {
   static const _storage = FlutterSecureStorage();
 
+  static const jwt = 'jwt';
+  static const userId = 'id';
+
   static Future<String?> getValueByKey(String key) {
     return _storage.read(key: key);
   }

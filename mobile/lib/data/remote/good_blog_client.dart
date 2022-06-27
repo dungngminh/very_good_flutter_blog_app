@@ -26,7 +26,7 @@ class GoodBlogClient {
       log(uri.toString());
 
       final response = await _client.get(uri, headers: headers).timeout(
-            Constant.timeOutDuration,
+            AppContants.timeOutDuration,
             onTimeout: () => throw TimeoutException('Ah shjt timeout'),
           );
       return _returnResponseResult(response);
@@ -37,6 +37,7 @@ class GoodBlogClient {
 
   Future<T> delete<T>(
     String path, {
+    Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) async {
     try {
@@ -46,8 +47,10 @@ class GoodBlogClient {
       );
       log(uri.toString());
 
-      final response = await _client.delete(uri, headers: headers).timeout(
-            Constant.timeOutDuration,
+      final response = await _client
+          .delete(uri, headers: headers, body: jsonEncode(body))
+          .timeout(
+            AppContants.timeOutDuration,
             onTimeout: () => throw TimeoutException('Ah shjt timeout'),
           );
       return _returnResponseResult(response);
@@ -74,7 +77,7 @@ class GoodBlogClient {
             headers: headers,
           )
           .timeout(
-            Constant.timeOutDuration,
+            AppContants.timeOutDuration,
             onTimeout: () => throw TimeoutException('Ah shjt timeout'),
           );
       return _returnResponseResult(response);
@@ -105,7 +108,7 @@ class GoodBlogClient {
             headers: headers,
           )
           .timeout(
-            Constant.timeOutDuration,
+            AppContants.timeOutDuration,
             onTimeout: () => throw TimeoutException('Ah shjt timeout'),
           );
       return _returnResponseResult(response);

@@ -9,6 +9,8 @@ abstract class ProfileEvent extends Equatable {
 
 class ProfileGetUserInformation extends ProfileEvent {}
 
+class ProfileGetLikedBlogs extends ProfileEvent {}
+
 class ProfileConfirmEditInformation extends ProfileEvent {}
 
 class ProfileUserLogoutRequested extends ProfileEvent {}

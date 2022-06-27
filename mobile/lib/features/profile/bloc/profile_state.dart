@@ -2,25 +2,29 @@ part of 'profile_bloc.dart';
 
 enum ProfileStatus { initial, loading, done, error }
 
-enum DeleteStatus { initial, loading, done, error }
+enum DeleteBlogStatus { initial, loading, done, error }
+
+enum LikeBlogStatus { initial, loading, done, error }
 
 class ProfileState extends Equatable {
   const ProfileState({
     this.user,
     this.messageError = '',
     this.profileStatus = ProfileStatus.initial,
-    this.deleteStatus = DeleteStatus.initial,
+    this.deleteStatus = DeleteBlogStatus.initial,
+    this.likeBlogStatus = LikeBlogStatus.initial,
     this.userBlogs = const <BlogModel>[],
-    this.userLikedBlogs = const <BlogModel>[],
+    this.userLikedBlogs = const <String>[],
     this.imagePath = '',
   });
 
   final UserModel? user;
   final String messageError;
   final ProfileStatus profileStatus;
-  final DeleteStatus deleteStatus;
+  final DeleteBlogStatus deleteStatus;
+  final LikeBlogStatus likeBlogStatus;
   final List<BlogModel> userBlogs;
-  final List<BlogModel> userLikedBlogs;
+  final List<String> userLikedBlogs;
   final String imagePath;
 
   @override
@@ -30,6 +34,7 @@ class ProfileState extends Equatable {
         profileStatus,
         userBlogs,
         deleteStatus,
+        likeBlogStatus,
         userLikedBlogs,
         imagePath,
       ];
@@ -38,9 +43,10 @@ class ProfileState extends Equatable {
     UserModel? user,
     String? messageError,
     ProfileStatus? profileStatus,
-    DeleteStatus? deleteStatus,
+    DeleteBlogStatus? deleteStatus,
+    LikeBlogStatus? likeBlogStatus,
     List<BlogModel>? userBlogs,
-    List<BlogModel>? userLikedBlogs,
+    List<String>? userLikedBlogs,
     String? imagePath,
   }) {
     return ProfileState(
@@ -48,6 +54,7 @@ class ProfileState extends Equatable {
       messageError: messageError ?? this.messageError,
       profileStatus: profileStatus ?? this.profileStatus,
       deleteStatus: deleteStatus ?? this.deleteStatus,
+      likeBlogStatus: likeBlogStatus ?? this.likeBlogStatus,
       userBlogs: userBlogs ?? this.userBlogs,
       userLikedBlogs: userLikedBlogs ?? this.userLikedBlogs,
       imagePath: imagePath ?? this.imagePath,

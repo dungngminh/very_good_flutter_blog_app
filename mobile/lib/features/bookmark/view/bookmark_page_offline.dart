@@ -4,11 +4,30 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
+import 'package:very_good_blog_app/repository/repository.dart';
 import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
-class BookmarkView extends StatelessWidget {
-  const BookmarkView({super.key});
+class BookmarkPageOffline extends StatelessWidget {
+  const BookmarkPageOffline({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => BookmarkBloc(
+            bookmarkRepository: context.read<BookmarkRepository>(),
+          ),
+        ),
+      ],
+      child: const BookmarkViewOffline(),
+    );
+  }
+}
+
+class BookmarkViewOffline extends StatelessWidget {
+  const BookmarkViewOffline({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,28 +42,12 @@ class BookmarkView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 24, right: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Danh sách bài viết đã lưu',
+                children: const [
+                  Text(
+                    'Bạn đang ở chế độ Offline\n'
+                    'Danh sách bài viết đã lưu ở máy',
                     style: AppTextTheme.darkW700TextStyle,
                   ),
-                  Builder(
-                    builder: (context) {
-                      final getBookmarkStatus = context.select(
-                        (BookmarkBloc bookmarkBloc) =>
-                            bookmarkBloc.state.getBookmarkStatus,
-                      );
-                      return RotateIconButton(
-                        icon: Assets.icons.refresh
-                            .svg(height: 26, color: AppPalette.primaryColor),
-                        onPressed: () => context
-                            .read<BookmarkBloc>()
-                            .add(BookmarkFetching()),
-                        isLoading:
-                            getBookmarkStatus == GetBookmarkStatus.loading,
-                      );
-                    },
-                  )
                 ],
               ),
             ),
@@ -119,6 +122,7 @@ class _BookmarkList extends StatelessWidget {
                       child: BlogCard(
                         needMargin: true,
                         blog: blog,
+                        isOffline: true,
                       ),
                     );
                   },

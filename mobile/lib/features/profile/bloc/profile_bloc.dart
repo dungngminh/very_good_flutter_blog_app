@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:very_good_blog_app/app/config/helpers/image_picker_helper.dart';
-import 'package:very_good_blog_app/app/config/helpers/secure_storage_helper.dart';
+import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
@@ -22,10 +21,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         super(const ProfileState()) {
     on<ProfileGetUserInformation>(_onGetUserInformation);
     on<ProfileUserLogoutRequested>(_onUserRequestedLogout);
+    on<ProfileGetLikedBlogs>(_onGetLikedBlogs);
     on<ProfileConfirmEditInformation>(_onConfirmEditUserInformation);
     on<ProfileAvatarButtonPressed>(_onAvatarButtonPressed);
     on<ProfileOnLongPressedBlog>(_onBlogLongPressed);
     add(ProfileGetUserInformation());
+    add(ProfileGetLikedBlogs());
   }
 
   final UserRepository _userRepository;
@@ -37,14 +38,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     try {
-      emit(state.copyWith(deleteStatus: DeleteStatus.loading));
+      emit(state.copyWith(deleteStatus: DeleteBlogStatus.loading));
       await _blogRepository.deleteBlog(event.blog);
-      emit(state.copyWith(deleteStatus: DeleteStatus.done));
+      emit(state.copyWith(deleteStatus: DeleteBlogStatus.done));
       add(ProfileGetUserInformation());
     } catch (e) {
       emit(
         state.copyWith(
-          deleteStatus: DeleteStatus.error,
+          deleteStatus: DeleteBlogStatus.error,
           messageError: e.toString(),
         ),
       );
@@ -57,9 +58,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) async {
     try {
       emit(state.copyWith(profileStatus: ProfileStatus.loading));
-      final userId = await SecureStorageHelper.getValueByKey('id');
+      final userId =
+          await SecureStorageHelper.getValueByKey(SecureStorageHelper.userId);
       final user = await _userRepository.getUserInformationByUserId(userId!);
       final userBlogs = await _blogRepository.getBlogsByUserId(userId);
+      add(ProfileGetLikedBlogs());
       emit(
         state.copyWith(
           user: user,
@@ -72,6 +75,29 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         state.copyWith(
           messageError: e.toString(),
           profileStatus: ProfileStatus.error,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onGetLikedBlogs(
+    ProfileGetLikedBlogs event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(likeBlogStatus: LikeBlogStatus.loading));
+      final userLikesBlog = await _blogRepository.getLikedBlog();
+      emit(
+        state.copyWith(
+          likeBlogStatus: LikeBlogStatus.done,
+          userLikedBlogs: userLikesBlog,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          messageError: e.toString(),
+          likeBlogStatus: LikeBlogStatus.loading,
         ),
       );
     }

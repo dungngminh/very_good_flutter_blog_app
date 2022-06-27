@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/data/remote/good_blog_client.dart';
+import 'package:very_good_blog_app/app/config/config.dart';
+import 'package:very_good_blog_app/data/data.dart';
 
 enum AuthenticationStatus {
   unknown,
   authenticated,
+  authenticatedOffline,
   unauthenticated,
   successfullyRegistered,
   existed,
@@ -16,20 +18,29 @@ enum AuthenticationStatus {
 class AuthenticationRepository {
   AuthenticationRepository({
     required GoodBlogClient blogClient,
-  }) : _blogClient = blogClient;
+    required BookmarkLocalBox bookmarkLocalBox,
+  })  : _blogClient = blogClient,
+        _bookmarkLocalBox = bookmarkLocalBox;
 
   final GoodBlogClient _blogClient;
+  final BookmarkLocalBox _bookmarkLocalBox;
 
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
-    final token = await SecureStorageHelper.getValueByKey('jwt');
+    final token =
+        await SecureStorageHelper.getValueByKey(SecureStorageHelper.jwt);
     log('token $token');
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 2));
     if (token == null) {
       yield AuthenticationStatus.unauthenticated;
     } else {
-      yield AuthenticationStatus.authenticated;
+      final isHasInternet = await ConnectivityHelper.isInternetOnline();
+      if (isHasInternet) {
+        yield AuthenticationStatus.authenticated;
+      } else {
+        yield AuthenticationStatus.authenticatedOffline;
+      }
     }
     // yield AuthenticationStatus.authenticated;
     yield* _controller.stream;
@@ -101,10 +112,13 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    await SecureStorageHelper.deleteValueFromKey('jwt');
-    await SecureStorageHelper.deleteValueFromKey('id');
+    await SecureStorageHelper.deleteValueFromKey(SecureStorageHelper.jwt);
+    await SecureStorageHelper.deleteValueFromKey(SecureStorageHelper.userId);
+    await _bookmarkLocalBox.deleteAll();
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void dispose() => _controller.close();
+  void dispose() {
+    _controller.close();
+  }
 }

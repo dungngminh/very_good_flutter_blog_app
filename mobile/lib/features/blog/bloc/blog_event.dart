@@ -40,6 +40,17 @@ class BlogLikePressed extends BlogEvent {
   List<Object?> get props => [id];
 }
 
+class BlogUnlikePressed extends BlogEvent {
+  const BlogUnlikePressed({
+    required this.id,
+  });
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
 class BlogAddToBookmarkPressed extends BlogEvent {
   const BlogAddToBookmarkPressed({
     required this.blog,

@@ -15,7 +15,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
         super(const BlogState()) {
     on<BlogGetBlogs>(_onGetBlogs);
     on<BlogLikePressed>(_onLikePressed);
-    on<BlogCardPressed>(_onBlogCardPressed);
+    on<BlogUnlikePressed>(_onUnlikePressed);
     on<BlogCategoryPressed>(_onCategoryPressed);
     on<BlogSearchChanged>(_onSearchChanged);
     add(const BlogGetBlogs());
@@ -23,14 +23,37 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
 
   final BlogRepository _blogRepository;
 
-
-
   Future<void> _onSearchChanged(
     BlogSearchChanged event,
     Emitter<BlogState> emit,
   ) async {
     try {
       if (event.value.isEmpty) {
+        if (state.category != 'Tất cả') {
+          emit(
+            state.copyWith(
+              getBlogStatus: GetBlogStatus.loading,
+              isSearching: false,
+            ),
+          );
+          await _blogRepository
+              .getBlogsByCategory(
+            state.category,
+            page: event.page,
+          )
+              .then(
+            (blogs) {
+              log(blogs.toString());
+              emit(
+                state.copyWith(
+                  getBlogStatus: GetBlogStatus.done,
+                  filterBlogs: blogs,
+                ),
+              );
+            },
+          );
+          return;
+        }
         emit(
           state.copyWith(
             isSearching: false,
@@ -152,12 +175,43 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
               likeBlogStatus: LikeBlogStatus.done,
             ),
           );
+          add(const BlogGetBlogs());
         },
       );
     } catch (e) {
       emit(
         state.copyWith(
-          getBlogStatus: GetBlogStatus.error,
+          likeBlogStatus: LikeBlogStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onUnlikePressed(
+    BlogUnlikePressed event,
+    Emitter<BlogState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(likeBlogStatus: LikeBlogStatus.loading));
+      await _blogRepository
+          .unlikeBlog(
+        event.id,
+      )
+          .then(
+        (_) {
+          emit(
+            state.copyWith(
+              likeBlogStatus: LikeBlogStatus.done,
+            ),
+          );
+          add(const BlogGetBlogs());
+        },
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          likeBlogStatus: LikeBlogStatus.error,
           errorMessage: e.toString(),
         ),
       );
@@ -194,42 +248,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       emit(
         state.copyWith(
           getBlogStatus: GetBlogStatus.error,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> _onBlogCardPressed(
-    BlogCardPressed event,
-    Emitter<BlogState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(contentBlogStatus: ContentBlogStatus.loading));
-      await _blogRepository
-          .getBlogById(
-        event.blogId,
-      )
-          .then(
-        (data) {
-          final currentBlogs = state.blogs;
-          for (var i = 0; i < currentBlogs.length; i++) {
-            if (currentBlogs[i].id == event.blogId) {
-              currentBlogs[i] = currentBlogs[i].copyWith(content: data.content);
-            }
-          }
-          emit(
-            state.copyWith(
-              contentBlogStatus: ContentBlogStatus.done,
-              blogs: currentBlogs,
-            ),
-          );
-        },
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          contentBlogStatus: ContentBlogStatus.error,
           errorMessage: e.toString(),
         ),
       );

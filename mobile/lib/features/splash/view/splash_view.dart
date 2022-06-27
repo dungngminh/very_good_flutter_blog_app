@@ -17,11 +17,13 @@ class SplashView extends StatelessWidget {
         } else if (state.status == AuthenticationStatus.unauthenticated ||
             state.status == AuthenticationStatus.unknown) {
           context.go(AppRoute.login);
+        } else if (state.status == AuthenticationStatus.authenticatedOffline) {
+          context.go(AppRoute.bookmarkOffline);
         }
       },
       child: Scaffold(
         body: Center(
-          child: Assets.images.veryGood.svg(),
+          child: Assets.images.logo.image(scale: 1.2),
         ),
       ),
     );
