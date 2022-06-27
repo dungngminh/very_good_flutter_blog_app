@@ -53,8 +53,39 @@ class SettingView extends StatelessWidget {
             ),
             SettingTile(
               iconPath: Assets.icons.logOut.path,
-              onTap: () =>
-                  context.read<ProfileBloc>().add(ProfileUserLogoutRequested()),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: const Text('Đăng xuất'),
+                      content:
+                          const Text('Xác nhận đăng xuất Very Good Blog App'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => context
+                              .read<ProfileBloc>()
+                              .add(ProfileUserLogoutRequested()),
+                          child: const Text(
+                            'Đăng xuất',
+                            style: TextStyle(
+                              color: AppPalette.primaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            'Hủy',
+                            style: TextStyle(color: AppPalette.primaryColor),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
               title: 'Đăng xuất',
               primaryColor: AppPalette.primaryColor,
               supportBackgroundColor: AppPalette.purpleSupportColor,

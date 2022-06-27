@@ -48,20 +48,10 @@ class RegisterView extends StatelessWidget {
                 Flexible(
                   flex: 2,
                   child: Center(
-                    child: Container(
+                    child: SizedBox(
                       height: 120,
-                      decoration: const BoxDecoration(
-                        color: AppPalette.purpleSupportColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(90),
-                          topRight: Radius.circular(90),
-                          bottomLeft: Radius.circular(90),
-                        ),
-                      ),
                       child: FittedBox(
-                        child: SvgPicture.asset(
-                          'assets/images/very_good.svg',
-                        ),
+                        child: Assets.images.logo.image(),
                       ),
                     ),
                   ),
