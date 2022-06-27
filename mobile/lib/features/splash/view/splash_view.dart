@@ -23,7 +23,7 @@ class SplashView extends StatelessWidget {
       },
       child: Scaffold(
         body: Center(
-          child: Assets.images.logo.image(scale: 1.2),
+          child: Assets.images.logo.image(height: 250),
         ),
       ),
     );

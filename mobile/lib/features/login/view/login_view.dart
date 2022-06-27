@@ -28,19 +28,11 @@ class LoginView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 120,
                     height: 120,
-                    decoration: const BoxDecoration(
-                      color: AppPalette.purpleSupportColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(90),
-                        topRight: Radius.circular(90),
-                        bottomLeft: Radius.circular(90),
-                      ),
-                    ),
                     child: FittedBox(
-                      child: Assets.images.veryGood.svg(),
+                      child: Assets.images.logo.image(),
                     ),
                   ),
                 ),
@@ -80,7 +72,7 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: context.screenHeight * 0.02,
+                  height: context.screenHeight * 0.06,
                 )
               ],
             ),
