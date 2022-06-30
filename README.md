@@ -2,7 +2,7 @@
 
 [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-blue.svg)](https://flutter.dev/)
 
-![SmartFood Landing](.github/screenshots/landing.png)
+![VeryGoodBlogApp Landing](.github/screenshots/landing.png)
 
 ## Features
 
@@ -15,6 +15,14 @@
 - Flutter & Dart
 - Firebase Storage
 - Django
+
+## Flutter app used
+
+- flutter_bloc for state management
+- Boring layered architecture recommanded by VeryGoodVentures
+- Navigator 2.0 using go_router
+- Service Locator using get_it
+- Image repository using Firebase Storage
 
 ## Setup and run
 
