@@ -5,6 +5,7 @@ abstract class SecureStorageHelper {
 
   static const jwt = 'jwt';
   static const userId = 'id';
+  static const fcmToken = 'fcm';
 
   static Future<String?> getValueByKey(String key) {
     return _storage.read(key: key);

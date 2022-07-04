@@ -23,7 +23,6 @@ class GoodBlogClient {
         '/api/v1$path',
         queryParams,
       );
-      log(uri.toString());
 
       final response = await _client.get(uri, headers: headers).timeout(
             AppContants.timeOutDuration,
@@ -45,7 +44,6 @@ class GoodBlogClient {
         _baseUrl,
         '/api/v1$path',
       );
-      log(uri.toString());
 
       final response = await _client
           .delete(uri, headers: headers, body: jsonEncode(body))
@@ -64,7 +62,6 @@ class GoodBlogClient {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) async {
-    log(body.toString());
     try {
       final uri = Uri.https(
         _baseUrl,
@@ -84,7 +81,6 @@ class GoodBlogClient {
     } on SocketException {
       throw ConnectionExpcetion('No internet connection');
     } catch (e) {
-      log(e.toString());
       throw Exception();
     }
   }
@@ -94,13 +90,11 @@ class GoodBlogClient {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) async {
-    log(body.toString());
     try {
       final uri = Uri.https(
         _baseUrl,
         '/api/v1$path',
       );
-      log(uri.toString());
       final response = await _client
           .put(
             uri,

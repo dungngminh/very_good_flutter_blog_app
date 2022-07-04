@@ -43,7 +43,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
           )
               .then(
             (blogs) {
-              log(blogs.toString());
               emit(
                 state.copyWith(
                   getBlogStatus: GetBlogStatus.done,
@@ -75,7 +74,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       )
           .then(
         (blogs) {
-          log(blogs.toString());
           emit(
             state.copyWith(
               getBlogStatus: GetBlogStatus.done,
@@ -119,9 +117,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
                 filterBlogs: blogs,
               ),
             );
-            log(
-              state.filterBlogs.length.toString(),
-            );
+           
           },
         );
         return;
@@ -139,7 +135,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       )
           .then(
         (blogs) {
-          log(blogs.toString());
           emit(
             state.copyWith(
               getBlogStatus: GetBlogStatus.done,
