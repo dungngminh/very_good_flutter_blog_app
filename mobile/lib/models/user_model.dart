@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 import 'package:very_good_blog_app/models/blog_model.dart';
 
 part 'user_model.g.dart';
@@ -52,6 +51,6 @@ class UserModel extends Equatable {
     ];
   }
 
-  @override
-  bool get stringify => true;
+  // @override
+  // bool get stringify => true; 
 }

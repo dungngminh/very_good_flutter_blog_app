@@ -66,8 +66,8 @@ class BlogModel extends Equatable {
     ];
   }
 
-  @override
-  bool get stringify => true;
+  // @override
+  // bool get stringify => true;
 
   BlogModel copyWith({
     String? id,
