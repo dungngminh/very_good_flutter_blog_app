@@ -19,7 +19,7 @@
 ## Flutter app used
 
 - flutter_bloc for state management
-- Boring layered architecture recommanded by VeryGoodVentures
+- Boring layered architecture recommended by VeryGoodVentures
 - Navigator 2.0 using go_router
 - Service Locator using get_it
 - Image repository using Firebase Storage
