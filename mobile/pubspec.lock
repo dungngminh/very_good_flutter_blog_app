@@ -333,7 +333,7 @@ packages:
   draggable_home:
     dependency: "direct main"
     description:
-      path: "packages/draggable_home"
+      path: "packages/draggable_home_implement"
       relative: true
     source: path
     version: "1.0.0"
