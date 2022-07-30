@@ -1,0 +1,3 @@
+[submodule "mobile/packages/draggable_home_implement"]
+	path = mobile/packages/draggable_home_implement
+	url = https://github.com/dungngminh/draggable_home_implement

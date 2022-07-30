@@ -84,7 +84,8 @@ class FcmHelper {
   /// this method will be triggered when the app generate fcm
   /// token successfully
   static _sendFcmTokenToServer() {
-    final token = SecureStorageHelper.getValueByKey(SecureStorageHelper.fcmToken);
+    final token =
+        SecureStorageHelper.getValueByKey(SecureStorageHelper.fcmToken);
     // TODO SEND FCM TOKEN TO SERVER
   }
 
