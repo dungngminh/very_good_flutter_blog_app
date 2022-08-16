@@ -9,6 +9,7 @@ import 'package:very_good_blog_app/features/blog/blog.dart';
 import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
 import 'package:very_good_blog_app/features/home/widget/widget.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
@@ -17,13 +18,14 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return MultiBlocListener(
       listeners: [
         BlocListener<BlogBloc, BlogState>(
           listener: (context, state) {
             if (state.getBlogStatus == GetBlogStatus.error) {
               Fluttertoast.cancel();
-              Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
+              Fluttertoast.showToast(msg: l10n.fetchingFailedPlsTryAgain);
             }
           },
         ),
@@ -34,19 +36,19 @@ class HomeView extends StatelessWidget {
             if (state.actionBookmarkStatus == ActionBookmarkStatus.addDone) {
               Fluttertoast.cancel();
               Fluttertoast.showToast(
-                msg: 'Đã thêm vào danh sách đã lưu',
+                msg: l10n.addedToSavedList,
               );
             }
             if (state.actionBookmarkStatus == ActionBookmarkStatus.removeDone) {
               Fluttertoast.cancel();
               Fluttertoast.showToast(
-                msg: 'Đã xóa khỏi danh sách đã lưu',
+                msg: l10n.removedFromSavedList,
               );
             }
           },
         ),
       ],
-      child: TapHideKeyboard(
+      child: DismissFocusKeyboard(
         child: Scaffold(
           body: RefreshIndicator(
             color: AppPalette.primaryColor,
@@ -67,25 +69,27 @@ class HomeView extends StatelessWidget {
                       final isSearching = context.select(
                         (BlogBloc blogBloc) => blogBloc.state.isSearching,
                       );
-                      if (currentCategory == 'Tất cả' && isSearching == false) {
+                      if (currentCategory == 'all' && isSearching == false) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const _CategoryChoiceBar(),
-                            _buildHeadTitle('Phổ biến'),
+                            _buildHeadTitle(l10n.popular),
                             const _PopularBlogList(),
-                            _buildHeadTitle('Tất cả bài viết'),
+                            _buildHeadTitle(l10n.allBlogs),
                             const _MoreBlogList(),
                           ],
                         );
-                      } else if (currentCategory != 'Tất cả' &&
+                      } else if (currentCategory != 'all' &&
                           isSearching == false) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const _CategoryChoiceBar(),
-                            _buildHeadTitle('Bài viết về $currentCategory'),
+                            _buildHeadTitle(
+                              l10n.blogsOfCategory(currentCategory),
+                            ),
                             const _MoreBlogList(),
                           ],
                         );
@@ -94,7 +98,7 @@ class HomeView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             _buildHeadTitle(
-                              'Kết quả tìm kiếm',
+                              l10n.resultSearch,
                               padding: const EdgeInsets.fromLTRB(24, 8, 0, 16),
                             ),
                             const _MoreBlogList(),
@@ -131,6 +135,8 @@ class _MoreBlogList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocBuilder<BlogBloc, BlogState>(
       buildWhen: (previous, current) =>
           previous.getBlogStatus != current.getBlogStatus,
@@ -162,8 +168,8 @@ class _MoreBlogList extends StatelessWidget {
           );
         }
         return state.filterBlogs.isEmpty
-            ? const Center(
-                child: Text('Không có bài viết nào'),
+            ? Center(
+                child: Text(l10n.noBlogs),
               )
             : ListView.separated(
                 padding: const EdgeInsets.only(
@@ -194,6 +200,7 @@ class _PopularBlogList extends StatelessWidget {
   const _PopularBlogList();
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SizedBox(
       height: context.screenHeight * 0.35,
       child: BlocBuilder<BlogBloc, BlogState>(
@@ -221,8 +228,8 @@ class _PopularBlogList extends StatelessWidget {
             );
           }
           return state.filterBlogs.isEmpty
-              ? const Center(
-                  child: Text('Không có bài viết nào'),
+              ? Center(
+                  child: Text(l10n.noBlogs),
                 )
               : ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -252,6 +259,8 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Container(
       height: context.screenHeight * 0.07,
       padding: const EdgeInsets.symmetric(
@@ -271,18 +280,18 @@ class _Header extends StatelessWidget {
                           (ProfileBloc profileBloc) =>
                               profileBloc.state.user?.lastName,
                         ) ??
-                        'bạn';
+                        l10n.user;
                     return Text(
-                      'Xin chào, $lastName',
+                      l10n.helloUser(lastName),
                       style: AppTextTheme.lightTextStyle.copyWith(fontSize: 15),
                     );
                   },
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 3,
                 child: Text(
-                  'Chào mừng bạn!',
+                  l10n.welcome,
                   style: AppTextTheme.titleTextStyle,
                 ),
               )
@@ -316,13 +325,8 @@ class _CategoryChoiceBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = <String>[
-      'Tất cả',
-      'Đời sống',
-      'Khoa học',
-      'Du lịch',
-      'Ẩm thực'
-    ];
+    final l10n = context.l10n;
+    final categories = <String>['all', 'life', 'science', 'travel', 'food'];
     return SizedBox(
       height: context.screenHeight * 0.06,
       child: ListView.separated(
@@ -355,7 +359,7 @@ class _CategoryChoiceBar extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    category,
+                    l10n.category(category),
                     style: TextStyle(
                       fontSize: 16,
                       color: currentCategory == category
@@ -384,6 +388,8 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       height: context.screenHeight * 0.07,
@@ -395,14 +401,14 @@ class _SearchField extends StatelessWidget {
       alignment: Alignment.center,
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(
+        decoration: InputDecoration(
+          prefixIcon: const Icon(
             PhosphorIcons.magnifyingGlassFill,
             color: AppPalette.primaryColor,
             size: 26,
           ),
-          hintText: 'Tìm kiếm',
-          contentPadding: EdgeInsets.only(right: 16),
+          hintText: l10n.searchHint,
+          contentPadding: const EdgeInsets.only(right: 16),
         ),
         onChanged: (value) => EasyDebounce.debounce(
           'searching',

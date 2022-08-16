@@ -30,7 +30,7 @@ class SettingView extends StatelessWidget {
             SettingTile(
               iconPath: Assets.icons.profile.path,
               onTap: () => context.push(
-                '${AppRoute.setting}/${AppRoute.editProfile}',
+                '${AppRoutes.setting}/${AppRoutes.editProfile}',
                 extra: context.read<ProfileBloc>(),
               ),
               title: 'Thông tin cá nhân',
