@@ -50,11 +50,11 @@ class BlogCard extends StatelessWidget {
     return GestureDetector(
       onTap: isOffline
           ? () => context.push(
-                '${context.currentLocation}/${AppRoute.offlineBlog}',
+                '${context.currentLocation}/${AppRoutes.offlineBlog}',
                 extra: blog,
               )
           : () => context.push(
-                AppRoute.blog,
+                AppRoutes.blog,
                 extra: ExtraParams4<BlogModel, ProfileBloc, BlogBloc,
                     BookmarkBloc>(
                   param1: blog,

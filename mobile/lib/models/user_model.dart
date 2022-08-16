@@ -51,6 +51,8 @@ class UserModel extends Equatable {
     ];
   }
 
-  // @override
-  // bool get stringify => true; 
+  @override
+  String toString() {
+    return 'UserModel($id, $username)';
+  }
 }

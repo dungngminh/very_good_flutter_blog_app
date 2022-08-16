@@ -217,7 +217,7 @@ class _SettingButton extends StatelessWidget {
       ),
       splashRadius: 24,
       onPressed: () => context.push(
-        AppRoute.setting,
+        AppRoutes.setting,
         extra: context.read<ProfileBloc>(),
       ),
     );

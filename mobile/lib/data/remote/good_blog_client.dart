@@ -10,7 +10,7 @@ class GoodBlogClient {
 
   final Client _client;
 
-  static const _baseUrl = 'lequocthinh.com';
+  static const _baseUrl = '10.0.2.2:8080';
 
   Future<T> get<T>(
     String path, {
@@ -18,7 +18,7 @@ class GoodBlogClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final uri = Uri.https(
+      final uri = Uri.http(
         _baseUrl,
         '/api/v1$path',
         queryParams,
@@ -40,7 +40,7 @@ class GoodBlogClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final uri = Uri.https(
+      final uri = Uri.http(
         _baseUrl,
         '/api/v1$path',
       );
@@ -63,7 +63,7 @@ class GoodBlogClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final uri = Uri.https(
+      final uri = Uri.http(
         _baseUrl,
         '/api/v1$path',
       );
@@ -91,7 +91,7 @@ class GoodBlogClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final uri = Uri.https(
+      final uri = Uri.http(
         _baseUrl,
         '/api/v1$path',
       );

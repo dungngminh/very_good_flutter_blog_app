@@ -4,6 +4,7 @@ import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class LoginForm extends StatelessWidget {
@@ -11,6 +12,8 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
@@ -34,19 +37,19 @@ class LoginForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const TitleOfTextField('Tên người dùng'),
+            TitleOfTextField(l10n.username),
             _UsernameInput(),
             const Padding(padding: EdgeInsets.all(12)),
-            const TitleOfTextField('Mật khẩu'),
+            TitleOfTextField(l10n.password),
             _PasswordInput(),
             const SizedBox(
               height: 24,
             ),
-            const Align(
+            Align(
               alignment: Alignment.centerRight,
               child: Text(
-                'Quên mật khẩu',
-                style: TextStyle(
+                l10n.forgotPassword,
+                style: const TextStyle(
                   color: AppPalette.primaryColor,
                   fontWeight: FontWeight.w500,
                 ),
@@ -66,6 +69,7 @@ class LoginForm extends StatelessWidget {
 class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
@@ -77,9 +81,8 @@ class _UsernameInput extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào tên người dùng',
-              errorText:
-                  state.username.invalid ? 'Tên người dùng không hợp lệ' : null,
+              hintText: l10n.usernameHint,
+              errorText: state.username.invalid ? l10n.usernameEmpty : null,
             ),
             textInputAction: TextInputAction.next,
           ),
@@ -105,6 +108,7 @@ class _PasswordInputState extends State<_PasswordInput> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
@@ -117,9 +121,10 @@ class _PasswordInputState extends State<_PasswordInput> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào mật khẩu',
-              errorText:
-                  state.password.invalid ? 'Mật khẩu không hợp lệ' : null,
+              hintText: l10n.passwordHint,
+              errorText: state.password.invalid
+                  ? getErrorMessage(state.password.error!, l10n)
+                  : null,
               suffixIcon: IconButton(
                 icon: _isHidePassword
                     ? Assets.icons.show.svg(color: AppPalette.primaryColor)
@@ -138,11 +143,22 @@ class _PasswordInputState extends State<_PasswordInput> {
       },
     );
   }
+
+  String getErrorMessage(PasswordValidationError error, AppLocalizations l10n) {
+    switch (error) {
+      case PasswordValidationError.empty:
+        return l10n.passwordEmpty;
+      case PasswordValidationError.tooShort:
+        return l10n.passwordLength;
+    }
+  }
 }
 
 class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
@@ -164,9 +180,9 @@ class _LoginButton extends StatelessWidget {
                   ),
                   primary: Theme.of(context).primaryColor,
                 ),
-                child: const Text(
-                  'Đăng nhập',
-                  style: TextStyle(
+                child: Text(
+                  l10n.login,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                     color: AppPalette.whiteBackgroundColor,

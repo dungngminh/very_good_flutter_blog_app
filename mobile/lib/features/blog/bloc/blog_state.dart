@@ -4,7 +4,6 @@ enum GetBlogStatus { loading, done, error }
 
 enum LikeBlogStatus { initial, loading, done, error }
 
-
 class BlogState extends Equatable {
   const BlogState({
     this.getBlogStatus = GetBlogStatus.loading,
@@ -13,7 +12,7 @@ class BlogState extends Equatable {
     this.filterBlogs = const <BlogModel>[],
     this.popularBlogs = const <BlogModel>[],
     this.errorMessage = '',
-    this.category = 'Tất cả',
+    this.category = 'all',
     this.isSearching = false,
   });
 

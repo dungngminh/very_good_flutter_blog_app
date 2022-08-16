@@ -1,5 +1,4 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/widgets.dart';
 
 abstract class ConnectivityHelper {
   static final _connectivity = Connectivity();
@@ -17,5 +16,4 @@ abstract class ConnectivityHelper {
   static Stream<ConnectivityResult> get connectivityStatus async* {
     yield* _connectivity.onConnectivityChanged;
   }
-
 }

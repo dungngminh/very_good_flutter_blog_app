@@ -34,7 +34,7 @@ class _MainViewState extends State<MainView> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.unauthenticated) {
-          context.go(AppRoute.login);
+          context.go(AppRoutes.login);
         } else if (state.status == AuthenticationStatus.authenticatedOffline) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -96,7 +96,7 @@ class _MainViewState extends State<MainView> {
                 builder: (context) {
                   return FloatingActionButton(
                     onPressed: () => context.push(
-                      AppRoute.blogEditor,
+                      AppRoutes.blogEditor,
                       extra: ExtraParams3<ProfileBloc, BlogBloc, BlogModel?>(
                         param1: context.read<ProfileBloc>(),
                         param2: context.read<BlogBloc>(),

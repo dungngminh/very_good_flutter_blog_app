@@ -1,0 +1,93 @@
+{
+  "username": "Username",
+  "usernameHint": "Input your username",
+  "password": "Password",
+  "passwordHint": "Input your password",
+  "forgotPassword": "Forgot password",
+  "login": "Login",
+  "firstName": "Firstname",
+  "firstNameHint": "Input your firstname",
+  "lastName": "Lastname",
+  "lastNameHint": "Input your lastname",
+  "confirmationPassword": "Confirmation Password",
+  "unmatchedPassword": "Password do not match",
+  "passwordLength": "Password must be at least 8 characters",
+  "usernameEmpty": "Username cannot be empty",
+  "passwordEmpty": "Password cannot be empty",
+  "firstNameEmpty": "Firstname cannot be empty",
+  "lastNameEmpty": "Lastname cannot be empty",
+  "confirmationPasswordHint": "Input your password again",
+  "notHaveAccountYet": "Don't have an account yet? ",
+  "register": "Register",
+  "duplicateUser": "Username already exists!",
+  "registerSuccessfully": "Register successfully!",
+  "registerFailed": "Register failed!",
+  "helloUser": "Hi, {name}",
+  "@helloUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "category": "{category, select, all{All} life{Life} science{Science} travel{Travel} food{Food} other{Category}} ",
+  "@category": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "popular": "Popular",
+  "allBlogs": "All blogs",
+  "noBlogs": "No blogs here",
+  "welcome": "Welcome!",
+  "notification": "Notification",
+  "followYou": "Followed you",
+  "savedBlogList": "Saved blog",
+  "noSavedBlogs": "You have not saved any blogs",
+  "noNotification": "You have no notification",
+  "noLikedBlogs": "You have not liked any blogs",
+  "noOwnBlogs": "You have not created any blogs",
+  "blog": "Blog",
+  "follower": "Follower",
+  "following": "Following",
+  "userInformation": "User information",
+  "option": "Option",
+  "aboutVeryGoodBlogApp": "About Very Good Blog App",
+  "logout": "Log out",
+  "draft": "Draft",
+  "nextAction": "Continue",
+  "uploadBlog": "Upload blog",
+  "updateBlog": "Update blog",
+  "titleBlog": "Title",
+  "titleBlogFieldHint": "Input your blog title",
+  "addPicture": "Add picture",
+  "chooseCategory": "Choose category",
+  "createBlogSuccessfully": "Create blog successfully!",
+  "createBlogFailed": "Create blog failed!",
+  "updateBlogSuccessfully": "Update blog successfully!",
+  "updateBlogFailed": "Update blog failed!",
+  "updateUserInfromationSuccessfully": "Update user information successfully!",
+  "updateUserInfromationFailed": "Update user information failed!",
+  "pendingUpdateUserInfromation": "Pending update user information!",
+  "previewTooltip": "You can preview your blog before uploading",
+  "cancel": "Cancel",
+  "confirmToLoggout": "Confirm to log out Very Good Blog App",
+  "currentOfflineMode": "You are currently in offline mode",
+  "blogsOfCategory": "Blogs about {category, select, life{Life} science{Science} travel{Travel} food{Food} other{All}}",
+  "@blogsOfCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "resultSearch": "Search result",
+  "searchHint": "Search",
+  "removedFromSavedList": "Removed from saved blogs",
+  "addedToSavedList": "Added to saved blogs",
+  "fetchingFailedPlsTryAgain": "Fetching failed, please try again!",
+  "user": "User",
+  "titleBlogEmpty": "Title of blog cannot be empty"
+}

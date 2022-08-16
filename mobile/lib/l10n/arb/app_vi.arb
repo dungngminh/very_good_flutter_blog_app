@@ -1,0 +1,93 @@
+{
+  "username": "Tên người dùng",
+  "usernameHint": "Nhập vào tên người dùng",
+  "password": "Mật khẩu",
+  "passwordHint": "Nhập vào mật khẩu",
+  "forgotPassword": "Quên mật khẩu",
+  "login": "Đăng nhập",
+  "firstName": "Họ của bạn",
+  "firstNameHint": "Nhập vào họ của bạn",
+  "lastName": "Tên của bạn",
+  "lastNameHint": "Nhập vào tên của bạn",
+  "confirmationPassword": "Xác nhân mật khẩu",
+  "unmatchedPassword": "Mật khẩu không trùng",
+  "passwordLength": "Mật khẩu phải có ít nhất 8 ký tự",
+  "usernameEmpty": "Tên người dùng không được để trống",
+  "passwordEmpty": "Mật khẩu không được để trống",
+  "firstNameEmpty": "Họ của bạn không được để trống",
+  "lastNameEmpty": "Tên của bạn không được để trống",
+  "confirmationPasswordHint": "Nhập lại mật khẩu",
+  "notHaveAccountYet": "Chưa có tài khoản? ",
+  "register": "Đăng ký",
+  "duplicateUser": "Tên người dùng đã tồn tại",
+  "registerSuccessfully": "Đăng ký thành công",
+  "registerFailed": "Đăng ký thất bại",
+  "helloUser": "Xin chào, {name}",
+  "@helloUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "category": "{category, select, all{Tất cả} life{Đời sống} science{Khoa học} travel{Du lịch} food{Ẩm thực} other{Thể loại}} ",
+  "@category": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "popular": "Phổ biến",
+  "allBlogs": "Tất cả bài viết",
+  "noBlogs": "Không có bài viết nào",
+  "welcome": "Chào mừng bạn!",
+  "notification": "Thông báo",
+  "followYou": "Đã theo dõi bạn",
+  "savedBlogList": "Danh sách bài viêt đã lưu",
+  "noSavedBlogs": "Bạn không có bài viết nào đã lưu",
+  "noNotification": "Bạn không có thông báo nào",
+  "noLikedBlogs": "Bạn chưa thích bài viết nào",
+  "noOwnBlogs": "Bạn chưa có bài viết nào",
+  "blog": "Bài viết",
+  "follower": "Người t.dõi",
+  "following": "Đang t.dõi",
+  "userInformation": "Thông tin cá nhân",
+  "option": "Tùy chọn",
+  "aboutVeryGoodBlogApp": "Về Very Good Blog App",
+  "logout": "Đăng xuất",
+  "draft": "Nháp",
+  "nextAction": "Tiếp tục",
+  "uploadBlog": "Đăng bài viết",
+  "updateBlog": "Cập nhật bài viết",
+  "titleBlog": "Tiêu đề",
+  "titleBlogFieldHint": "Nhập vào tiêu đề blog của bạn",
+  "addPicture": "Thêm ảnh",
+  "chooseCategory": "Chọn thể loại",
+  "createBlogSuccessfully": "Đăng bài viết thành công",
+  "createBlogFailed": "Đăng bài viết thất bại",
+  "updateBlogSuccessfully": "Cập nhật bài viết thành công",
+  "updateBlogFailed": "Cập nhật bài viết thất bại",
+  "updateUserInfromationSuccessfully": "Cập nhật người dùng thành công",
+  "updateUserInfromationFailed": "Cập nhật người dùng thất bại",
+  "pendingUpdateUserInfromation": "Đang cập nhật thông tin người dùng",
+  "previewTooltip": "Bạn có thể xem trước bài viết trước khi đăng",
+  "cancel": "Hủy",
+  "confirmToLoggout": "Xác nhận đăng xuất Very Good Blog App",
+  "currentOfflineMode": "Hiện tại bạn đang ở chế độ ngoại tuyến",
+  "blogsOfCategory": "Bài viết {category, select, life{Đời sống} science{Khoa học} travel{Du lịch} food{Ẩm thực} other{Tất cả}}",
+  "@blogsOfCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "resultSearch": "Kết quả tìm kiếm",
+  "searchHint": "Tìm kiếm",
+  "removedFromSavedList": "Đã xóa khỏi dạnh sách đã lưu",
+  "addedToSavedList": "Đã thêm vào dạnh sách đã lưu",
+  "fetchingFailedPlsTryAgain": "Cập nhật thất bại, hãy thử lại!",
+  "user": "bạn",
+  "titleBlogEmpty": "Tiêu đề bài viết không được để trống"
+}

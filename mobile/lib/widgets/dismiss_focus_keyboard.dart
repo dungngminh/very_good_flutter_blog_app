@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class TapHideKeyboard extends StatelessWidget {
-  const TapHideKeyboard({super.key, required this.child});
+class DismissFocusKeyboard extends StatelessWidget {
+  const DismissFocusKeyboard({super.key, required this.child});
 
   final Widget child;
 

@@ -1,0 +1,22 @@
+[
+  {
+    "type": "unauthorized",
+    "status_code": 401,
+    "message": "Unauthorized"
+  },
+  {
+    "type": "bad_request",
+    "status_code": 400,
+    "message": "Bad Request"
+  },
+  {
+    "type": "timeout",
+    "status_code": 408,
+    "message": "Request Timeout"
+  },
+  {
+    "type": "server_error",
+    "status_code": 500,
+    "message": "Internal Server Error"
+  }
+]

@@ -25,19 +25,28 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    log('onAddEvent -- ${bloc.runtimeType}, $event', name: '${bloc.runtimeType}');
+    log(
+      'onAddEvent -- ${bloc.runtimeType}, $event',
+      name: '${bloc.runtimeType}',
+    );
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    log('onStateChange -- ${bloc.runtimeType}, $change', name: '${bloc.runtimeType}');
+    log(
+      'onStateChange -- ${bloc.runtimeType}, $change',
+      name: '${bloc.runtimeType}',
+    );
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    log('onStateTransition -- ${bloc.runtimeType}, $transition', name: '${bloc.runtimeType}');
+    log(
+      'onStateTransition -- ${bloc.runtimeType}, $transition',
+      name: '${bloc.runtimeType}',
+    );
   }
 
   @override
@@ -56,18 +65,14 @@ class AppBlocObserver extends BlocObserver {
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   await runZonedGuarded(
     () async {
-      await BlocOverrides.runZoned(
-        () async {
-          WidgetsFlutterBinding.ensureInitialized();
-          await Firebase.initializeApp();
-          await Hive.initFlutter();
-          await initServices();
-          setLocaleMessages('vi', ViMessages());
-          setDefaultLocale('vi');
-          runApp(await builder());
-        },
-        blocObserver: AppBlocObserver(),
-      );
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp();
+      Bloc.observer = AppBlocObserver();
+      await Hive.initFlutter();
+      await initServices();
+      setLocaleMessages('vi', ViMessages());
+      setDefaultLocale('vi');
+      runApp(await builder());
     },
     (error, stackTrace) =>
         log(error.toString(), stackTrace: stackTrace, name: 'ERROR'),

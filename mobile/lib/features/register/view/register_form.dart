@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/register/register.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class RegisterForm extends StatelessWidget {
@@ -10,33 +11,34 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TitleOfTextField('Họ của bạn'),
+            TitleOfTextField(l10n.firstName),
             _FirstnameInput(),
             const SizedBox(
               height: 16,
             ),
-            const TitleOfTextField('Tên của bạn'),
+            TitleOfTextField(l10n.lastName),
             _LastnameInput(),
             const SizedBox(
               height: 16,
             ),
-            const TitleOfTextField('Tên người dùng'),
+            TitleOfTextField(l10n.username),
             _UsernameInput(),
             const SizedBox(
               height: 16,
             ),
-            const TitleOfTextField('Mật khẩu'),
+            TitleOfTextField(l10n.password),
             _PasswordInput(),
             const SizedBox(
               height: 16,
             ),
-            const TitleOfTextField('Xác nhận mật khẩu'),
+            TitleOfTextField(l10n.confirmationPassword),
             _ConfirmedPasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             Center(
@@ -52,6 +54,7 @@ class RegisterForm extends StatelessWidget {
 class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Builder(
       builder: (context) {
         final username = context.select(
@@ -70,9 +73,8 @@ class _UsernameInput extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào tên người dùng',
-              errorText:
-                  username.invalid ? 'Tên người dùng không hợp lệ' : null,
+              hintText: l10n.usernameHint,
+              errorText: username.invalid ? l10n.usernameEmpty : null,
             ),
           ),
         );
@@ -97,6 +99,7 @@ class _PasswordInputState extends State<_PasswordInput> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Builder(
       builder: (context) {
         final password = context.select(
@@ -117,7 +120,7 @@ class _PasswordInputState extends State<_PasswordInput> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào mật khẩu',
+              hintText: l10n.passwordHint,
               suffixIcon: IconButton(
                 icon: _isHidePassword
                     ? Assets.icons.show.svg(color: AppPalette.primaryColor)
@@ -129,13 +132,24 @@ class _PasswordInputState extends State<_PasswordInput> {
                 },
                 splashRadius: 24,
               ),
-              errorText: password.invalid ? 'Mật khẩu không hợp lệ' : null,
+              errorText: password.invalid
+                  ? getErrorMessage(password.error!, l10n)
+                  : null,
             ),
             textAlignVertical: TextAlignVertical.center,
           ),
         );
       },
     );
+  }
+
+  String getErrorMessage(PasswordValidationError error, AppLocalizations l10n) {
+    switch (error) {
+      case PasswordValidationError.empty:
+        return l10n.passwordEmpty;
+      case PasswordValidationError.tooShort:
+        return l10n.passwordLength;
+    }
   }
 }
 
@@ -156,6 +170,7 @@ class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocBuilder<RegisterBloc, RegisterState>(
       buildWhen: (previous, current) =>
           previous.password != current.password ||
@@ -174,7 +189,7 @@ class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập lại mật khẩu',
+              hintText: l10n.confirmationPasswordHint,
               suffixIcon: IconButton(
                 icon: _isHideConfirmationPassword
                     ? Assets.icons.show.svg(color: AppPalette.primaryColor)
@@ -187,7 +202,7 @@ class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
                 splashRadius: 24,
               ),
               errorText: state.confirmedPassword.invalid
-                  ? 'Mật khẩu không trùng'
+                  ? l10n.unmatchedPassword
                   : null,
             ),
             textAlignVertical: TextAlignVertical.center,
@@ -201,6 +216,7 @@ class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
 class _FirstnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Builder(
       builder: (context) {
         final firstname = context.select(
@@ -219,8 +235,8 @@ class _FirstnameInput extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào họ của bạn',
-              errorText: firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
+              hintText: l10n.firstNameHint,
+              errorText: firstname.invalid ? l10n.firstNameEmpty : null,
             ),
           ),
         );
@@ -232,6 +248,8 @@ class _FirstnameInput extends StatelessWidget {
 class _LastnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Builder(
       builder: (context) {
         final lastname = context
@@ -249,8 +267,8 @@ class _LastnameInput extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào tên của bạn',
-              errorText: lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
+              hintText: l10n.lastNameHint,
+              errorText: lastname.invalid ? l10n.lastNameEmpty : null,
             ),
           ),
         );
@@ -262,6 +280,7 @@ class _LastnameInput extends StatelessWidget {
 class _RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Builder(
       builder: (context) {
         final status = context
@@ -286,9 +305,9 @@ class _RegisterButton extends StatelessWidget {
                   ),
                   primary: Theme.of(context).primaryColor,
                 ),
-                child: const Text(
-                  'Đăng ký',
-                  style: TextStyle(
+                child: Text(
+                  l10n.register,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                     color: AppPalette.whiteBackgroundColor,

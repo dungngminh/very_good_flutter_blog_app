@@ -5,21 +5,23 @@ import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/features/login/login.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
-import 'package:very_good_blog_app/widgets/tap_hide_keyboard.dart';
+import 'package:very_good_blog_app/widgets/dismiss_focus_keyboard.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.status == AuthenticationStatus.authenticated) {
-          context.go(AppRoute.home);
+          context.go(AppRoutes.home);
         }
       },
-      child: TapHideKeyboard(
+      child: DismissFocusKeyboard(
         child: Scaffold(
           backgroundColor: AppPalette.whiteBackgroundColor,
           body: SingleChildScrollView(
@@ -52,16 +54,16 @@ class LoginView extends StatelessWidget {
                 Center(
                   child: Text.rich(
                     TextSpan(
-                      text: 'Chưa có tài khoản? ',
+                      text: l10n.notHaveAccountYet,
                       children: [
                         TextSpan(
-                          text: 'Đăng ký',
+                          text: l10n.register,
                           style: const TextStyle(
                             color: AppPalette.primaryColor,
                             fontWeight: FontWeight.w700,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => context.push(AppRoute.register),
+                            ..onTap = () => context.push(AppRoutes.register),
                         )
                       ],
                     ),

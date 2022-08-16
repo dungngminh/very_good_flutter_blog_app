@@ -1,0 +1,91 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+linter:
+  rules:
+    public_member_api_docs: false
+
+analyzer:
+  plugins:
+   - dart_code_metrics
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/models/**"
+    - "lib/injection/ioc.config.dart"
+  errors:
+    invalid_annotation_target: ignore
+    unnecessary_import: ignore
+    always_use_package_imports: ignore
+
+# dart_code_metrics:
+#   metrics:
+#     cyclomatic-complexity: 20
+#     maximum-nesting-level: 5
+#     lines-of-code: 100
+#     number-of-methods: 10
+#     technical-debt:
+#       threshold: 1
+#       todo-cost: 100
+#       ignore-cost: 50
+#       ignore-for-file-cost: 200
+#       as-dynamic-cost: 300
+#       deprecated-annotations-cost: 40
+#       file-nullsafety-migration-cost: 40
+#       unit-type: "USD"
+#   rules:
+#     - avoid-global-state
+#     - avoid-missing-enum-constant-in-map
+#     - avoid-nested-conditional-expressions:
+#         acceptable-level: 2
+#     - avoid-throw-in-catch-block
+#     - avoid-unnecessary-type-assertions
+#     - avoid-unnecessary-type-casts
+#     - avoid-unrelated-type-assertions
+#     - binary-expression-operand-order
+#     - double-literal-format
+#     - member-ordering-extended:
+#         exclude:
+#           - '**/models/**'
+#         order:
+#           - constructors
+#           - private-late-final-fields
+#           - private-fields
+#           - public-late-final-fields
+#           - public-fields
+#     - prefer-correct-type-name:
+#         min-length: 3
+#         max-length: 40
+#     - prefer-first
+#     - prefer-last
+#     - prefer-match-file-name:
+#         exclude:
+#           - test/**
+#           - lib/gen/**
+#           - lib/l10n/l10n.dart
+#           - lib/injection/module.dart
+#     - always-remove-listener
+#     - avoid-returning-widgets:
+#         ignored-names:
+#           - testFunction
+#         ignored-annotations:
+#           - allowedAnnotation
+#     - prefer-single-widget-per-file:
+#         ignore-private-widgets: true
+#     - avoid-unnecessary-setstate
+#     - avoid-wrapping-in-padding
+#     - prefer-extracting-callbacks:
+#         ignored-named-arguments:
+#           - onPressed
+#     - newline-before-return
+#     - no-boolean-literal-compare
+#     - no-empty-block:
+#         exclude:
+#           - test/**
+#     - prefer-trailing-comma
+#     - prefer-conditional-expressions
+#     - no-equal-then-else
+#   anti-patterns:
+#     - long-method:
+#         exclude:
+#           - test/**
+#     - long-parameter-list

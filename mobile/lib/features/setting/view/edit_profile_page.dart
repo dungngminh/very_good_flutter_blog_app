@@ -9,7 +9,7 @@ import 'package:very_good_blog_app/features/profile/profile.dart';
 import 'package:very_good_blog_app/features/setting/bloc/edit_profile_bloc.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 import 'package:very_good_blog_app/widgets/action_bar.dart';
-import 'package:very_good_blog_app/widgets/tap_hide_keyboard.dart';
+import 'package:very_good_blog_app/widgets/dismiss_focus_keyboard.dart';
 import 'package:very_good_blog_app/widgets/text_field_decoration.dart';
 import 'package:very_good_blog_app/widgets/title_of_text_field.dart';
 
@@ -63,7 +63,7 @@ class _EditProfileView extends StatelessWidget {
           context.pop();
         }
       },
-      child: TapHideKeyboard(
+      child: DismissFocusKeyboard(
         child: Scaffold(
           body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(

@@ -29,7 +29,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
   ) async {
     try {
       if (event.value.isEmpty) {
-        if (state.category != 'Tất cả') {
+        if (state.category != 'all') {
           emit(
             state.copyWith(
               getBlogStatus: GetBlogStatus.loading,
@@ -97,7 +97,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
     Emitter<BlogState> emit,
   ) async {
     try {
-      if (event.catagory == 'Tất cả') {
+      if (event.catagory == 'all') {
         emit(
           state.copyWith(
             getBlogStatus: GetBlogStatus.loading,
@@ -117,7 +117,6 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
                 filterBlogs: blogs,
               ),
             );
-           
           },
         );
         return;
