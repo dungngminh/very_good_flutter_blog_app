@@ -1,6 +1,8 @@
 import 'package:formz/formz.dart';
 
-enum LastnameValidationError { empty, tooShort }
+enum LastnameValidationError {
+  empty,
+}
 
 class Lastname extends FormzInput<String, LastnameValidationError> {
   const Lastname.pure() : super.pure('');
@@ -8,10 +10,6 @@ class Lastname extends FormzInput<String, LastnameValidationError> {
 
   @override
   LastnameValidationError? validator(String? value) {
-    if (value?.isNotEmpty == true) {
-      return value!.isNotEmpty ? null : LastnameValidationError.tooShort;
-    } else {
-      return LastnameValidationError.empty;
-    }
+    return value?.isNotEmpty == true ? null : LastnameValidationError.empty;
   }
 }

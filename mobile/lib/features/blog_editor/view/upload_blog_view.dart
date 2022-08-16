@@ -11,6 +11,7 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/features/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
 import 'package:very_good_blog_app/features/profile/profile.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
@@ -19,13 +20,14 @@ class UploadBlogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocListener<BlogEditorBloc, BlogEditorState>(
       listener: (context, state) {
         if (state.uploadStatus == UploadBlogStatus.done) {
           Fluttertoast.showToast(
             msg: state.existBlog == null
-                ? 'Đăng bài viết thành công'
-                : 'Cập nhật bài viết thành công',
+                ? l10n.createBlogSuccessfully
+                : l10n.updateBlogSuccessfully,
           );
           Future.delayed(const Duration(milliseconds: 300), () {
             context
@@ -39,12 +41,12 @@ class UploadBlogView extends StatelessWidget {
         } else if (state.uploadStatus == UploadBlogStatus.error) {
           Fluttertoast.showToast(
             msg: state.existBlog == null
-                ? 'Đăng bài viết thất bài'
-                : 'Cập nhật bài viết thất bại',
+                ? l10n.createBlogFailed
+                : l10n.updateBlogFailed,
           );
         }
       },
-      child: TapHideKeyboard(
+      child: DismissFocusKeyboard(
         child: Scaffold(
           body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
@@ -68,9 +70,8 @@ class UploadBlogView extends StatelessWidget {
                           blogEditorBloc.state.existBlog,
                     );
                     return ActionBar(
-                      title: existBlog == null
-                          ? 'Đăng bài viết'
-                          : 'Cập nhật bài viết',
+                      title:
+                          existBlog == null ? l10n.updateBlog : l10n.updateBlog,
                       actions: [
                         Visibility(
                           replacement: const Padding(
@@ -83,8 +84,7 @@ class UploadBlogView extends StatelessWidget {
                               category.isNotEmpty &&
                               existBlog == null,
                           child: IconButton(
-                            tooltip: 'Bạn có thể xem trước bài viết'
-                                ' trước khi đăng',
+                            tooltip: l10n.previewTooltip,
                             splashRadius: 24,
                             icon: Assets.icons.search.svg(
                               color: AppPalette.deepPurpleColor,
@@ -117,7 +117,7 @@ class UploadBlogView extends StatelessWidget {
                               );
 
                               context.push(
-                                '${context.currentLocation}/${AppRoute.previewBlog}',
+                                '${context.currentLocation}/${AppRoutes.previewBlog}',
                                 extra: previewBlog,
                               );
                             },
@@ -146,6 +146,7 @@ class _ImagePlacer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return GestureDetector(
       onTap: () =>
           context.read<BlogEditorBloc>().add(const BlogEditorAddImage()),
@@ -157,7 +158,7 @@ class _ImagePlacer extends StatelessWidget {
                   blogEditorBlog.state.imagePath.value,
             );
             if (pickedImage.isEmpty) {
-              return _buildImagePlaceHoder();
+              return _buildImagePlaceHoder(l10n);
             }
             final isImageUploaded = pickedImage.contains('firebasestorage');
             return Stack(
@@ -237,7 +238,7 @@ class _ImagePlacer extends StatelessWidget {
     );
   }
 
-  Widget _buildImagePlaceHoder() {
+  Widget _buildImagePlaceHoder(AppLocalizations l10n) {
     return Container(
       height: 190,
       width: 150,
@@ -258,7 +259,7 @@ class _ImagePlacer extends StatelessWidget {
             ),
           ),
           Text(
-            'Thêm ảnh',
+            l10n.addPicture,
             style: AppTextTheme.regularTextStyle.copyWith(fontSize: 15),
           ),
         ],
@@ -272,26 +273,27 @@ class _BlogInformationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         TitleOfTextField(
-          'Tiêu đề',
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          l10n.titleBlog,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
         ),
-        _TitleBlogInput(),
-        SizedBox(
+        const _TitleBlogInput(),
+        const SizedBox(
           height: 32,
         ),
         TitleOfTextField(
-          'Thể loại',
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          l10n.category('other'),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
         ),
-        _CategoryDropdownField(),
-        SizedBox(
+        const _CategoryDropdownField(),
+        const SizedBox(
           height: 48,
         ),
-        _UploadButton(),
+        const _UploadButton(),
       ],
     );
   }
@@ -302,6 +304,7 @@ class _TitleBlogInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Builder(
       builder: (context) {
         final blogTitle = context.select(
@@ -319,9 +322,8 @@ class _TitleBlogInput extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Nhập vào tiêu đề blog của bạn',
-              errorText:
-                  blogTitle.invalid ? 'Tiêu đề không được để trống' : null,
+              hintText: l10n.titleBlogFieldHint,
+              errorText: blogTitle.invalid ? l10n.titleBlogEmpty : null,
             ),
             textInputAction: TextInputAction.next,
           ),
@@ -336,6 +338,7 @@ class _CategoryDropdownField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final categories = <String>['Đời sống', 'Khoa học', 'Du lịch', 'Ẩm thực'];
     return TextFieldDecoration(
       fieldColor: AppPalette.whiteBackgroundColor,
@@ -359,10 +362,10 @@ class _CategoryDropdownField extends StatelessWidget {
             onChanged: (category) => context.read<BlogEditorBloc>().add(
                   BlogEditorCategoryChanged(category),
                 ),
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.only(left: 16, right: 16),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
-              hintText: 'Chọn thể loại',
+              hintText: l10n.chooseCategory,
             ),
           );
         },
@@ -376,6 +379,8 @@ class _UploadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Center(
       child: Builder(
         builder: (context) {
@@ -414,7 +419,7 @@ class _UploadButton extends StatelessWidget {
                     primary: Theme.of(context).primaryColor,
                   ),
                   child: Text(
-                    existBlog == null ? 'Đăng bài viết' : 'Cập nhật bài viết',
+                    existBlog == null ? l10n.uploadBlog : l10n.updateBlog,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,

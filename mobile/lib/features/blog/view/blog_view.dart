@@ -93,7 +93,7 @@ class _BlogViewState extends State<BlogView> {
                               ),
                               splashRadius: 24,
                               onPressed: () => context.push(
-                                AppRoute.blogEditor,
+                                AppRoutes.blogEditor,
                                 extra: ExtraParams3<ProfileBloc, BlogBloc,
                                     BlogModel>(
                                   param1: context.read<ProfileBloc>(),

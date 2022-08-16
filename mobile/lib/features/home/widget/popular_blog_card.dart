@@ -23,7 +23,7 @@ class PopularBlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => context.push(
-        AppRoute.blog,
+        AppRoutes.blog,
         extra: ExtraParams4<BlogModel, ProfileBloc, BlogBloc, BookmarkBloc>(
           param1: blog,
           param2: context.read<ProfileBloc>(),

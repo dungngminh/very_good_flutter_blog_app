@@ -7,12 +7,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/data/data.dart';
 import 'package:very_good_blog_app/di/di.dart';
-
 import 'package:very_good_blog_app/features/authentication/authentication.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
 class VeryGoodBlogApp extends StatelessWidget {
@@ -73,9 +74,9 @@ class _VeryGoodBlogAppViewState extends State<VeryGoodBlogAppView> {
       child: MaterialApp.router(
         title: 'Very Good Blog App',
         debugShowCheckedModeBanner: false,
-        routeInformationProvider: AppRoute.route.routeInformationProvider,
-        routeInformationParser: AppRoute.route.routeInformationParser,
-        routerDelegate: AppRoute.route.routerDelegate,
+        routeInformationProvider: AppRoutes.route.routeInformationProvider,
+        routeInformationParser: AppRoutes.route.routeInformationParser,
+        routerDelegate: AppRoutes.route.routerDelegate,
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: FontFamily.nunito,
@@ -88,6 +89,13 @@ class _VeryGoodBlogAppViewState extends State<VeryGoodBlogAppView> {
             cursorColor: AppPalette.primaryColor,
           ),
         ),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }

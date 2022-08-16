@@ -71,7 +71,7 @@ class _AddBlogViewState extends State<_AddBlogView> {
 
   @override
   Widget build(BuildContext context) {
-    return TapHideKeyboard(
+    return DismissFocusKeyboard(
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.only(
@@ -107,7 +107,7 @@ class _AddBlogViewState extends State<_AddBlogView> {
                           .read<BlogEditorBloc>()
                           .add(BlogEditorSubmitContent(editorContent));
                       context.push(
-                        '${AppRoute.blogEditor}/${AppRoute.uploadBlog}',
+                        '${AppRoutes.blogEditor}/${AppRoutes.uploadBlog}',
                         extra: ExtraParams4<BlogEditorBloc, BlogBloc,
                             ProfileBloc, BlogModel?>(
                           param1: context.read<BlogEditorBloc>(),

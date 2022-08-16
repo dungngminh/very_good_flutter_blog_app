@@ -12,7 +12,7 @@ import 'package:very_good_blog_app/features/setting/setting.dart';
 import 'package:very_good_blog_app/features/splash/splash.dart';
 import 'package:very_good_blog_app/models/models.dart';
 
-class AppRoute {
+class AppRoutes {
   static const splash = '/';
   static const home = '/home';
   static const login = '/login';
@@ -29,15 +29,15 @@ class AppRoute {
   static final route = GoRouter(
     routes: [
       GoRoute(
-        path: home,
-        builder: (context, state) {
-          return const MainView();
-        },
-      ),
-      GoRoute(
         path: splash,
         builder: (context, state) {
           return const SplashView();
+        },
+      ),
+      GoRoute(
+        path: home,
+        builder: (context, state) {
+          return const MainView();
         },
       ),
       GoRoute(

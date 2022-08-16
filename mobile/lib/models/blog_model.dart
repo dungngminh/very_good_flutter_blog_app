@@ -2,7 +2,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:very_good_blog_app/app/app.dart';
-
 import 'package:very_good_blog_app/models/models.dart' show UserModel;
 
 part 'blog_model.g.dart';
@@ -66,8 +65,6 @@ class BlogModel extends Equatable {
     ];
   }
 
-  // @override
-  // bool get stringify => true;
 
   BlogModel copyWith({
     String? id,
@@ -89,5 +86,10 @@ class BlogModel extends Equatable {
       user: user ?? this.user,
       createdAt: createdAt ?? this.createdAt,
     );
+  }
+
+  @override
+  String toString() {
+    return 'BlogModel($id, $title)';
   }
 }
