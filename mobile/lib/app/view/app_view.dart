@@ -10,9 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:very_good_blog_app/app/app.dart';
+import 'package:very_good_blog_app/authentication/authentication.dart';
 import 'package:very_good_blog_app/data/data.dart';
 import 'package:very_good_blog_app/di/di.dart';
-import 'package:very_good_blog_app/features/authentication/authentication.dart';
 import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/repository/repository.dart';
 
