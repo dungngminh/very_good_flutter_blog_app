@@ -1,10 +1,9 @@
 part of 'edit_profile_bloc.dart';
 
-
 class EditProfileState extends Equatable {
   const EditProfileState({
     this.validationStatus = FormzStatus.pure,
-    this.loadingStatus = LoadingStatus.done,
+    this.editProfileStatus = LoadingStatus.done,
     this.lastname = const Lastname.pure(),
     this.firstname = const Firstname.pure(),
     this.imagePath = '',
@@ -13,7 +12,7 @@ class EditProfileState extends Equatable {
   });
 
   final FormzStatus validationStatus;
-  final LoadingStatus loadingStatus;
+  final LoadingStatus editProfileStatus;
   final Lastname lastname;
   final Firstname firstname;
   final String imagePath;
@@ -22,7 +21,7 @@ class EditProfileState extends Equatable {
 
   EditProfileState copyWith({
     FormzStatus? validationStatus,
-    LoadingStatus? loadingStatus,
+    LoadingStatus? editProfileStatus,
     Lastname? lastname,
     Firstname? firstname,
     String? imagePath,
@@ -32,7 +31,7 @@ class EditProfileState extends Equatable {
     return EditProfileState(
       validationStatus: validationStatus ?? this.validationStatus,
       lastname: lastname ?? this.lastname,
-      loadingStatus: loadingStatus ?? this.loadingStatus,
+      editProfileStatus: editProfileStatus ?? this.editProfileStatus,
       firstname: firstname ?? this.firstname,
       imagePath: imagePath ?? this.imagePath,
       enableEditing: enableEditing ?? this.enableEditing,
@@ -48,7 +47,7 @@ class EditProfileState extends Equatable {
       firstname,
       imagePath,
       enableEditing,
-      loadingStatus,
+      editProfileStatus,
       errorMessage
     ];
   }

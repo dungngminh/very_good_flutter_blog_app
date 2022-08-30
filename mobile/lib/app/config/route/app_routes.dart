@@ -1,15 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:models/models.dart';
 import 'package:very_good_blog_app/blog/blog.dart';
 import 'package:very_good_blog_app/blog/view/blog_view_offline.dart';
 import 'package:very_good_blog_app/blog_editor/blog_editor.dart';
 import 'package:very_good_blog_app/bookmark/book_mark.dart';
-
-
-
 import 'package:very_good_blog_app/login/login.dart';
 import 'package:very_good_blog_app/main/main.dart';
-import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/profile/profile.dart';
 import 'package:very_good_blog_app/register/register.dart';
 import 'package:very_good_blog_app/setting/setting.dart';
@@ -119,7 +116,6 @@ class AppRoutes {
             builder: (context, state) {
               final extras = state.extra! as ExtraParams4<BlogEditorBloc,
                   BlogBloc, ProfileBloc, BlogModel?>;
-
               return MultiBlocProvider(
                 providers: [
                   BlocProvider.value(

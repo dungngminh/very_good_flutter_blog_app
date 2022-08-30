@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:user_repository/user_repository.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/profile/bloc/profile_bloc.dart';
 import 'package:very_good_blog_app/register/register.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'edit_profile_event.dart';
 part 'edit_profile_state.dart';
@@ -58,21 +58,21 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     Emitter<EditProfileState> emit,
   ) async {
     if (state.validationStatus.isValid) {
-      emit(state.copyWith(loadingStatus: LoadingStatus.loading));
+      emit(state.copyWith(editProfileStatus: LoadingStatus.loading));
       try {
         final user = _profileBloc.state.user;
         await _userRepository.updateUserInformation(
           username: user!.username,
-          firstName: state.firstname.value,
-          lastName: state.lastname.value,
+          firstname: state.firstname.value,
+          lastname: state.lastname.value,
           imagePath: state.imagePath == '' ? user.avatarUrl : state.imagePath,
           userId: user.id,
         );
-        emit(state.copyWith(loadingStatus: LoadingStatus.done));
+        emit(state.copyWith(editProfileStatus: LoadingStatus.done));
       } catch (e) {
         emit(
           state.copyWith(
-            loadingStatus: LoadingStatus.error,
+            editProfileStatus: LoadingStatus.error,
             errorMessage: e.toString(),
           ),
         );

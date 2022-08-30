@@ -1,0 +1,29 @@
+name: bookmark_data_source
+description: A bookmark data source
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: 3.0.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  http_client_handler:
+    path: ../http_client_handler
+  models:
+    path: ../models
+  secure_storage_helper:
+    path: ../secure_storage_helper
+  
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.0.1

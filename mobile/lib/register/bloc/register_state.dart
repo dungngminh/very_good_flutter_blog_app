@@ -2,7 +2,7 @@ part of 'register_bloc.dart';
 
 class RegisterState extends Equatable {
   const RegisterState({
-    this.status = FormzStatus.pure,
+    this.formStatus = FormzStatus.pure,
     this.username = const Username.pure(),
     this.password = const Password.pure(),
     this.lastname = const Lastname.pure(),
@@ -10,7 +10,7 @@ class RegisterState extends Equatable {
     this.confirmedPassword = const ConfirmedPassword.pure(),
   });
 
-  final FormzStatus status;
+  final FormzStatus formStatus;
   final Username username;
   final Password password;
   final Lastname lastname;
@@ -18,7 +18,7 @@ class RegisterState extends Equatable {
   final ConfirmedPassword confirmedPassword;
 
   RegisterState copyWith({
-    FormzStatus? status,
+    FormzStatus? formStatus,
     Username? username,
     Password? password,
     Lastname? lastname,
@@ -26,7 +26,7 @@ class RegisterState extends Equatable {
     ConfirmedPassword? confirmedPassword,
   }) {
     return RegisterState(
-      status: status ?? this.status,
+      formStatus: formStatus ?? this.formStatus,
       username: username ?? this.username,
       password: password ?? this.password,
       lastname: lastname ?? this.lastname,
@@ -38,7 +38,7 @@ class RegisterState extends Equatable {
   @override
   List<Object?> get props {
     return [
-      status,
+      formStatus,
       username,
       password,
       lastname,

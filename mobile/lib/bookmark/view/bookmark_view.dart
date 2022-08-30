@@ -62,7 +62,7 @@ class BookmarkView extends StatelessWidget {
                       bookmarkBloc.state.messageError,
                 );
                 if (bookmarkStatus == LoadingStatus.loading) {
-                  return const _BookmarkPlaceholder();
+                  return const _BookmarkListViewPlaceholder();
                 } else if (bookmarkStatus == LoadingStatus.error) {
                   return Expanded(
                     child: Center(
@@ -72,7 +72,7 @@ class BookmarkView extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return const _BookmarkList();
+                  return const _BookmarkListView();
                 }
               },
             ),
@@ -85,8 +85,8 @@ class BookmarkView extends StatelessWidget {
   }
 }
 
-class _BookmarkList extends StatelessWidget {
-  const _BookmarkList();
+class _BookmarkListView extends StatelessWidget {
+  const _BookmarkListView();
 
   @override
   Widget build(BuildContext context) {
@@ -134,8 +134,8 @@ class _BookmarkList extends StatelessWidget {
   }
 }
 
-class _BookmarkPlaceholder extends StatelessWidget {
-  const _BookmarkPlaceholder();
+class _BookmarkListViewPlaceholder extends StatelessWidget {
+  const _BookmarkListViewPlaceholder();
 
   @override
   Widget build(BuildContext context) {

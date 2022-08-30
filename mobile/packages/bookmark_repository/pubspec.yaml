@@ -1,0 +1,20 @@
+name: bookmark_repository
+description: A very good bookmark repository
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: 3.0.4
+
+dependencies:
+  bookmark_data_source:
+    path: ../bookmark_data_source
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.0.1

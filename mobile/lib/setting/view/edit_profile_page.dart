@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
+import 'package:user_repository/user_repository.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/profile/profile.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 import 'package:very_good_blog_app/setting/bloc/edit_profile_bloc.dart';
 import 'package:very_good_blog_app/widgets/action_bar.dart';
 import 'package:very_good_blog_app/widgets/dismiss_focus_keyboard.dart';
@@ -35,7 +35,7 @@ class _EditProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<EditProfileBloc, EditProfileState>(
       listener: (context, state) {
-        if (state.loadingStatus == LoadingStatus.loading) {
+        if (state.editProfileStatus == LoadingStatus.loading) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -43,7 +43,7 @@ class _EditProfileView extends StatelessWidget {
                 content: Text('Đang cập nhật thông tin'),
               ),
             );
-        } else if (state.loadingStatus == LoadingStatus.error) {
+        } else if (state.editProfileStatus == LoadingStatus.error) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -51,7 +51,7 @@ class _EditProfileView extends StatelessWidget {
                 content: Text(state.errorMessage),
               ),
             );
-        } else if (state.loadingStatus == LoadingStatus.done) {
+        } else if (state.editProfileStatus == LoadingStatus.done) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -196,7 +196,7 @@ class _UpdateProfileButton extends StatelessWidget {
         );
         final loadingStatus = context.select(
           (EditProfileBloc editProfileBloc) =>
-              editProfileBloc.state.loadingStatus,
+              editProfileBloc.state.editProfileStatus,
         );
         final enableToEdit = context.select(
           (EditProfileBloc editProfileBloc) =>

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:models/models.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/blog_editor/blog_editor.dart';
-import 'package:very_good_blog_app/models/models.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'blog_editor_event.dart';
 part 'blog_editor_state.dart';
@@ -52,15 +52,15 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
         uploadStatus: LoadingStatus.loading,
       ),
     );
-    if (state.existBlog != null) {}
     try {
       if (state.existBlog != null) {
         await _blogRepository
             .updateBlog(
-          blog: state.existBlog!,
-          title: state.blogTitle.value,
-          category: state.category,
-          content: state.content,
+          blog: state.existBlog!.copyWith(
+            title: state.blogTitle.value,
+            category: state.category,
+            content: state.content,
+          ),
           imagePath: state.imagePath.value,
         )
             .then((_) {
@@ -176,7 +176,10 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
           imagePath: imagePath,
           existBlog: event.existBlog,
           category: category,
-          validationStatus: Formz.validate([blogTitle, imagePath]),
+          validationStatus: Formz.validate([
+            blogTitle,
+            imagePath,
+          ]),
         ),
       );
     }

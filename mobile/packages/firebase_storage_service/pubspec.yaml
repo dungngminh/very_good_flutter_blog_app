@@ -1,0 +1,21 @@
+name: firebase_storage_service
+description: A Firebase Storage Service package
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: 3.0.4
+
+dependencies:
+  firebase_storage: ^10.3.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  # firebase_storage_mocks: ^0.5.1
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  test: ^1.19.2
+  very_good_analysis: ^3.0.1

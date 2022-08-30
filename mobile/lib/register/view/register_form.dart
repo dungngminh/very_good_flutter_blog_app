@@ -283,15 +283,16 @@ class _RegisterButton extends StatelessWidget {
     final l10n = context.l10n;
     return Builder(
       builder: (context) {
-        final status = context
-            .select((RegisterBloc registerBloc) => registerBloc.state.status);
-        return status.isSubmissionInProgress
+        final formStatus = context.select(
+          (RegisterBloc registerBloc) => registerBloc.state.formStatus,
+        );
+        return formStatus.isSubmissionInProgress
             ? const CircularProgressIndicator(
                 color: AppPalette.primaryColor,
               )
             : ElevatedButton(
                 key: const Key('registerForm_continue_raisedButton'),
-                onPressed: status.isValidated
+                onPressed: formStatus.isValidated
                     ? () {
                         context.read<RegisterBloc>().add(
                               const RegisterEvent(RegisterEventType.submitted),

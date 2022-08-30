@@ -1,15 +1,15 @@
 import 'dart:convert';
 
+import 'package:blog_repository/blog_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:go_router/go_router.dart';
+import 'package:models/models.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/blog_editor/blog_editor.dart';
-import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/profile/bloc/profile_bloc.dart';
-import 'package:very_good_blog_app/repository/blog_repository.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class BlogEditorPage extends StatelessWidget {

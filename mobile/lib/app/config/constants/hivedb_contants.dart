@@ -5,4 +5,5 @@ abstract class HiveBox {
 
 abstract class HiveBoxKey {
   static const isFirstTime = 'first_time';
+  static const darkMode = 'dark_mode';
 }

@@ -1,9 +1,9 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:very_good_blog_app/register/register.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}

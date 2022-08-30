@@ -1,8 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/register/register.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -46,7 +46,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: state.confirmedPassword,
         lastname: lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        formStatus: Formz.validate(
           [
             state.username,
             state.password,
@@ -68,7 +68,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: state.confirmedPassword,
         lastname: state.lastname,
         firstname: firstname,
-        status: Formz.validate(
+        formStatus: Formz.validate(
           [
             state.username,
             state.password,
@@ -91,7 +91,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        formStatus: Formz.validate(
           [
             state.username,
             state.password,
@@ -113,7 +113,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: state.confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        formStatus: Formz.validate(
           [
             username,
             state.password,
@@ -139,7 +139,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        formStatus: Formz.validate(
           [
             state.username,
             password,
@@ -153,8 +153,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Future<void> _onSubmitted(Emitter<RegisterState> emit) async {
-    if (state.status.isValidated) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (state.formStatus.isValidated) {
+      emit(state.copyWith(formStatus: FormzStatus.submissionInProgress));
       try {
         await _authenticationRepository
             .register(
@@ -163,17 +163,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           confirmationPassword: state.confirmedPassword.value,
           firstname: state.firstname.value,
           lastname: state.lastname.value,
-          
         )
             .then((_) {
           emit(
             state.copyWith(
-              status: FormzStatus.submissionSuccess,
+              formStatus: FormzStatus.submissionSuccess,
             ),
           );
         });
       } catch (e) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(formStatus: FormzStatus.submissionFailure));
       }
     }
   }

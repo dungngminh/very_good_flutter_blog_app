@@ -1,0 +1,27 @@
+[
+  {
+    "type": "unauthorized",
+    "code": 401,
+    "message": "Unauthorized"
+  },
+  {
+    "type": "bad_request",
+    "code": 400,
+    "message": "Bad Request"
+  },
+  {
+    "type": "timeout",
+    "code": 408,
+    "message": "Request Timeout"
+  },
+  {
+    "type": "not_found",
+    "code": 404,
+    "message": "Not Found"
+  },
+  {
+    "type": "server_error",
+    "code": 500,
+    "message": "Internal Server Error"
+  }
+]
