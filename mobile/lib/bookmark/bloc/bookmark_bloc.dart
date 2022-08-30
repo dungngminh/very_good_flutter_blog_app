@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:bookmark_repository/bookmark_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:models/models.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/models/models.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'bookmark_event.dart';
 part 'bookmark_state.dart';
@@ -30,32 +30,13 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
           getBookmarkStatus: LoadingStatus.loading,
         ),
       );
-      final isHasNetwork = await ConnectivityHelper.isInternetOnline();
-      if (isHasNetwork) {
-        final bookmarks = await _bookmarkRepository.getBookmarks();
-        final bookmarksInLocal = _bookmarkRepository.getBookmarksInLocalBox();
-        if (bookmarks != bookmarksInLocal) {
-          for (final blog in bookmarks) {
-            final isExist = bookmarksInLocal.any((e) => blog.id == e.id);
-            if (isExist) continue;
-            await _bookmarkRepository.addBookmarkToLocal(blog: blog);
-          }
-        }
-        emit(
-          state.copyWith(
-            getBookmarkStatus: LoadingStatus.done,
-            bookmarks: bookmarks,
-          ),
-        );
-      } else {
-        final bookmarksInLocal = _bookmarkRepository.getBookmarksInLocalBox();
-        emit(
-          state.copyWith(
-            getBookmarkStatus: LoadingStatus.done,
-            bookmarks: bookmarksInLocal,
-          ),
-        );
-      }
+      final bookmarks = await _bookmarkRepository.getBookmarks();
+      emit(
+        state.copyWith(
+          bookmarks: bookmarks,
+          getBookmarkStatus: LoadingStatus.done,
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(
@@ -77,7 +58,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
           actionBookmarkStatus: ActionBookmarkStatus.loading,
         ),
       );
-      await _bookmarkRepository.addBookmark(blog: event.blog);
+      await _bookmarkRepository.addBookmark(event.blog);
       emit(
         state.copyWith(
           bookmarks: [...state.bookmarks, event.blog],
@@ -105,7 +86,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
           actionBookmarkStatus: ActionBookmarkStatus.loading,
         ),
       );
-      await _bookmarkRepository.removeBookmark(blog: event.blog);
+      await _bookmarkRepository.removeBookmark(event.blog);
       emit(
         state.copyWith(
           bookmarks: state.bookmarks

@@ -8,7 +8,6 @@ export 'config/gen/assets.gen.dart';
 export 'config/gen/fonts.gen.dart';
 export 'config/helpers/connectivity_helper.dart';
 export 'config/helpers/image_picker_helper.dart';
-export 'config/helpers/secure_storage_helper.dart';
 export 'config/route/app_routes.dart';
 export 'config/theme/app_palette.dart';
 export 'config/theme/app_text_theme.dart';

@@ -1,11 +1,10 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:models/models.dart';
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/models/models.dart';
-import 'package:very_good_blog_app/repository/repository.dart'
-    show BlogRepository;
 
 part 'blog_event.dart';
 part 'blog_state.dart';

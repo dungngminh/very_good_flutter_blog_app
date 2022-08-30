@@ -1,8 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/register/register.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -163,7 +163,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           confirmationPassword: state.confirmedPassword.value,
           firstname: state.firstname.value,
           lastname: state.lastname.value,
-          
         )
             .then((_) {
           emit(

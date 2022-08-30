@@ -5,10 +5,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:models/models.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
-import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 
 class BlogViewOffline extends StatefulWidget {

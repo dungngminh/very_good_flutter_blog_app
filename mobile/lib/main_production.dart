@@ -9,5 +9,9 @@ import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/bootstrap.dart';
 
 void main() {
+  FlavorConfig(
+    flavor: Flavor.production,
+    values: FlavorValues(baseUrl: 'http://10.0.2.2:8080'),
+  );
   bootstrap(() => const VeryGoodBlogApp());
 }

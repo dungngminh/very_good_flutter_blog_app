@@ -6,12 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
+import 'package:models/models.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/blog/bloc/blog_bloc.dart';
 import 'package:very_good_blog_app/blog_editor/blog_editor.dart';
 import 'package:very_good_blog_app/l10n/l10n.dart';
-import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/profile/profile.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
 

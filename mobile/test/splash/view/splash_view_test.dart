@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:very_good_blog_app/authentication/authentication.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 import 'package:very_good_blog_app/splash/splash.dart';
 
 class MockAuthenticationRepository extends Mock

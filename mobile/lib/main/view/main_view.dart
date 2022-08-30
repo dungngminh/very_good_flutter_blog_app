@@ -1,16 +1,18 @@
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:blog_repository/blog_repository.dart';
+import 'package:bookmark_repository/bookmark_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
+import 'package:user_repository/user_repository.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/authentication/authentication.dart';
 import 'package:very_good_blog_app/blog/blog.dart';
 import 'package:very_good_blog_app/bookmark/book_mark.dart';
 import 'package:very_good_blog_app/home/home.dart';
-import 'package:very_good_blog_app/models/models.dart';
 import 'package:very_good_blog_app/notification/notification.dart';
 import 'package:very_good_blog_app/profile/profile.dart';
-import 'package:very_good_blog_app/repository/repository.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
