@@ -1,0 +1,25 @@
+name: blog_repository
+description: A blog repository
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: 3.0.4
+
+dependencies:
+  blog_data_source:
+    path: ../blog_data_source
+  firebase_storage_service:
+    path: ../firebase_storage_service
+  flutter:
+    sdk: flutter
+  models:
+    path: ../models
+  secure_storage_helper:
+    path: ../secure_storage_helper
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.0.1

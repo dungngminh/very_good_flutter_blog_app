@@ -1,16 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_blog_app/features/blog/blog.dart';
-import 'package:very_good_blog_app/features/blog/view/blog_view_offline.dart';
-import 'package:very_good_blog_app/features/blog_editor/blog_editor.dart';
-import 'package:very_good_blog_app/features/bookmark/book_mark.dart';
-import 'package:very_good_blog_app/features/login/login.dart';
-import 'package:very_good_blog_app/features/main/main.dart';
-import 'package:very_good_blog_app/features/profile/profile.dart';
-import 'package:very_good_blog_app/features/register/register.dart';
-import 'package:very_good_blog_app/features/setting/setting.dart';
-import 'package:very_good_blog_app/features/splash/splash.dart';
-import 'package:very_good_blog_app/models/models.dart';
+import 'package:models/models.dart';
+import 'package:very_good_blog_app/blog/blog.dart';
+import 'package:very_good_blog_app/blog/view/blog_view_offline.dart';
+import 'package:very_good_blog_app/blog_editor/blog_editor.dart';
+import 'package:very_good_blog_app/bookmark/book_mark.dart';
+import 'package:very_good_blog_app/login/login.dart';
+import 'package:very_good_blog_app/main/main.dart';
+import 'package:very_good_blog_app/profile/profile.dart';
+import 'package:very_good_blog_app/register/register.dart';
+import 'package:very_good_blog_app/setting/setting.dart';
+import 'package:very_good_blog_app/splash/splash.dart';
 
 class AppRoutes {
   static const splash = '/';

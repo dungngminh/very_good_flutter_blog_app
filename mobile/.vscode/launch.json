@@ -17,6 +17,19 @@
       ]
     },
     {
+      "name": "Launch development with Impeller",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--flavor",
+        "development",
+        "--target",
+        "lib/main_development.dart",
+        "--enable-impeller"
+      ]
+    },
+    {
       "name": "Launch staging",
       "request": "launch",
       "type": "dart",
