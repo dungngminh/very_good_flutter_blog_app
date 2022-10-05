@@ -1,0 +1,5 @@
+.vscode
+*.sqlite
+*.pyc
+venv
+firebase_key.json

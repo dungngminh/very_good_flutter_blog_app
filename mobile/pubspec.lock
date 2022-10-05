@@ -74,15 +74,15 @@ packages:
   bookmark_data_source:
     dependency: "direct main"
     description:
-      path: "/media/dungngminh/Data/project/very_good_blog_app/mobile/packages/bookmark_data_source"
-      relative: false
+      path: "packages/bookmark_data_source"
+      relative: true
     source: path
     version: "0.1.0+1"
   bookmark_repository:
     dependency: "direct main"
     description:
-      path: "/media/dungngminh/Data/project/very_good_blog_app/mobile/packages/bookmark_repository"
-      relative: false
+      path: "packages/bookmark_repository"
+      relative: true
     source: path
     version: "0.1.0+1"
   boolean_selector:
@@ -629,7 +629,7 @@ packages:
       name: go_router
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.8"
+    version: "4.3.0"
   hive:
     dependency: "direct main"
     description:

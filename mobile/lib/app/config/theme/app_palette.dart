@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// It's a class that contains static constants that represent colors
 abstract class AppPalette {
   static const primaryColor = Color(0xFF864AFC);
   static const fieldColor = Color(0xFFF6F6F6);
@@ -21,6 +22,6 @@ abstract class AppPalette {
   static const deepPurpleColor = Color(0xFF200E32);
   static const red300Color = Color(0xFFEC4D4D);
 
-  static final shimmerBaseColor = Colors.grey.shade300;
-  static final shimmerHighlightColor = Colors.grey.shade100;
+  static const shimmerBaseColor = Color(0xFFE0E0E0);
+  static const shimmerHighlightColor = Color(0xFFF5F5F5);
 }
