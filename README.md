@@ -81,9 +81,9 @@
 <table>
   <tr>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/63831488?v=4" width="100px;" alt=""/><br /><sub><b>Nguyen Minh Dung</b></sub></a><br /><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=dungngminh" title="Code">💻</a> <a title="Mobile">📱</a> <a href="https://github.com/dungngminh/very_good_blog_app/commits?author=dungngminh" >
-    <td align="center"><img src="https://avatars.githubusercontent.com/u/55595623?v=4" width="100px;" alt=""/><br /><sub><b>Le Quoc Thinh</b></sub></a><br /><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=quocthinhle" title="Code">💻</a> <a title="Mobile">📱</a> <a href="https://github.com/dungngminh/very_good_blog_app/commits?author=quocthinhle" >
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/55595623?v=4" width="100px;" alt=""/><br /><sub><b>Le Quoc Thinh</b></sub></a><br /><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=quocthinhle" title="Code">💻</a> <a title="Backend">🔗</a> <a href="https://github.com/dungngminh/very_good_blog_app/commits?author=quocthinhle" >
     <td align="center"><img src="https://avatars.githubusercontent.com/u/79962030?v=4" width="100px;" alt=""/><br /><sub><b>Tran Thanh Nhat</b></sub></a><br /><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=thanhnhat108" title="Code">💻</a><a title="Backend">🔗</a> <a href="https://github.com/dungngminh/very_good_blog_app/commits?author=thanhnhat108" >
-    <td align="center"><img src="https://avatars.githubusercontent.com/u/61832021?v=4" width="100px;" alt=""/><br /><sub><b>Dinh Minh Toan</b></sub></a><br /><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=mtoan65" title="Code">💻</a><a title="Mobile">📱</a> <a href="https://github.com/dungngminh/very_good_blog_app/commits?author=mtoan65" >
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/61832021?v=4" width="100px;" alt=""/><br /><sub><b>Dinh Minh Toan</b></sub></a><br /><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=mtoan65" title="Code">💻</a><a title="Backend">🔗</a><a href="https://github.com/dungngminh/very_good_blog_app/commits?author=mtoan65" >
   </tr>
   
 </table>
