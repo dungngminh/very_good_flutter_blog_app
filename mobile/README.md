@@ -1,4 +1,4 @@
-# Very Good Blog App
+# Very Good Blog App 2023
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
