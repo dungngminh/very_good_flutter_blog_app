@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/blog/blog.dart';
+import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/profile/profile.dart';
 import 'package:very_good_blog_app/widgets/blog_card_placeholder.dart';
 import 'package:very_good_blog_app/widgets/widgets.dart';
@@ -37,9 +38,9 @@ class ProfileView extends StatelessWidget {
                 color: AppPalette.whiteBackgroundColor,
               )
             ],
-            physics: userBlogsLength > 0
-                ? const BouncingScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
+            // physics: userBlogsLength > 0
+            //     ? const BouncingScrollPhysics()
+            //     : const NeverScrollableScrollPhysics(),
             leading: Padding(
               padding: const EdgeInsets.all(4),
               child: Align(
@@ -229,6 +230,7 @@ class _BasicUserInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocBuilder<ProfileBloc, ProfileState>(
       buildWhen: (previous, current) => previous.user != current.user,
       builder: (context, state) {
@@ -260,7 +262,7 @@ class _BasicUserInformation extends StatelessWidget {
 
                     return _ProfileStat(
                       key: const ValueKey('post'),
-                      content: 'Bài viết',
+                      content: l10n.blog,
                       count: userBlogs.length,
                     );
                   },
@@ -273,7 +275,7 @@ class _BasicUserInformation extends StatelessWidget {
                     );
                     return _ProfileStat(
                       key: const ValueKey('follower'),
-                      content: 'Người t.dõi',
+                      content: l10n.follower,
                       count: followerCount ?? 0,
                     );
                   },
@@ -286,7 +288,7 @@ class _BasicUserInformation extends StatelessWidget {
                     );
                     return _ProfileStat(
                       key: const ValueKey('following'),
-                      content: 'Đang t.dõi',
+                      content: l10n.following,
                       count: followingCount ?? 0,
                     );
                   },
@@ -437,17 +439,18 @@ class _BlogPanelState extends State<_BlogPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
           child: Row(
             children: [
-              _buildTab(index: 0, nameTab: 'Tất cả'),
+              _buildTab(index: 0, nameTab: l10n.all),
               const SizedBox(
                 width: 16,
               ),
-              _buildTab(index: 1, nameTab: 'Đã thích'),
+              _buildTab(index: 1, nameTab: l10n.liked),
             ],
           ),
         ),
@@ -462,10 +465,10 @@ class _BlogPanelState extends State<_BlogPanel> {
                     final userBlogs =
                         context.watch<ProfileBloc>().state.userBlogs;
                     if (userBlogs.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 32),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 32),
                         child: Center(
-                          child: Text('Bạn chưa có blog nào'),
+                          child: Text(l10n.noOwnBlogs),
                         ),
                       );
                     }
@@ -551,6 +554,7 @@ class _BuildLikedBlogList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Builder(
       builder: (context) {
         final userLikedBlogs =
@@ -586,18 +590,18 @@ class _BuildLikedBlogList extends StatelessWidget {
           );
         }
         if (likedBlogStatus == LikeBlogStatus.error) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 32),
+          return Padding(
+            padding: const EdgeInsets.only(top: 32),
             child: Center(
-              child: Text('Đã có lỗi xảy ra vui lòng thử lại'),
+              child: Text(l10n.unknownError),
             ),
           );
         }
         if (userLikedBlogs.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 32),
+          return Padding(
+            padding: const EdgeInsets.only(top: 32),
             child: Center(
-              child: Text('Bạn chưa thích blog nào'),
+              child: Text(l10n.noLikedBlogs),
             ),
           );
         }

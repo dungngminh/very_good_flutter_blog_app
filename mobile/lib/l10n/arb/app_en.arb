@@ -89,5 +89,8 @@
   "addedToSavedList": "Added to saved blogs",
   "fetchingFailedPlsTryAgain": "Fetching failed, please try again!",
   "user": "User",
-  "titleBlogEmpty": "Title of blog cannot be empty"
+  "titleBlogEmpty": "Title of blog cannot be empty",
+  "unknownError": "Something went wrong, please try again!",
+  "all": "All",
+  "liked": "Liked"
 }

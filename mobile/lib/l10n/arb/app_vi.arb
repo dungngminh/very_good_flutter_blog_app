@@ -89,5 +89,9 @@
   "addedToSavedList": "Đã thêm vào dạnh sách đã lưu",
   "fetchingFailedPlsTryAgain": "Cập nhật thất bại, hãy thử lại!",
   "user": "bạn",
-  "titleBlogEmpty": "Tiêu đề bài viết không được để trống"
+  "titleBlogEmpty": "Tiêu đề bài viết không được để trống",
+  "unknownError": "Đã có lỗi xảy ra, vui lòng thử lại",
+  "all":"Tất cả",
+  "liked":"Đã thích"
 }
+ 

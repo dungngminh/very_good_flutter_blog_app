@@ -3,7 +3,6 @@ enum Flavor { development, production, staging }
 class FlavorValues {
   FlavorValues({required this.baseUrl});
   final String baseUrl;
-  //Add other flavor specific values, e.g database name
 }
 
 class FlavorConfig {
