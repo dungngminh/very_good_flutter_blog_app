@@ -173,7 +173,6 @@ class AppRoutes {
     ],
     // initialLocation: home,
     debugLogDiagnostics: true,
-    urlPathStrategy: UrlPathStrategy.path,
   );
 }
 

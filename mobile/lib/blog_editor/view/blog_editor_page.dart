@@ -141,9 +141,6 @@ class _AddBlogViewState extends State<_AddBlogView> {
                     borderRadius: 40,
                     iconSelectedFillColor: AppPalette.primaryColor,
                   ),
-                  showImageButton: false,
-                  showCameraButton: false,
-                  showVideoButton: false,
                 ),
               ),
               Expanded(
