@@ -1,0 +1,7 @@
+appId: com.dungngminh.very_good_blog_app.dev
+---
+- launchApp
+- tapOn: "Input your username"
+- inputText: "dungngminh"
+- tapOn: "Input your password"
+- inputText: "12345"
