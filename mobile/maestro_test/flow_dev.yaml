@@ -4,4 +4,4 @@ appId: com.dungngminh.very_good_blog_app.dev
 - tapOn: "Input your username"
 - inputText: "dungngminh"
 - tapOn: "Input your password"
-- inputText: "1234567"
+- inputText: "123456789"
