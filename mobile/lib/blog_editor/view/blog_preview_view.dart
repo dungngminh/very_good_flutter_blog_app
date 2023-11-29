@@ -75,9 +75,9 @@ class _BlogPreviewViewState extends State<BlogPreviewView> {
                             ),
                             style: AppTextTheme.decriptionTextStyle
                                 .copyWith(fontSize: 14),
-                          )
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(

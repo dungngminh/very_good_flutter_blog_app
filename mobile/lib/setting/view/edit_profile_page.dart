@@ -43,7 +43,7 @@ class _EditProfileView extends StatelessWidget {
                 content: Text('Đang cập nhật thông tin'),
               ),
             );
-        } else if (state.loadingStatus == LoadingStatus.error) {
+        } else if (state.loadingStatus.isError) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -51,7 +51,7 @@ class _EditProfileView extends StatelessWidget {
                 content: Text(state.errorMessage),
               ),
             );
-        } else if (state.loadingStatus == LoadingStatus.done) {
+        } else if (state.loadingStatus.isDone) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -225,10 +225,10 @@ class _UpdateProfileButton extends StatelessWidget {
                       : null,
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(120, 50),
+                    backgroundColor: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    primary: Theme.of(context).primaryColor,
                   ),
                   child: const Text(
                     'Cập nhật',

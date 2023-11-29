@@ -1,6 +1,5 @@
 part of 'bookmark_bloc.dart';
 
-
 enum ActionBookmarkStatus { initial, loading, addDone, error, removeDone }
 
 class BookmarkState extends Equatable {

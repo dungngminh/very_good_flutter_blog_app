@@ -15,7 +15,7 @@
 
 - Flutter & Dart
 - Firebase Storage
-- Django
+- Dart Frog for backend
 
 ## Flutter app used
 

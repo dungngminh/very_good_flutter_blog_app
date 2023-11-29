@@ -88,7 +88,7 @@ class AppRoutes {
                 child: const EditProfilePage(),
               );
             },
-          )
+          ),
         ],
       ),
       GoRoute(
@@ -142,7 +142,7 @@ class AppRoutes {
                     blog: blog,
                   );
                 },
-              )
+              ),
             ],
           ),
         ],
@@ -169,7 +169,7 @@ class AppRoutes {
             ),
           );
         },
-      )
+      ),
     ],
     // initialLocation: home,
     debugLogDiagnostics: true,

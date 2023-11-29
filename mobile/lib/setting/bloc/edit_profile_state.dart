@@ -1,6 +1,5 @@
 part of 'edit_profile_bloc.dart';
 
-
 class EditProfileState extends Equatable {
   const EditProfileState({
     this.validationStatus = FormzStatus.pure,
@@ -49,7 +48,7 @@ class EditProfileState extends Equatable {
       imagePath,
       enableEditing,
       loadingStatus,
-      errorMessage
+      errorMessage,
     ];
   }
 }

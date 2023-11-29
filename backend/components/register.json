@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "confirmation_password": {
+      "type": "string"
+    }
+  }
+}

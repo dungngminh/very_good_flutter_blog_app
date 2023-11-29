@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:very_good_blog_app/app/app.dart';
 
 class SettingTile extends StatelessWidget {
@@ -53,7 +52,7 @@ class SettingTile extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

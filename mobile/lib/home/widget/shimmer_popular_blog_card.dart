@@ -76,7 +76,7 @@ class ShimmerPopularBlogCard extends StatelessWidget {
                                 Container(
                                   height: 10,
                                   color: AppPalette.whiteBackgroundColor,
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -86,7 +86,7 @@ class ShimmerPopularBlogCard extends StatelessWidget {
                       Container(
                         height: 16,
                         color: AppPalette.whiteBackgroundColor,
-                      )
+                      ),
                     ],
                   ),
                 ),

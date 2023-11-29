@@ -159,7 +159,7 @@ class BlogCard extends StatelessWidget {
                   timeago.format(blog.createdAt),
                   style:
                       AppTextTheme.decriptionTextStyle.copyWith(fontSize: 12),
-                )
+                ),
               ],
             ),
           ),
@@ -203,7 +203,7 @@ class BlogCard extends StatelessWidget {
                   timeago.format(blog.createdAt),
                   style:
                       AppTextTheme.decriptionTextStyle.copyWith(fontSize: 12),
-                )
+                ),
               ],
             ),
           ),
@@ -253,7 +253,7 @@ class BlogCard extends StatelessWidget {
                   style: AppTextTheme.decriptionTextStyle.copyWith(
                     fontSize: 14,
                   ),
-                )
+                ),
               ],
             ),
           ),

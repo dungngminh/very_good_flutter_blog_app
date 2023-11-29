@@ -96,7 +96,7 @@ void main() {
               body: <String, dynamic>{
                 'id': 2,
                 'title': 'json-server',
-                'author': 'typicode'
+                'author': 'typicode',
               },
             ),
           ).thenAnswer(
@@ -114,7 +114,7 @@ void main() {
             body: <String, dynamic>{
               'id': 2,
               'title': 'json-server',
-              'author': 'typicode'
+              'author': 'typicode',
             },
             headers: {
               HttpHeaders.contentTypeHeader: 'application/json',

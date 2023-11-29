@@ -176,7 +176,7 @@ class PopularBlogCard extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

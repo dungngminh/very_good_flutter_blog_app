@@ -9,9 +9,9 @@ enum RegisterEventType {
   submitted,
 }
 
- class RegisterEvent extends Equatable {
+class RegisterEvent extends Equatable {
   const RegisterEvent(
-    this.type,{
+    this.type, {
     this.input = '',
   });
 

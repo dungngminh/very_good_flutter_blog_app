@@ -1,0 +1,17 @@
+[phases.setup]
+nixpkgsArchive = 'bc901a14315f03cb02d5be6d7e4c8075cd0fe36c'
+[phases.install]
+cmds = [
+    'dart pub get',
+    'dart pub global activate dart_frog_cli',
+    'echo "export PATH=$PATH:$HOME/.pub-cache/bin" >> ~/.bashrc',
+    'source ~/.bashrc',
+    'exec bash',
+    'dart_frog --version',
+    'dart_frog build',
+    'cd build/',
+]
+[phases.build]
+cmds = ['cd app/', 'dart compile exe bin/server.dart -o bin/server']
+[start]
+cmd = '.bin/server.exe'

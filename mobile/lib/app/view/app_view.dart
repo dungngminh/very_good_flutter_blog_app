@@ -97,7 +97,7 @@ class _VeryGoodBlogAppViewState extends State<VeryGoodBlogAppView> {
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
       ),

@@ -1,0 +1,29 @@
+name: very_good_blog_app_backend
+description: A backend for Very Good Blog App
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  cloudinary: ^1.2.0
+  crypto: ^3.0.3
+  dart_frog: ^1.0.0
+  dart_frog_auth: ^1.1.0
+  dart_jsonwebtoken: ^2.11.0
+  dartx: ^1.2.0
+  equatable: ^2.0.5
+  http: ^1.1.0
+  json_annotation: ^4.8.1
+  shelf_enforces_ssl: ^1.2.1
+  stormberry: ^0.13.1
+  string_validator: ^1.0.0
+  uuid: ^3.0.7
+
+dev_dependencies:
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+  mocktail: ^0.3.0
+  test: ^1.19.2
+  very_good_analysis: ^5.0.0

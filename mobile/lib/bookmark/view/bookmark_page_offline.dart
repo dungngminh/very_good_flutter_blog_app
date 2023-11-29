@@ -38,11 +38,11 @@ class BookmarkViewOffline extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 24, right: 16),
+            const Padding(
+              padding: EdgeInsets.only(left: 24, right: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     'Bạn đang ở chế độ Offline\n'
                     'Danh sách bài viết đã lưu ở máy',
@@ -66,7 +66,7 @@ class BookmarkViewOffline extends StatelessWidget {
                 );
                 if (bookmarkStatus == LoadingStatus.loading) {
                   return const _BookmarkPlaceholder();
-                } else if (bookmarkStatus == LoadingStatus.error) {
+                } else if (bookmarkStatus.isError) {
                   return Expanded(
                     child: Center(
                       child: Text(

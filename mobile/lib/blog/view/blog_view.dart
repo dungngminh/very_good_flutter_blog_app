@@ -60,7 +60,7 @@ class _BlogViewState extends State<BlogView> {
       listenWhen: (previous, current) =>
           previous.likeBlogStatus != current.likeBlogStatus,
       listener: (context, state) {
-        if (state.likeBlogStatus == LikeBlogStatus.done) {
+        if (state.likeBlogStatus.isDone) {
           if (_likeCount.value > widget.blog.likeCount) {
             Fluttertoast.cancel();
             Fluttertoast.showToast(msg: 'Đã thích bài viết');
@@ -141,9 +141,9 @@ class _BlogViewState extends State<BlogView> {
                               ),
                               style: AppTextTheme.decriptionTextStyle
                                   .copyWith(fontSize: 14),
-                            )
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(
@@ -243,7 +243,7 @@ class _BlogViewState extends State<BlogView> {
                                       ),
                               );
                             },
-                          )
+                          ),
                         ],
                       ),
                     ),

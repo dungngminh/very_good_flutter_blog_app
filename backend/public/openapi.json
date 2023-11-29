@@ -1,0 +1,980 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "A sample API",
+    "description": "A sample API",
+    "termsOfService": "https://very-good-blog-app.up.railway.app",
+    "contact": {
+      "name": "none",
+      "url": "http://localhost",
+      "email": "none@api.com"
+    },
+    "license": {
+      "name": "",
+      "url": ""
+    },
+    "version": "0.0.0"
+  },
+  "externalDocs": {
+    "description": "",
+    "url": "https://very-good-blog-app.up.railway.app/"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local server"
+    },
+    {
+      "url": "https://very-good-blog-app.up.railway.app/",
+      "description": "Railway server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "blogs",
+      "description": "Operations about blogs"
+    },
+    {
+      "name": "followings",
+      "description": "Operations about followings"
+    },
+    {
+      "name": "register",
+      "description": "Operations about register"
+    },
+    {
+      "name": "login",
+      "description": "Operations about login"
+    },
+    {
+      "name": "favorites",
+      "description": "Operations about favorites"
+    },
+    {
+      "name": "followers",
+      "description": "Operations about followers"
+    },
+    {
+      "name": "profiles",
+      "description": "Operations about profiles"
+    },
+    {
+      "name": "upload",
+      "description": "Operations about upload"
+    },
+    {
+      "name": "unregister",
+      "description": "Operations about unregister"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "blogs": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          }
+        }
+      },
+      "register": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmation_password": {
+            "type": "string"
+          }
+        }
+      },
+      "login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  },
+  "paths": {
+    "/api/blogs": {
+      "get": {
+        "tags": [
+          "blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of blogs.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/blogs"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "blogs"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/blogs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created blogs.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/api/blogs/{id}": {
+      "get": {
+        "tags": [
+          "blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "A blogs.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/blogs"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      },
+      "delete": {
+        "tags": [
+          "blogs"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      },
+      "patch": {
+        "tags": [
+          "blogs"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/blogs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of blogs.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/blogs"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/api/followings": {
+      "post": {
+        "tags": [
+          "followings"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created followings.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "register"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created register.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created login.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    },
+    "/api/favorites": {
+      "get": {
+        "tags": [
+          "favorites"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of favorites.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "favorites"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created favorites.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    },
+    "/api/users/{id}/blogs": {
+      "get": {
+        "tags": [
+          "blogs"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of blogs.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/blogs"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/api/users/{id}/followers": {
+      "get": {
+        "tags": [
+          "followers"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of followers.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/api/users/{id}/followings": {
+      "get": {
+        "tags": [
+          "followings"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of followings.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/api/users/{id}/profiles": {
+      "get": {
+        "tags": [
+          "profiles"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of profiles.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      },
+      "patch": {
+        "tags": [
+          "profiles"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of profiles.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": []
+      }
+    },
+    "/api/documents/upload": {
+      "post": {
+        "tags": [
+          "upload"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created upload.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    },
+    "/api/notifications/registrations/register": {
+      "get": {
+        "tags": [
+          "register"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of register.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/register"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "register"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created register.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "put": {
+        "tags": [
+          "register"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of register.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/register"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "delete": {
+        "tags": [
+          "register"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "patch": {
+        "tags": [
+          "register"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of register.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/register"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "head": {
+        "tags": [
+          "register"
+        ],
+        "responses": {
+          "200": {
+            "description": "Meta informations about register.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "options": {
+        "tags": [
+          "register"
+        ],
+        "responses": {
+          "204": {
+            "description": "Allowed HTTP methods for /api/notifications/registrations/register",
+            "headers": {
+              "Allow": {
+                "description": "Allowed HTTP methods for /api/notifications/registrations/register",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    },
+    "/api/notifications/registrations/unregister": {
+      "get": {
+        "tags": [
+          "unregister"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of unregister.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "post": {
+        "tags": [
+          "unregister"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created unregister.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "put": {
+        "tags": [
+          "unregister"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of unregister.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "delete": {
+        "tags": [
+          "unregister"
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "patch": {
+        "tags": [
+          "unregister"
+        ],
+        "requestBody": {
+          "description": "",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of unregister.",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "head": {
+        "tags": [
+          "unregister"
+        ],
+        "responses": {
+          "200": {
+            "description": "Meta informations about unregister.",
+            "headers": {},
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      },
+      "options": {
+        "tags": [
+          "unregister"
+        ],
+        "responses": {
+          "204": {
+            "description": "Allowed HTTP methods for /api/notifications/registrations/unregister",
+            "headers": {
+              "Allow": {
+                "description": "Allowed HTTP methods for /api/notifications/registrations/unregister",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "parameters": [],
+        "security": []
+      }
+    }
+  }
+}

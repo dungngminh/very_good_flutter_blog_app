@@ -109,7 +109,7 @@ class NotificationTile extends StatelessWidget {
                               text: '$blogName',
                               style: AppTextTheme.titleTextStyle
                                   .copyWith(fontSize: 13),
-                            )
+                            ),
                           ],
                         ),
                   style: AppTextTheme.regularTextStyle.copyWith(fontSize: 13),

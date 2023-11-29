@@ -38,7 +38,7 @@ class UserRemoteDataSource implements UserDataSource {
       },
       headers: <String, String>{
         HttpHeaders.authorizationHeader: token,
-        HttpHeaders.contentTypeHeader: 'application/json'
+        HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
   }

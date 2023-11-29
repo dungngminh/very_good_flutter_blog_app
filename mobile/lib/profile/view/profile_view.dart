@@ -36,7 +36,7 @@ class ProfileView extends StatelessWidget {
             actions: const [
               _SettingButton(
                 color: AppPalette.whiteBackgroundColor,
-              )
+              ),
             ],
             // physics: userBlogsLength > 0
             //     ? const BouncingScrollPhysics()
@@ -178,10 +178,10 @@ class _ProfilePanel extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: Column(
-              children: const [
+              children: [
                 SizedBox(
                   height: 180,
                   child: _AvatarDecoration(),
@@ -192,7 +192,7 @@ class _ProfilePanel extends StatelessWidget {
                 SizedBox(
                   height: 120,
                   child: _BasicUserInformation(),
-                )
+                ),
               ],
             ),
           ),
@@ -392,7 +392,7 @@ class _AvatarDecoration extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -500,7 +500,7 @@ class _BlogPanelState extends State<_BlogPanel> {
               ],
             );
           },
-        )
+        ),
       ],
     );
   }
@@ -538,7 +538,7 @@ class _BlogPanelState extends State<_BlogPanel> {
                           ? AppPalette.primaryColor
                           : Colors.transparent,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

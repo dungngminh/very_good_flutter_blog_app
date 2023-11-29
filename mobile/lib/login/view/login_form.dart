@@ -175,10 +175,10 @@ class _LoginButton extends StatelessWidget {
                     : null,
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(130, 50),
+                  backgroundColor: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  primary: Theme.of(context).primaryColor,
                 ),
                 child: Text(
                   l10n.login,

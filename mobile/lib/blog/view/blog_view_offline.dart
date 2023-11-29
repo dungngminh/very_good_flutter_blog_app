@@ -86,9 +86,9 @@ class _BlogViewOfflineState extends State<BlogViewOffline> {
                             ),
                             style: AppTextTheme.decriptionTextStyle
                                 .copyWith(fontSize: 14),
-                          )
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(

@@ -1,0 +1,33 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "A sample API",
+    "description": "A sample API",
+    "termsOfService": "https://very-good-blog-app.up.railway.app",
+    "contact": {
+      "name": "none",
+      "url": "http://localhost",
+      "email": "none@api.com"
+    },
+    "license": {
+      "name": "",
+      "url": ""
+    },
+    "version": "0.0.0"
+  },
+  "externalDocs": {
+    "description": "",
+    "url": "https://very-good-blog-app.up.railway.app/"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local server"
+    },
+    {
+      "url": "https://very-good-blog-app.up.railway.app/",
+      "description": "Railway server"
+    }
+  ],
+  "paths": {}
+}

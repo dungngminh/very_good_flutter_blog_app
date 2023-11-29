@@ -12,19 +12,22 @@ abstract class AuthenticationException implements Exception {
   final StackTrace stackTrace;
 }
 
-/// Extending `AuthenticationException` and is used to throw an exception when the user
+/// Extending `AuthenticationException` and is used 
+/// to throw an exception when the user
 /// is not logged in.
 class LoginException extends AuthenticationException {
   LoginException(super.error, super.stackTrace);
 }
 
-/// Extending `AuthenticationException` and is used to throw an exception when the user
+/// Extending `AuthenticationException` and is used to 
+/// throw an exception when the user
 /// is not registered.
 class RegisterException extends AuthenticationException {
   RegisterException(super.error, super.stackTrace);
 }
 
-/// A class that extends `AuthenticationException` and is used to throw an exception when the user
+/// A class that extends `AuthenticationException` and is 
+/// used to throw an exception when the user
 /// is not logged out.
 class LogoutException extends AuthenticationException {
   LogoutException(super.error, super.stackTrace);

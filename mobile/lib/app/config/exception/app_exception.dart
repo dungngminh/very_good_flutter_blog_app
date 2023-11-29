@@ -35,5 +35,8 @@ class TimeoutException extends AppException {
 }
 
 class BadRequestedExpcetion extends AppException {
-  BadRequestedExpcetion(super.message, {super.name = 'Bad requested',});
+  BadRequestedExpcetion(
+    super.message, {
+    super.name = 'Bad requested',
+  });
 }

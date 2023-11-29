@@ -64,7 +64,7 @@ class LoginView extends StatelessWidget {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => context.push(AppRoutes.register),
-                        )
+                        ),
                       ],
                     ),
                     style: const TextStyle(
@@ -75,7 +75,7 @@ class LoginView extends StatelessWidget {
                 ),
                 SizedBox(
                   height: context.screenHeight * 0.06,
-                )
+                ),
               ],
             ),
           ),

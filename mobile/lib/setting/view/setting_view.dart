@@ -79,7 +79,7 @@ class SettingView extends StatelessWidget {
                             'Hủy',
                             style: TextStyle(color: AppPalette.primaryColor),
                           ),
-                        )
+                        ),
                       ],
                     );
                   },
@@ -88,7 +88,7 @@ class SettingView extends StatelessWidget {
               title: 'Đăng xuất',
               primaryColor: AppPalette.primaryColor,
               supportBackgroundColor: AppPalette.purpleSupportColor,
-            )
+            ),
           ],
         ),
       ),

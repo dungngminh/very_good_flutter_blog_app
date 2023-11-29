@@ -120,7 +120,7 @@ class CloudMessagingService {
     _logger.d('Handling message interactions');
     await _handleBackgroundMessageInteraction();
     _handleForegroundMessageInteraction();
-    _handleLocalNotificationInteraction();
+    // _handleLocalNotificationInteraction();
   }
 
   Future<void> _handleBackgroundMessageInteraction() async {
@@ -137,19 +137,19 @@ class CloudMessagingService {
     return FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
-  void _handleLocalNotificationInteraction() {
-    _localNotificationsPlugin.initialize(
-      const InitializationSettings(
-        android: AndroidInitializationSettings('ic_notification'),
-      ),
-      onSelectNotification: (payload) {
-        if (payload == null) return;
+  // void _handleLocalNotificationInteraction() {
+  //   _localNotificationsPlugin.initialize(
+  //     const InitializationSettings(
+  //       android: AndroidInitializationSettings('ic_notification'),
+  //     ),
+  //     onSelectNotification: (payload) {
+  //       if (payload == null) return;
 
-        final data = json.decode(payload) as Map<String, dynamic>;
-        _messageHandler?.call(data);
-      },
-    );
-  }
+  //       final data = json.decode(payload) as Map<String, dynamic>;
+  //       _messageHandler?.call(data);
+  //     },
+  //   );
+  // }
 
   void _handleMessage(RemoteMessage message) {
     _messageHandler?.call(message.data);

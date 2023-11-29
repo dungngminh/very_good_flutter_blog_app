@@ -40,11 +40,10 @@ class BookmarkView extends StatelessWidget {
                         onPressed: () => context
                             .read<BookmarkBloc>()
                             .add(BookmarkFetching()),
-                        isLoading:
-                            getBookmarkStatus == LoadingStatus.loading,
+                        isLoading: getBookmarkStatus == LoadingStatus.loading,
                       );
                     },
-                  )
+                  ),
                 ],
               ),
             ),
@@ -63,7 +62,7 @@ class BookmarkView extends StatelessWidget {
                 );
                 if (bookmarkStatus == LoadingStatus.loading) {
                   return const _BookmarkPlaceholder();
-                } else if (bookmarkStatus == LoadingStatus.error) {
+                } else if (bookmarkStatus.isError) {
                   return Expanded(
                     child: Center(
                       child: Text(

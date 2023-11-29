@@ -1,7 +1,5 @@
 part of 'blog_bloc.dart';
 
-
-
 class BlogState extends Equatable {
   const BlogState({
     this.getBlogStatus = LoadingStatus.done,

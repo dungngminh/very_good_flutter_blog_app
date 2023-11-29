@@ -23,7 +23,7 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
         'password': password,
       },
       headers: <String, String>{
-        HttpHeaders.contentTypeHeader: 'application/json'
+        HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
   }
@@ -46,7 +46,7 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
         'confirmation_password': confirmationPassword,
       },
       headers: <String, String>{
-        HttpHeaders.contentTypeHeader: 'application/json'
+        HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
   }

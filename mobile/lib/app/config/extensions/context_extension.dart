@@ -15,6 +15,6 @@ extension ContextExtension on BuildContext {
   }
 
   String get currentLocation {
-    return GoRouter.of(this).location;
+    return GoRouterState.of(this).uri.toString();
   }
 }

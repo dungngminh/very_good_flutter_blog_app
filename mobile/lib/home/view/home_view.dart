@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
       listeners: [
         BlocListener<BlogBloc, BlogState>(
           listener: (context, state) {
-            if (state.getBlogStatus == LoadingStatus.error) {
+            if (state.getBlogStatus.isError) {
               Fluttertoast.cancel();
               Fluttertoast.showToast(msg: l10n.fetchingFailedPlsTryAgain);
             }
@@ -162,7 +162,7 @@ class _MoreBlogList extends StatelessWidget {
               },
             ),
           );
-        } else if (state.getBlogStatus == LoadingStatus.error) {
+        } else if (state.getBlogStatus.isError) {
           return Center(
             child: Text(state.errorMessage),
           );
@@ -222,7 +222,7 @@ class _PopularBlogList extends StatelessWidget {
                 );
               },
             );
-          } else if (state.getBlogStatus == LoadingStatus.error) {
+          } else if (state.getBlogStatus.isError) {
             return Center(
               child: Text(state.errorMessage),
             );
@@ -294,7 +294,7 @@ class _Header extends StatelessWidget {
                   l10n.welcome,
                   style: AppTextTheme.titleTextStyle,
                 ),
-              )
+              ),
             ],
           ),
           GestureDetector(
@@ -403,7 +403,7 @@ class _SearchField extends StatelessWidget {
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
           prefixIcon: const Icon(
-            PhosphorIcons.magnifyingGlassFill,
+            PhosphorIconsFill.magnifyingGlass,
             color: AppPalette.primaryColor,
             size: 26,
           ),

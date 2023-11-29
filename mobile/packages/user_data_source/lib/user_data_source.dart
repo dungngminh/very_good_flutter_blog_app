@@ -11,5 +11,5 @@ library user_data_source;
 export 'package:http_client_handler/http_client_handler.dart';
 export 'package:models/models.dart';
 
-export 'src/user_remote_data_source.dart';
 export 'src/user_data_source.dart';
+export 'src/user_remote_data_source.dart';

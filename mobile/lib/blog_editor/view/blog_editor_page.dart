@@ -157,7 +157,7 @@ class _AddBlogViewState extends State<_AddBlogView> {
                     readOnly: false,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

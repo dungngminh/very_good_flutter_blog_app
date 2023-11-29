@@ -134,7 +134,7 @@ class BlogRemoteDataSource implements BlogDataSource {
         },
         headers: <String, String>{
           HttpHeaders.authorizationHeader: token,
-          HttpHeaders.contentTypeHeader: 'application/json'
+          HttpHeaders.contentTypeHeader: 'application/json',
         },
       );
     } catch (e) {
@@ -213,7 +213,7 @@ class BlogRemoteDataSource implements BlogDataSource {
         },
         headers: <String, String>{
           HttpHeaders.authorizationHeader: token,
-          HttpHeaders.contentTypeHeader: 'application/json'
+          HttpHeaders.contentTypeHeader: 'application/json',
         },
       );
     } catch (e) {
@@ -229,7 +229,7 @@ class BlogRemoteDataSource implements BlogDataSource {
         body: blog.toJson(),
         headers: <String, String>{
           HttpHeaders.authorizationHeader: token,
-          HttpHeaders.contentTypeHeader: 'application/json'
+          HttpHeaders.contentTypeHeader: 'application/json',
         },
       );
     } catch (e) {
@@ -256,7 +256,7 @@ class BlogRemoteDataSource implements BlogDataSource {
         },
         headers: <String, String>{
           HttpHeaders.authorizationHeader: token,
-          HttpHeaders.contentTypeHeader: 'application/json'
+          HttpHeaders.contentTypeHeader: 'application/json',
         },
       );
     } catch (e) {

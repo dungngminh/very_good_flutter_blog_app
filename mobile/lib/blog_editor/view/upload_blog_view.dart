@@ -23,7 +23,7 @@ class UploadBlogView extends StatelessWidget {
     final l10n = context.l10n;
     return BlocListener<BlogEditorBloc, BlogEditorState>(
       listener: (context, state) {
-        if (state.uploadStatus == LoadingStatus.done) {
+        if (state.uploadStatus.isDone) {
           Fluttertoast.showToast(
             msg: state.existBlog == null
                 ? l10n.createBlogSuccessfully
@@ -38,7 +38,7 @@ class UploadBlogView extends StatelessWidget {
 
           context.read<BlogBloc>().add(const BlogGetBlogs());
           context.read<ProfileBloc>().add(ProfileGetUserInformation());
-        } else if (state.uploadStatus == LoadingStatus.error) {
+        } else if (state.uploadStatus.isError) {
           Fluttertoast.showToast(
             msg: state.existBlog == null
                 ? l10n.createBlogFailed
@@ -122,7 +122,7 @@ class UploadBlogView extends StatelessWidget {
                               );
                             },
                           ),
-                        )
+                        ),
                       ],
                     );
                   },
@@ -229,7 +229,7 @@ class _ImagePlacer extends StatelessWidget {
                       color: AppPalette.red300Color,
                     ),
                   ),
-                )
+                ),
               ],
             );
           },
@@ -413,10 +413,10 @@ class _UploadButton extends StatelessWidget {
                       : null,
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(existBlog == null ? 130 : 160, 50),
+                    backgroundColor: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    primary: Theme.of(context).primaryColor,
                   ),
                   child: Text(
                     existBlog == null ? l10n.uploadBlog : l10n.updateBlog,

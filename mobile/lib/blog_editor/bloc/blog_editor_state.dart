@@ -1,6 +1,5 @@
 part of 'blog_editor_bloc.dart';
 
-
 class BlogEditorState extends Equatable {
   const BlogEditorState({
     this.validationStatus = FormzStatus.pure,
