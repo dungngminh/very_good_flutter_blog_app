@@ -148,39 +148,34 @@ class _UserProfileForm extends StatelessWidget {
 class _FirstnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final firstname = context.select(
-          (EditProfileBloc editProfileBloc) => editProfileBloc.state.firstname,
-        );
-        final user =
-            context.select((ProfileBloc profileBloc) => profileBloc.state.user);
-        final enableToEdit = context.select(
-          (EditProfileBloc editProfileBloc) =>
-              editProfileBloc.state.enableEditing,
-        );
-        return TextFieldDecoration(
-          child: TextFormField(
-            readOnly: !enableToEdit,
-            initialValue: user!.firstName,
-            key: const Key('editProfile_firstnameInput_textField'),
-            onChanged: (firstName) => context.read<EditProfileBloc>().add(
-                  EditProfileEvent(
-                    EditProfileType.firstNameChanged,
-                    input: firstName,
-                  ),
-                ),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: 'Nhập vào họ của bạn',
-              errorText:
-                  firstname.isNotValid ? 'Họ của bạn không hợp lệ' : null,
+    final firstname = context.select(
+      (EditProfileBloc editProfileBloc) => editProfileBloc.state.firstname,
+    );
+    final user =
+        context.select((ProfileBloc profileBloc) => profileBloc.state.user);
+    final enableToEdit = context.select(
+      (EditProfileBloc editProfileBloc) => editProfileBloc.state.enableEditing,
+    );
+    return TextFieldDecoration(
+      child: TextFormField(
+        readOnly: !enableToEdit,
+        initialValue: user!.firstName,
+        key: const Key('editProfile_firstnameInput_textField'),
+        onChanged: (firstName) => context.read<EditProfileBloc>().add(
+              EditProfileEvent(
+                EditProfileType.firstNameChanged,
+                input: firstName,
+              ),
             ),
-          ),
-        );
-      },
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: 'Nhập vào họ của bạn',
+          errorText:
+              firstname.displayError != null ? 'Họ của bạn không hợp lệ' : null,
+        ),
+      ),
     );
   }
 }
@@ -188,97 +183,84 @@ class _FirstnameInput extends StatelessWidget {
 class _UpdateProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final isValid = context.select(
-          (EditProfileBloc editProfileBloc) => editProfileBloc.state.isValid,
-        );
-        final loadingStatus = context.select(
-          (EditProfileBloc editProfileBloc) =>
-              editProfileBloc.state.loadingStatus,
-        );
-        final enableToEdit = context.select(
-          (EditProfileBloc editProfileBloc) =>
-              editProfileBloc.state.enableEditing,
-        );
-        // final enableToEdit =
-        //     context.watch<EditProfileBloc>().state.enableEditing;
-        return loadingStatus == LoadingStatus.loading
-            ? const CircularProgressIndicator(
-                color: AppPalette.primaryColor,
-              )
-            : Visibility(
-                visible: enableToEdit,
-                child: ElevatedButton(
-                  key: const Key('editProfile_confirmedEdit_raisedButton'),
-                  onPressed: enableToEdit
-                      ? (isValid
-                          ? () {
-                              context.read<EditProfileBloc>().add(
-                                    const EditProfileEvent(
-                                      EditProfileType.submitted,
-                                    ),
-                                  );
-                            }
-                          : null)
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(120, 50),
-                    backgroundColor: Theme.of(context).primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                  child: const Text(
-                    'Cập nhật',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: AppPalette.whiteBackgroundColor,
-                    ),
-                  ),
-                ),
-              );
-      },
+    final isValid = context.select(
+      (EditProfileBloc editProfileBloc) => editProfileBloc.state.isValid,
     );
+    final loadingStatus = context.select(
+      (EditProfileBloc editProfileBloc) => editProfileBloc.state.loadingStatus,
+    );
+    final enableToEdit = context.select(
+      (EditProfileBloc editProfileBloc) => editProfileBloc.state.enableEditing,
+    );
+    return loadingStatus == LoadingStatus.loading
+        ? const CircularProgressIndicator(
+            color: AppPalette.primaryColor,
+          )
+        : Visibility(
+            visible: enableToEdit,
+            child: ElevatedButton(
+              key: const Key('editProfile_confirmedEdit_raisedButton'),
+              onPressed: enableToEdit
+                  ? (isValid
+                      ? () {
+                          context.read<EditProfileBloc>().add(
+                                const EditProfileEvent(
+                                  EditProfileType.submitted,
+                                ),
+                              );
+                        }
+                      : null)
+                  : null,
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(120, 50),
+                backgroundColor: Theme.of(context).primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              child: const Text(
+                'Cập nhật',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  color: AppPalette.whiteBackgroundColor,
+                ),
+              ),
+            ),
+          );
   }
 }
 
 class _LastnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final lastname = context.select(
-          (EditProfileBloc registerBloc) => registerBloc.state.lastname,
-        );
-        final user =
-            context.select((ProfileBloc profileBloc) => profileBloc.state.user);
-        final enableToEdit = context.select(
-          (EditProfileBloc editProfileBloc) =>
-              editProfileBloc.state.enableEditing,
-        );
-        return TextFieldDecoration(
-          child: TextFormField(
-            readOnly: !enableToEdit,
-            initialValue: user!.lastName,
-            key: const Key('editProfile_lastNameInput_textField'),
-            onChanged: (lastName) => context.read<EditProfileBloc>().add(
-                  EditProfileEvent(
-                    EditProfileType.lastNameChanged,
-                    input: lastName,
-                  ),
-                ),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: 'Nhập vào tên của bạn',
-              errorText:
-                  lastname.isNotValid ? 'Tên của bạn không hợp lệ' : null,
+    final lastname = context.select(
+      (EditProfileBloc registerBloc) => registerBloc.state.lastname,
+    );
+    final user =
+        context.select((ProfileBloc profileBloc) => profileBloc.state.user);
+    final enableToEdit = context.select(
+      (EditProfileBloc editProfileBloc) => editProfileBloc.state.enableEditing,
+    );
+    return TextFieldDecoration(
+      child: TextFormField(
+        readOnly: !enableToEdit,
+        initialValue: user!.lastName,
+        key: const Key('editProfile_lastNameInput_textField'),
+        onChanged: (lastName) => context.read<EditProfileBloc>().add(
+              EditProfileEvent(
+                EditProfileType.lastNameChanged,
+                input: lastName,
+              ),
             ),
-          ),
-        );
-      },
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: 'Nhập vào tên của bạn',
+          errorText:
+              lastname.displayError != null ? 'Tên của bạn không hợp lệ' : null,
+        ),
+      ),
     );
   }
 }

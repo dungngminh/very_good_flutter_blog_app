@@ -82,7 +82,9 @@ class _UsernameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.usernameHint,
-              errorText: state.username.isNotValid ? l10n.usernameEmpty : null,
+              errorText: state.username.displayError != null
+                  ? l10n.usernameEmpty
+                  : null,
             ),
             textInputAction: TextInputAction.next,
           ),
@@ -122,9 +124,7 @@ class _PasswordInputState extends State<_PasswordInput> {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.passwordHint,
-              errorText: state.password.isNotValid
-                  ? getErrorMessage(state.password.error!, l10n)
-                  : null,
+              errorText: getErrorMessage(state.password.displayError, l10n),
               suffixIcon: IconButton(
                 icon: _isHidePassword
                     ? Assets.icons.show.svg(color: AppPalette.primaryColor)
@@ -144,13 +144,15 @@ class _PasswordInputState extends State<_PasswordInput> {
     );
   }
 
-  String getErrorMessage(PasswordValidationError error, AppLocalizations l10n) {
-    switch (error) {
-      case PasswordValidationError.empty:
-        return l10n.passwordEmpty;
-      case PasswordValidationError.tooShort:
-        return l10n.passwordLength;
-    }
+  String? getErrorMessage(
+    PasswordValidationError? error,
+    AppLocalizations l10n,
+  ) {
+    return switch (error) {
+      PasswordValidationError.empty => l10n.passwordEmpty,
+      PasswordValidationError.tooShort => l10n.passwordLength,
+      null => null,
+    };
   }
 }
 

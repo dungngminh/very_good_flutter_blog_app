@@ -322,7 +322,8 @@ class _TitleBlogInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.titleBlogFieldHint,
-              errorText: blogTitle.isNotValid ? l10n.titleBlogEmpty : null,
+              errorText:
+                  blogTitle.displayError != null ? l10n.titleBlogEmpty : null,
             ),
             textInputAction: TextInputAction.next,
           ),

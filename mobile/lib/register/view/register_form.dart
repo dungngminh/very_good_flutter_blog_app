@@ -12,40 +12,38 @@ class RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TitleOfTextField(l10n.firstName),
-            _FirstnameInput(),
-            const SizedBox(
-              height: 16,
-            ),
-            TitleOfTextField(l10n.lastName),
-            _LastnameInput(),
-            const SizedBox(
-              height: 16,
-            ),
-            TitleOfTextField(l10n.username),
-            _UsernameInput(),
-            const SizedBox(
-              height: 16,
-            ),
-            TitleOfTextField(l10n.password),
-            _PasswordInput(),
-            const SizedBox(
-              height: 16,
-            ),
-            TitleOfTextField(l10n.confirmationPassword),
-            _ConfirmedPasswordInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            Center(
-              child: _RegisterButton(),
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TitleOfTextField(l10n.firstName),
+          _FirstnameInput(),
+          const SizedBox(
+            height: 16,
+          ),
+          TitleOfTextField(l10n.lastName),
+          _LastnameInput(),
+          const SizedBox(
+            height: 16,
+          ),
+          TitleOfTextField(l10n.username),
+          _UsernameInput(),
+          const SizedBox(
+            height: 16,
+          ),
+          TitleOfTextField(l10n.password),
+          _PasswordInput(),
+          const SizedBox(
+            height: 16,
+          ),
+          TitleOfTextField(l10n.confirmationPassword),
+          _ConfirmedPasswordInput(),
+          const Padding(padding: EdgeInsets.all(12)),
+          Center(
+            child: _RegisterButton(),
+          ),
+        ],
       ),
     );
   }
@@ -55,30 +53,26 @@ class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Builder(
-      builder: (context) {
-        final username = context.select(
-          (RegisterBloc registerBloc) => registerBloc.state.username,
-        );
-        return TextFieldDecoration(
-          child: TextField(
-            key: const Key('registerForm_usernameInput_textField'),
-            onChanged: (username) => context.read<RegisterBloc>().add(
-                  RegisterEvent(
-                    RegisterEventType.userNameChanged,
-                    input: username,
-                  ),
-                ),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: l10n.usernameHint,
-              errorText: username.isNotValid ? l10n.usernameEmpty : null,
+    final username = context.select(
+      (RegisterBloc registerBloc) => registerBloc.state.username,
+    );
+    return TextFieldDecoration(
+      child: TextField(
+        key: const Key('registerForm_usernameInput_textField'),
+        onChanged: (username) => context.read<RegisterBloc>().add(
+              RegisterEvent(
+                RegisterEventType.userNameChanged,
+                input: username,
+              ),
             ),
-          ),
-        );
-      },
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: l10n.usernameHint,
+          errorText: username.displayError != null ? l10n.usernameEmpty : null,
+        ),
+      ),
     );
   }
 }
@@ -100,56 +94,52 @@ class _PasswordInputState extends State<_PasswordInput> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Builder(
-      builder: (context) {
-        final password = context.select(
-          (RegisterBloc registerBloc) => registerBloc.state.password,
-        );
-        return TextFieldDecoration(
-          child: TextField(
-            key: const Key('registerForm_passwordInput_textField'),
-            onChanged: (password) => context.read<RegisterBloc>()
-              ..add(
-                RegisterEvent(
-                  RegisterEventType.passwordChanged,
-                  input: password,
-                ),
-              ),
-            textInputAction: TextInputAction.next,
-            obscureText: _isHidePassword,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: l10n.passwordHint,
-              suffixIcon: IconButton(
-                icon: _isHidePassword
-                    ? Assets.icons.show.svg(color: AppPalette.primaryColor)
-                    : Assets.icons.hide.svg(color: AppPalette.primaryColor),
-                onPressed: () {
-                  setState(() {
-                    _isHidePassword = !_isHidePassword;
-                  });
-                },
-                splashRadius: 24,
-              ),
-              errorText: password.isNotValid
-                  ? getErrorMessage(password.error!, l10n)
-                  : null,
+    final password = context.select(
+      (RegisterBloc registerBloc) => registerBloc.state.password,
+    );
+    return TextFieldDecoration(
+      child: TextField(
+        key: const Key('registerForm_passwordInput_textField'),
+        onChanged: (password) => context.read<RegisterBloc>()
+          ..add(
+            RegisterEvent(
+              RegisterEventType.passwordChanged,
+              input: password,
             ),
-            textAlignVertical: TextAlignVertical.center,
           ),
-        );
-      },
+        textInputAction: TextInputAction.next,
+        obscureText: _isHidePassword,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: l10n.passwordHint,
+          suffixIcon: IconButton(
+            icon: _isHidePassword
+                ? Assets.icons.show.svg(color: AppPalette.primaryColor)
+                : Assets.icons.hide.svg(color: AppPalette.primaryColor),
+            onPressed: () {
+              setState(() {
+                _isHidePassword = !_isHidePassword;
+              });
+            },
+            splashRadius: 24,
+          ),
+          errorText: getErrorMessage(password.displayError, l10n),
+        ),
+        textAlignVertical: TextAlignVertical.center,
+      ),
     );
   }
 
-  String getErrorMessage(PasswordValidationError error, AppLocalizations l10n) {
-    switch (error) {
-      case PasswordValidationError.empty:
-        return l10n.passwordEmpty;
-      case PasswordValidationError.tooShort:
-        return l10n.passwordLength;
-    }
+  String? getErrorMessage(
+    PasswordValidationError? error,
+    AppLocalizations l10n,
+  ) {
+    return switch (error) {
+      PasswordValidationError.empty => l10n.passwordEmpty,
+      PasswordValidationError.tooShort => l10n.passwordLength,
+      null => null,
+    };
   }
 }
 
@@ -201,7 +191,7 @@ class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
                 },
                 splashRadius: 24,
               ),
-              errorText: state.confirmedPassword.isNotValid
+              errorText: state.confirmedPassword.displayError != null
                   ? l10n.unmatchedPassword
                   : null,
             ),
@@ -217,30 +207,27 @@ class _FirstnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Builder(
-      builder: (context) {
-        final firstname = context.select(
-          (RegisterBloc registerBloc) => registerBloc.state.firstname,
-        );
-        return TextFieldDecoration(
-          child: TextField(
-            key: const Key('registerForm_firstnameInput_textField'),
-            onChanged: (firstName) => context.read<RegisterBloc>().add(
-                  RegisterEvent(
-                    RegisterEventType.firstNameChanged,
-                    input: firstName,
-                  ),
-                ),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: l10n.firstNameHint,
-              errorText: firstname.isNotValid ? l10n.firstNameEmpty : null,
+    final firstname = context.select(
+      (RegisterBloc registerBloc) => registerBloc.state.firstname,
+    );
+    return TextFieldDecoration(
+      child: TextField(
+        key: const Key('registerForm_firstnameInput_textField'),
+        onChanged: (firstName) => context.read<RegisterBloc>().add(
+              RegisterEvent(
+                RegisterEventType.firstNameChanged,
+                input: firstName,
+              ),
             ),
-          ),
-        );
-      },
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: l10n.firstNameHint,
+          errorText:
+              firstname.displayError != null ? l10n.firstNameEmpty : null,
+        ),
+      ),
     );
   }
 }
@@ -249,30 +236,25 @@ class _LastnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
-    return Builder(
-      builder: (context) {
-        final lastname = context
-            .select((RegisterBloc registerBloc) => registerBloc.state.lastname);
-        return TextFieldDecoration(
-          child: TextField(
-            key: const Key('registerForm_passwordInput_textField'),
-            onChanged: (lastName) => context.read<RegisterBloc>().add(
-                  RegisterEvent(
-                    RegisterEventType.lastNameChanged,
-                    input: lastName,
-                  ),
-                ),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: l10n.lastNameHint,
-              errorText: lastname.isNotValid ? l10n.lastNameEmpty : null,
+    final lastname = context
+        .select((RegisterBloc registerBloc) => registerBloc.state.lastname);
+    return TextFieldDecoration(
+      child: TextField(
+        key: const Key('registerForm_passwordInput_textField'),
+        onChanged: (lastName) => context.read<RegisterBloc>().add(
+              RegisterEvent(
+                RegisterEventType.lastNameChanged,
+                input: lastName,
+              ),
             ),
-          ),
-        );
-      },
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: l10n.lastNameHint,
+          errorText: lastname.displayError != null ? l10n.lastNameEmpty : null,
+        ),
+      ),
     );
   }
 }
@@ -281,42 +263,43 @@ class _RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Builder(
-      builder: (context) {
-        final status = context
-            .select((RegisterBloc registerBloc) => registerBloc.state.status);
-        final isValid =
-            context.select((RegisterBloc bloc) => bloc.state.isValid);
-        return status.isInProgress
-            ? const CircularProgressIndicator(
-                color: AppPalette.primaryColor,
-              )
-            : ElevatedButton(
-                key: const Key('registerForm_continue_raisedButton'),
-                onPressed: isValid
-                    ? () {
-                        context.read<RegisterBloc>().add(
-                              const RegisterEvent(RegisterEventType.submitted),
-                            );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(130, 50),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-                child: Text(
-                  l10n.register,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: AppPalette.whiteBackgroundColor,
-                  ),
-                ),
-              );
-      },
+    final status = context
+        .select((RegisterBloc registerBloc) => registerBloc.state.status);
+    final isValid = context.select((RegisterBloc bloc) => bloc.state.isValid);
+    if (status.isInProgress) {
+      return const CircularProgressIndicator(color: AppPalette.primaryColor);
+    }
+    return _buildRegisterButton(isValid, context, l10n);
+  }
+
+  ElevatedButton _buildRegisterButton(
+    bool isValid,
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    return ElevatedButton(
+      key: const Key('registerForm_continue_raisedButton'),
+      onPressed: isValid
+          ? () {
+              context.read<RegisterBloc>().add(
+                    const RegisterEvent(RegisterEventType.submitted),
+                  );
+            }
+          : null,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+      ),
+      child: Text(
+        l10n.register,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
+          color: AppPalette.whiteBackgroundColor,
+        ),
+      ),
     );
   }
 }

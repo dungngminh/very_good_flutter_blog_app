@@ -3,13 +3,13 @@
 ///  FlutterGen
 /// *****************************************************
 
-import 'package:flutter/services.dart';
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
 
 class $AssetsFontsGen {
   const $AssetsFontsGen();
@@ -40,6 +40,19 @@ class $AssetsFontsGen {
 
   /// File path: assets/fonts/Nunito-SemiBold.ttf
   String get nunitoSemiBold => 'assets/fonts/Nunito-SemiBold.ttf';
+
+  /// List of all assets
+  List<String> get values => [
+        nunitoBlack,
+        nunitoBold,
+        nunitoExtraBold,
+        nunitoExtraLight,
+        nunitoItalic,
+        nunitoLight,
+        nunitoMedium,
+        nunitoRegular,
+        nunitoSemiBold
+      ];
 }
 
 class $AssetsIconsGen {
@@ -117,6 +130,33 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/user.svg
   SvgGenImage get user => const SvgGenImage('assets/icons/user.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        addUser,
+        arrowDown,
+        bell,
+        bookmark,
+        camera,
+        circleArrowLeft,
+        closeSquare,
+        edit,
+        editSquare,
+        filter,
+        heart,
+        hide,
+        home,
+        info,
+        logOut,
+        plus,
+        plusBorder,
+        profile,
+        refresh,
+        search,
+        setting,
+        show,
+        user
+      ];
 }
 
 class $AssetsImagesGen {
@@ -138,6 +178,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/very_good.svg
   SvgGenImage get veryGood => const SvgGenImage('assets/images/very_good.svg');
+
+  /// List of all assets
+  List<dynamic> get values => [blankAvatar, blankImage, komkat, logo, veryGood];
 }
 
 class Assets {
@@ -206,6 +249,17 @@ class AssetGenImage {
     );
   }
 
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
+  }
+
   String get path => _assetName;
 
   String get keyName => _assetName;
@@ -227,13 +281,14 @@ class SvgGenImage {
     AlignmentGeometry alignment = Alignment.center,
     bool allowDrawingOutsideViewBox = false,
     WidgetBuilder? placeholderBuilder,
-    Color? color,
-    BlendMode colorBlendMode = BlendMode.srcIn,
     String? semanticsLabel,
     bool excludeFromSemantics = false,
+    SvgTheme theme = const SvgTheme(),
+    ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
-    bool cacheColorFilter = false,
-    SvgTheme? theme,
+    @deprecated Color? color,
+    @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated bool cacheColorFilter = false,
   }) {
     return SvgPicture.asset(
       _assetName,
@@ -247,15 +302,18 @@ class SvgGenImage {
       alignment: alignment,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholderBuilder: placeholderBuilder,
-      color: color,
-      colorBlendMode: colorBlendMode,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
+      theme: theme,
+      colorFilter: colorFilter,
+      color: color,
+      colorBlendMode: colorBlendMode,
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
-      theme: theme,
     );
   }
 
   String get path => _assetName;
+
+  String get keyName => _assetName;
 }
