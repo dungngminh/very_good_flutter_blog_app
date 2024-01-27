@@ -2,28 +2,31 @@ part of 'register_bloc.dart';
 
 class RegisterState extends Equatable {
   const RegisterState({
-    this.status = FormzStatus.pure,
-    this.username = const Username.pure(),
-    this.password = const Password.pure(),
-    this.lastname = const Lastname.pure(),
-    this.firstname = const Firstname.pure(),
-    this.confirmedPassword = const ConfirmedPassword.pure(),
+    this.status = FormzSubmissionStatus.initial,
+    this.username = const Username.isPure(),
+    this.password = const Password.isPure(),
+    this.lastname = const Lastname.isPure(),
+    this.firstname = const Firstname.isPure(),
+    this.confirmedPassword = const ConfirmedPassword.isPure(),
+    this.isValid = false,
   });
 
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
   final Username username;
   final Password password;
   final Lastname lastname;
   final Firstname firstname;
   final ConfirmedPassword confirmedPassword;
+  final bool isValid;
 
   RegisterState copyWith({
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     Username? username,
     Password? password,
     Lastname? lastname,
     Firstname? firstname,
     ConfirmedPassword? confirmedPassword,
+    bool? isValid,
   }) {
     return RegisterState(
       status: status ?? this.status,
@@ -32,6 +35,7 @@ class RegisterState extends Equatable {
       lastname: lastname ?? this.lastname,
       firstname: firstname ?? this.firstname,
       confirmedPassword: confirmedPassword ?? this.confirmedPassword,
+      isValid: isValid ?? this.isValid,
     );
   }
 
@@ -44,6 +48,7 @@ class RegisterState extends Equatable {
       lastname,
       firstname,
       confirmedPassword,
+      isValid,
     ];
   }
 }

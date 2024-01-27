@@ -4,7 +4,7 @@ enum ConfirmedPasswordValidationError { notMatch }
 
 class ConfirmedPassword
     extends FormzInput<String, ConfirmedPasswordValidationError> {
-  const ConfirmedPassword.pure({this.password = ''}) : super.pure('');
+  const ConfirmedPassword.isPure({this.password = ''}) : super.pure('');
   const ConfirmedPassword.dirty({
     this.password = '',
     String value = '',

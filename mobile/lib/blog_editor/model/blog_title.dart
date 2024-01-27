@@ -3,7 +3,7 @@ import 'package:formz/formz.dart';
 enum BlogTitleValidationError { empty, maxLength }
 
 class BlogTitle extends FormzInput<String, BlogTitleValidationError> {
-  const BlogTitle.pure() : super.pure('');
+  const BlogTitle.isPure() : super.pure('');
   const BlogTitle.dirty([super.value = '']) : super.dirty();
 
   @override

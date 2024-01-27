@@ -7,15 +7,15 @@ void main() {
   group('Register Firstname', () {
     group('constructors', () {
       test('pure creates correct instance', () {
-        const firstName = Firstname.pure();
+        const firstName = Firstname.isPure();
         expect(firstName.value, '');
-        expect(firstName.pure, true);
+        expect(firstName.isPure, true);
       });
 
       test('dirty creates correct instance', () {
         const firstName = Firstname.dirty(firstNameLong);
         expect(firstName.value, firstNameLong);
-        expect(firstName.pure, false);
+        expect(firstName.isPure, false);
       });
     });
 

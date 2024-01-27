@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:authentication_data_source/authentication_data_source.dart';
@@ -15,7 +14,6 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
     required String username,
     required String password,
   }) {
-    log('user', name: '$runtimeType');
     return _httpClientHandler.post(
       '/auth/login',
       body: <String, dynamic>{

@@ -32,11 +32,11 @@ void main() {
     const username = 'dungngminh';
     const password = 'kminhdung123';
     const repasswordError = 'kminhdung';
-    const repasswordCorret = 'kminhdung123';
-    const password2 = 'lynlynlyn';
-    const repasswordCorret2 = 'lynlynlyn';
+    const repasswordCorrect = 'kminhdung123';
+    const password2 = 'hehehe';
+    const repasswordCorrect2 = 'hehehe';
     blocTest<RegisterBloc, RegisterState>(
-      'emits [submissionInProgress, submissionSuccess] '
+      'emits [inProgress, success] '
       'when register SUCCEEDS',
       setUp: () {
         when(
@@ -45,7 +45,7 @@ void main() {
             password: password2,
             lastname: lastname,
             firstname: firstname,
-            confirmationPassword: repasswordCorret2,
+            confirmationPassword: repasswordCorrect2,
           ),
           // ignore: void_checks
         ).thenAnswer((_) => Future.value());
@@ -88,7 +88,7 @@ void main() {
           ..add(
             const RegisterEvent(
               RegisterEventType.confirmedPasswordChanged,
-              input: repasswordCorret,
+              input: repasswordCorrect,
             ),
           )
           ..add(
@@ -100,7 +100,7 @@ void main() {
           ..add(
             const RegisterEvent(
               RegisterEventType.confirmedPasswordChanged,
-              input: repasswordCorret2,
+              input: repasswordCorrect2,
             ),
           )
           ..add(
@@ -112,18 +112,15 @@ void main() {
       expect: () => <RegisterState>[
         const RegisterState(
           firstname: Firstname.dirty(firstname),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
           lastname: Lastname.dirty(lastname),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
           lastname: Lastname.dirty(lastname),
           username: Username.dirty(username),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -131,7 +128,6 @@ void main() {
           username: Username.dirty(username),
           password: Password.dirty(password),
           confirmedPassword: ConfirmedPassword.dirty(password: password),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -142,7 +138,6 @@ void main() {
             password: password,
             value: repasswordError,
           ),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -151,9 +146,8 @@ void main() {
           password: Password.dirty(password),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password,
-            value: repasswordCorret,
+            value: repasswordCorrect,
           ),
-          status: FormzStatus.valid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -162,9 +156,8 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret,
+            value: repasswordCorrect,
           ),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -173,9 +166,8 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret2,
+            value: repasswordCorrect2,
           ),
-          status: FormzStatus.valid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -184,9 +176,9 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret2,
+            value: repasswordCorrect2,
           ),
-          status: FormzStatus.submissionInProgress,
+          status: FormzSubmissionStatus.inProgress,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -195,14 +187,14 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret2,
+            value: repasswordCorrect2,
           ),
-          status: FormzStatus.submissionSuccess,
+          status: FormzSubmissionStatus.success,
         ),
       ],
     );
     blocTest<RegisterBloc, RegisterState>(
-      'emits [submissionInProgress, submissionFailure] '
+      'emits [inProgress, .failure] '
       'when register UNSUCCEEDS',
       setUp: () {
         when(
@@ -211,7 +203,7 @@ void main() {
             password: password2,
             lastname: lastname,
             firstname: firstname,
-            confirmationPassword: repasswordCorret2,
+            confirmationPassword: repasswordCorrect2,
           ),
           // ignore: void_checks
         ).thenThrow(Exception('register failed'));
@@ -254,7 +246,7 @@ void main() {
           ..add(
             const RegisterEvent(
               RegisterEventType.confirmedPasswordChanged,
-              input: repasswordCorret,
+              input: repasswordCorrect,
             ),
           )
           ..add(
@@ -266,7 +258,7 @@ void main() {
           ..add(
             const RegisterEvent(
               RegisterEventType.confirmedPasswordChanged,
-              input: repasswordCorret2,
+              input: repasswordCorrect2,
             ),
           )
           ..add(
@@ -278,18 +270,15 @@ void main() {
       expect: () => <RegisterState>[
         const RegisterState(
           firstname: Firstname.dirty(firstname),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
           lastname: Lastname.dirty(lastname),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
           lastname: Lastname.dirty(lastname),
           username: Username.dirty(username),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -297,7 +286,6 @@ void main() {
           username: Username.dirty(username),
           password: Password.dirty(password),
           confirmedPassword: ConfirmedPassword.dirty(password: password),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -308,7 +296,6 @@ void main() {
             password: password,
             value: repasswordError,
           ),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -317,9 +304,8 @@ void main() {
           password: Password.dirty(password),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password,
-            value: repasswordCorret,
+            value: repasswordCorrect,
           ),
-          status: FormzStatus.valid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -328,9 +314,8 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret,
+            value: repasswordCorrect,
           ),
-          status: FormzStatus.invalid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -339,9 +324,8 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret2,
+            value: repasswordCorrect2,
           ),
-          status: FormzStatus.valid,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -350,9 +334,9 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret2,
+            value: repasswordCorrect2,
           ),
-          status: FormzStatus.submissionInProgress,
+          status: FormzSubmissionStatus.inProgress,
         ),
         const RegisterState(
           firstname: Firstname.dirty(firstname),
@@ -361,9 +345,9 @@ void main() {
           password: Password.dirty(password2),
           confirmedPassword: ConfirmedPassword.dirty(
             password: password2,
-            value: repasswordCorret2,
+            value: repasswordCorrect2,
           ),
-          status: FormzStatus.submissionFailure,
+          status: FormzSubmissionStatus.failure,
         ),
       ],
     );

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:models/models.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_blog_app/app/app.dart';
@@ -21,7 +21,9 @@ class BlogPreviewView extends StatefulWidget {
 }
 
 class _BlogPreviewViewState extends State<BlogPreviewView> {
-  late QuillController _quillController;
+  late final QuillController _quillController;
+  late final FocusNode _textEditorFocusNode;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -85,14 +87,12 @@ class _BlogPreviewViewState extends State<BlogPreviewView> {
                   ),
                   _BlogImage(imagePath: widget.blog.imageUrl),
                   QuillEditor(
-                    controller: _quillController,
-                    autoFocus: false,
-                    scrollable: true,
-                    focusNode: FocusNode(),
-                    scrollController: ScrollController(),
-                    padding: EdgeInsets.zero,
-                    expands: false,
-                    readOnly: true,
+                    scrollController: _scrollController,
+                    focusNode: _textEditorFocusNode,
+                    configurations: QuillEditorConfigurations(
+                      controller: _quillController,
+                      padding: const EdgeInsets.all(16),
+                    ),
                   ),
                 ],
               ),

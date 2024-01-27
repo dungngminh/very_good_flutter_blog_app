@@ -8,15 +8,15 @@ void main() {
 
   group('Confirmed Password', () {
     test('pure init create correct instance', () {
-      const confirmedPassword = ConfirmedPassword.pure();
+      const confirmedPassword = ConfirmedPassword.isPure();
       expect(confirmedPassword.value, '');
-      expect(confirmedPassword.pure, true);
+      expect(confirmedPassword.isPure, true);
     });
 
     test('dirty init create correct instance', () {
       const confirmedPassword = ConfirmedPassword.dirty();
       expect(confirmedPassword.value, '');
-      expect(confirmedPassword.pure, false);
+      expect(confirmedPassword.isPure, false);
     });
 
     test(
@@ -25,7 +25,7 @@ void main() {
       () {
         const confirmedPassword =
             ConfirmedPassword.dirty(password: password, value: wrongInput);
-        expect(confirmedPassword.pure, false);
+        expect(confirmedPassword.isPure, false);
         expect(confirmedPassword.value, wrongInput);
         expect(
           confirmedPassword.error,
@@ -36,7 +36,7 @@ void main() {
     test('return no error when input is not empty but match with password', () {
       const confirmedPassword =
           ConfirmedPassword.dirty(password: password, value: correctInput);
-      expect(confirmedPassword.pure, false);
+      expect(confirmedPassword.isPure, false);
       expect(confirmedPassword.value, correctInput);
       expect(confirmedPassword.error, isNull);
     });

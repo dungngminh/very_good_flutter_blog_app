@@ -8,15 +8,15 @@ void main() {
   group('Register password', () {
     group('constructors', () {
       test('pure creates correct instance', () {
-        const password = Password.pure();
+        const password = Password.isPure();
         expect(password.value, '');
-        expect(password.pure, true);
+        expect(password.isPure, true);
       });
 
       test('dirty creates correct instance', () {
         const password = Password.dirty();
         expect(password.value, '');
-        expect(password.pure, false);
+        expect(password.isPure, false);
       });
     });
 

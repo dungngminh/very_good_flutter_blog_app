@@ -74,7 +74,7 @@ class _UsernameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.usernameHint,
-              errorText: username.invalid ? l10n.usernameEmpty : null,
+              errorText: username.isNotValid ? l10n.usernameEmpty : null,
             ),
           ),
         );
@@ -132,7 +132,7 @@ class _PasswordInputState extends State<_PasswordInput> {
                 },
                 splashRadius: 24,
               ),
-              errorText: password.invalid
+              errorText: password.isNotValid
                   ? getErrorMessage(password.error!, l10n)
                   : null,
             ),
@@ -201,7 +201,7 @@ class _ConfirmedPasswordInputState extends State<_ConfirmedPasswordInput> {
                 },
                 splashRadius: 24,
               ),
-              errorText: state.confirmedPassword.invalid
+              errorText: state.confirmedPassword.isNotValid
                   ? l10n.unmatchedPassword
                   : null,
             ),
@@ -236,7 +236,7 @@ class _FirstnameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.firstNameHint,
-              errorText: firstname.invalid ? l10n.firstNameEmpty : null,
+              errorText: firstname.isNotValid ? l10n.firstNameEmpty : null,
             ),
           ),
         );
@@ -268,7 +268,7 @@ class _LastnameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.lastNameHint,
-              errorText: lastname.invalid ? l10n.lastNameEmpty : null,
+              errorText: lastname.isNotValid ? l10n.lastNameEmpty : null,
             ),
           ),
         );
@@ -285,13 +285,15 @@ class _RegisterButton extends StatelessWidget {
       builder: (context) {
         final status = context
             .select((RegisterBloc registerBloc) => registerBloc.state.status);
-        return status.isSubmissionInProgress
+        final isValid =
+            context.select((RegisterBloc bloc) => bloc.state.isValid);
+        return status.isInProgress
             ? const CircularProgressIndicator(
                 color: AppPalette.primaryColor,
               )
             : ElevatedButton(
                 key: const Key('registerForm_continue_raisedButton'),
-                onPressed: status.isValidated
+                onPressed: isValid
                     ? () {
                         context.read<RegisterBloc>().add(
                               const RegisterEvent(RegisterEventType.submitted),

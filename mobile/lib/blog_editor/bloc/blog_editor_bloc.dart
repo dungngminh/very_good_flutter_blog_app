@@ -35,7 +35,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     emit(
       state.copyWith(
         imagePath: imagePath,
-        validationStatus: Formz.validate([
+        isValid: Formz.validate([
           state.blogTitle,
           imagePath,
         ]),
@@ -121,7 +121,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
     emit(
       state.copyWith(
         blogTitle: blogTitle,
-        validationStatus: Formz.validate([
+        isValid: Formz.validate([
           blogTitle,
           state.imagePath,
         ]),
@@ -138,7 +138,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
       emit(
         state.copyWith(
           imagePath: imagePath,
-          validationStatus: Formz.validate([
+          isValid: Formz.validate([
             state.blogTitle,
             imagePath,
           ]),
@@ -153,7 +153,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
       emit(
         state.copyWith(
           imagePath: imagePath,
-          validationStatus: Formz.validate([
+          isValid: Formz.validate([
             state.blogTitle,
             imagePath,
           ]),
@@ -177,7 +177,7 @@ class BlogEditorBloc extends Bloc<BlogEditorEvent, BlogEditorState> {
           imagePath: imagePath,
           existBlog: event.existBlog,
           category: category,
-          validationStatus: Formz.validate([blogTitle, imagePath]),
+          isValid: Formz.validate([blogTitle, imagePath]),
         ),
       );
     }

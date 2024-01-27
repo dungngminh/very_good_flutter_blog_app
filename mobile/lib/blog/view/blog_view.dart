@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:models/models.dart';
@@ -30,9 +30,11 @@ class BlogView extends StatefulWidget {
 }
 
 class _BlogViewState extends State<BlogView> {
-  late QuillController _quillController;
-  late ValueNotifier<bool> _liked;
-  late ValueNotifier<int> _likeCount;
+  late final QuillController _quillController;
+  late final ValueNotifier<bool> _liked;
+  late final ValueNotifier<int> _likeCount;
+  late final ScrollController _scrollController;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
@@ -248,14 +250,11 @@ class _BlogViewState extends State<BlogView> {
                       ),
                     ),
                     QuillEditor(
-                      controller: _quillController,
-                      autoFocus: false,
-                      scrollable: true,
-                      focusNode: FocusNode(),
-                      scrollController: ScrollController(),
-                      padding: EdgeInsets.zero,
-                      expands: false,
-                      readOnly: true,
+                      scrollController: _scrollController,
+                      focusNode: _focusNode,
+                      configurations: QuillEditorConfigurations(
+                        controller: _quillController,
+                      ),
                     ),
                   ],
                 ),

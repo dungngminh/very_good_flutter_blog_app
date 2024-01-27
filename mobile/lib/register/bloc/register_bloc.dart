@@ -46,7 +46,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: state.confirmedPassword,
         lastname: lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        isValid: Formz.validate(
           [
             state.username,
             state.password,
@@ -68,7 +68,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: state.confirmedPassword,
         lastname: state.lastname,
         firstname: firstname,
-        status: Formz.validate(
+        isValid: Formz.validate(
           [
             state.username,
             state.password,
@@ -91,7 +91,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        isValid: Formz.validate(
           [
             state.username,
             state.password,
@@ -113,7 +113,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: state.confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        isValid: Formz.validate(
           [
             username,
             state.password,
@@ -139,7 +139,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmedPassword: confirmedPassword,
         lastname: state.lastname,
         firstname: state.firstname,
-        status: Formz.validate(
+        isValid: Formz.validate(
           [
             state.username,
             password,
@@ -153,8 +153,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Future<void> _onSubmitted(Emitter<RegisterState> emit) async {
-    if (state.status.isValidated) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       try {
         await _authenticationRepository
             .register(
@@ -167,12 +167,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
             .then((_) {
           emit(
             state.copyWith(
-              status: FormzStatus.submissionSuccess,
+              status: FormzSubmissionStatus.success,
             ),
           );
         });
       } catch (e) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }
     }
   }

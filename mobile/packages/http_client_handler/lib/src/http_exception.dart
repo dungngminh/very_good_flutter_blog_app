@@ -6,10 +6,6 @@ class HttpException implements Exception {
 
   final String message;
   final int statusCode;
-
-  @override
-  String toString() =>
-      '$runtimeType(message: $message, statusCode: $statusCode)';
 }
 
 class UnauthorizedException extends HttpException {

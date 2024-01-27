@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:models/models.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -24,8 +24,10 @@ class BlogViewOffline extends StatefulWidget {
 }
 
 class _BlogViewOfflineState extends State<BlogViewOffline> {
-  late QuillController _quillController;
-  late ValueNotifier<int> _likeCount;
+  late final QuillController _quillController;
+  late final ValueNotifier<int> _likeCount;
+  late final ScrollController _scrollController;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
@@ -37,6 +39,12 @@ class _BlogViewOfflineState extends State<BlogViewOffline> {
     );
 
     _likeCount = ValueNotifier(widget.blog.likeCount);
+  }
+
+  @override
+  void dispose() {
+    _likeCount.dispose();
+    super.dispose();
   }
 
   @override
@@ -99,14 +107,12 @@ class _BlogViewOfflineState extends State<BlogViewOffline> {
                     height: 16,
                   ),
                   QuillEditor(
-                    controller: _quillController,
-                    autoFocus: false,
-                    scrollable: true,
-                    focusNode: FocusNode(),
-                    scrollController: ScrollController(),
-                    padding: EdgeInsets.zero,
-                    expands: false,
-                    readOnly: true,
+                    scrollController: _scrollController,
+                    focusNode: _focusNode,
+                    configurations: QuillEditorConfigurations(
+                      controller: _quillController,
+                      padding: const EdgeInsets.all(16),
+                    ),
                   ),
                 ],
               ),

@@ -57,7 +57,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     EditProfileEvent event,
     Emitter<EditProfileState> emit,
   ) async {
-    if (state.validationStatus.isValid) {
+    if (state.isValid) {
       emit(state.copyWith(loadingStatus: LoadingStatus.loading));
       try {
         final user = _profileBloc.state.user;
@@ -108,7 +108,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       state.copyWith(
         lastname: lastname,
         firstname: state.firstname,
-        validationStatus: Formz.validate(
+        isValid: Formz.validate(
           [
             lastname,
             state.firstname,
@@ -124,7 +124,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       state.copyWith(
         lastname: state.lastname,
         firstname: firstname,
-        validationStatus: Formz.validate(
+        isValid: Formz.validate(
           [
             state.lastname,
             firstname,

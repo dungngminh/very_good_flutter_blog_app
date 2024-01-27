@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       state.copyWith(
         username: username,
         password: state.password,
-        status: Formz.validate(
+        isValid: Formz.validate(
           [
             username,
             state.password,
@@ -47,12 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       state.copyWith(
         username: state.username,
         password: password,
-        status: Formz.validate(
-          [
-            state.username,
-            password,
-          ],
-        ),
+        isValid: Formz.validate([state.username, password]),
       ),
     );
   }
@@ -61,21 +56,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     Emitter<LoginState> emit,
   ) async {
-    if (state.status.isValidated) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      try {
-        await _authenticationRepository
-            .login(
-          username: state.username.value,
-          password: state.password.value,
+    if (!state.isValid) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    return _authenticationRepository
+        .login(password: state.password.value, username: state.username.value)
+        .then(
+          (_) => emit(state.copyWith(status: FormzSubmissionStatus.success)),
         )
-            .then((_) {
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
-        });
-      } catch (e) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
-        rethrow;
-      }
-    }
+        .catchError(
+          (_, __) =>
+              emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+        );
   }
 }

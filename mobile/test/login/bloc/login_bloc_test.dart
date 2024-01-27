@@ -25,7 +25,7 @@ void main() {
 
     group('LoginSubmitted', () {
       blocTest<LoginBloc, LoginState>(
-        'emits [submissionInProgress, submissionSuccess] '
+        'emits [inProgress, success] '
         'when login succeeds',
         setUp: () {
           when(
@@ -48,22 +48,27 @@ void main() {
         expect: () => const <LoginState>[
           LoginState(
             username: Username.dirty('username'),
-            status: FormzStatus.invalid,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.valid,
+            isValid: true,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionInProgress,
+            isValid: true,
+            status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionSuccess,
+            status: FormzSubmissionStatus.inProgress,
+          ),
+          LoginState(
+            username: Username.dirty('username'),
+            password: Password.dirty('password'),
+            status: FormzSubmissionStatus.success,
           ),
         ],
       );
@@ -90,22 +95,23 @@ void main() {
         expect: () => const <LoginState>[
           LoginState(
             username: Username.dirty('username'),
-            status: FormzStatus.invalid,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.valid,
+            isValid: true,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionInProgress,
+            isValid: true,
+            status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
             username: Username.dirty('username'),
             password: Password.dirty('password'),
-            status: FormzStatus.submissionFailure,
+            isValid: true,
+            status: FormzSubmissionStatus.failure,
           ),
         ],
       );

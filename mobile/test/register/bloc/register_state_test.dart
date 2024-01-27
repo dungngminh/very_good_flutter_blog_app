@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/register/register.dart';
 
 void main() {
@@ -23,7 +22,7 @@ void main() {
 
     test('return object when pass 1 or some props', () {
       expect(
-        const RegisterState().copyWith(status: FormzStatus.pure),
+        const RegisterState().copyWith(isValid: true),
         const RegisterState(),
       );
     });

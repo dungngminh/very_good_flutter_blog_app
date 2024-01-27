@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:models/models.dart';
 import 'package:shimmer/shimmer.dart';
@@ -57,9 +56,9 @@ class UploadBlogView extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    final validationStatus = context.select(
+                    final isValid = context.select(
                       (BlogEditorBloc blogEditorBloc) =>
-                          blogEditorBloc.state.validationStatus,
+                          blogEditorBloc.state.isValid,
                     );
                     final category = context.select(
                       (BlogEditorBloc blogEditorBloc) =>
@@ -80,7 +79,7 @@ class UploadBlogView extends StatelessWidget {
                               dimension: 30,
                             ),
                           ),
-                          visible: validationStatus.isValid &&
+                          visible: isValid &&
                               category.isNotEmpty &&
                               existBlog == null,
                           child: IconButton(
@@ -323,7 +322,7 @@ class _TitleBlogInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.titleBlogFieldHint,
-              errorText: blogTitle.invalid ? l10n.titleBlogEmpty : null,
+              errorText: blogTitle.isNotValid ? l10n.titleBlogEmpty : null,
             ),
             textInputAction: TextInputAction.next,
           ),
@@ -384,9 +383,8 @@ class _UploadButton extends StatelessWidget {
     return Center(
       child: Builder(
         builder: (context) {
-          final validationStatus = context.select(
-            (BlogEditorBloc blogEditorBlog) =>
-                blogEditorBlog.state.validationStatus,
+          final isValid = context.select(
+            (BlogEditorBloc blogEditorBlog) => blogEditorBlog.state.isValid,
           );
           final category = context.select(
             (BlogEditorBloc blogEditorBlog) => blogEditorBlog.state.category,
@@ -404,7 +402,7 @@ class _UploadButton extends StatelessWidget {
                 )
               : ElevatedButton(
                   key: const Key('loginForm_continue_raisedButton'),
-                  onPressed: validationStatus.isValidated && category.isNotEmpty
+                  onPressed: isValid && category.isNotEmpty
                       ? () {
                           context.read<BlogEditorBloc>().add(
                                 BlogEditorUploadBlog(),

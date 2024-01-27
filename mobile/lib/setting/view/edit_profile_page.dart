@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:very_good_blog_app/app/app.dart';
@@ -176,7 +175,8 @@ class _FirstnameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào họ của bạn',
-              errorText: firstname.invalid ? 'Họ của bạn không hợp lệ' : null,
+              errorText:
+                  firstname.isNotValid ? 'Họ của bạn không hợp lệ' : null,
             ),
           ),
         );
@@ -190,9 +190,8 @@ class _UpdateProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final validationStatus = context.select(
-          (EditProfileBloc editProfileBloc) =>
-              editProfileBloc.state.validationStatus,
+        final isValid = context.select(
+          (EditProfileBloc editProfileBloc) => editProfileBloc.state.isValid,
         );
         final loadingStatus = context.select(
           (EditProfileBloc editProfileBloc) =>
@@ -213,7 +212,7 @@ class _UpdateProfileButton extends StatelessWidget {
                 child: ElevatedButton(
                   key: const Key('editProfile_confirmedEdit_raisedButton'),
                   onPressed: enableToEdit
-                      ? (validationStatus.isValid
+                      ? (isValid
                           ? () {
                               context.read<EditProfileBloc>().add(
                                     const EditProfileEvent(
@@ -274,7 +273,8 @@ class _LastnameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: 'Nhập vào tên của bạn',
-              errorText: lastname.invalid ? 'Tên của bạn không hợp lệ' : null,
+              errorText:
+                  lastname.isNotValid ? 'Tên của bạn không hợp lệ' : null,
             ),
           ),
         );

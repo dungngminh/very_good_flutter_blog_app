@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:go_router/go_router.dart';
 import 'package:models/models.dart';
 import 'package:very_good_blog_app/app/app.dart';
@@ -38,8 +38,9 @@ class _AddBlogView extends StatefulWidget {
 }
 
 class _AddBlogViewState extends State<_AddBlogView> {
-  late QuillController _quillController;
-  late FocusNode _textEditorFocusNode;
+  late final QuillController _quillController;
+  late final FocusNode _textEditorFocusNode;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _AddBlogViewState extends State<_AddBlogView> {
       _quillController = QuillController.basic();
     }
     _textEditorFocusNode = FocusNode();
+    _scrollController = ScrollController();
   }
 
   String get editorContent {
@@ -66,6 +68,8 @@ class _AddBlogViewState extends State<_AddBlogView> {
   @override
   void dispose() {
     _quillController.dispose();
+    _textEditorFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -135,26 +139,37 @@ class _AddBlogViewState extends State<_AddBlogView> {
                   top: 16,
                   bottom: 8,
                 ),
-                child: QuillToolbar.basic(
-                  controller: _quillController,
-                  iconTheme: const QuillIconTheme(
-                    borderRadius: 40,
-                    iconSelectedFillColor: AppPalette.primaryColor,
+                child: QuillSimpleToolbar(
+                  configurations: QuillSimpleToolbarConfigurations(
+                    controller: _quillController,
                   ),
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //     left: 8,
+              //     right: 8,
+              //     top: 16,
+              //     bottom: 8,
+              //   ),
+              //   child: QuillToolbar.basic(
+              //     controller: _quillController,
+              //     iconTheme: const QuillIconTheme(
+              //       borderRadius: 40,
+              //       iconSelectedFillColor: AppPalette.primaryColor,
+              //     ),
+              //   ),
+              // ),
               Expanded(
                 child: ColoredBox(
                   color: AppPalette.whiteBackgroundColor,
                   child: QuillEditor(
-                    controller: _quillController,
-                    autoFocus: false,
-                    scrollable: true,
+                    scrollController: _scrollController,
                     focusNode: _textEditorFocusNode,
-                    scrollController: ScrollController(),
-                    padding: const EdgeInsets.all(16),
-                    expands: false,
-                    readOnly: false,
+                    configurations: QuillEditorConfigurations(
+                      controller: _quillController,
+                      padding: const EdgeInsets.all(16),
+                    ),
                   ),
                 ),
               ),

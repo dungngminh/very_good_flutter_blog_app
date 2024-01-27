@@ -5,7 +5,7 @@ enum LastnameValidationError {
 }
 
 class Lastname extends FormzInput<String, LastnameValidationError> {
-  const Lastname.pure() : super.pure('');
+  const Lastname.isPure() : super.pure('');
   const Lastname.dirty([super.value = '']) : super.dirty();
 
   @override

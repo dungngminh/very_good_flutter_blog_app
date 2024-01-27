@@ -6,15 +6,15 @@ void main() {
   group('Login Username', () {
     group('constructors', () {
       test('pure creates correct instance', () {
-        const username = Username.pure();
+        const username = Username.isPure();
         expect(username.value, '');
-        expect(username.pure, true);
+        expect(username.isPure, true);
       });
 
       test('dirty creates correct instance', () {
         const username = Username.dirty(usernameString);
         expect(username.value, usernameString);
-        expect(username.pure, false);
+        expect(username.isPure, false);
       });
     });
 

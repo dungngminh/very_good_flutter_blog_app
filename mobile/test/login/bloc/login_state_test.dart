@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:formz/formz.dart';
 import 'package:very_good_blog_app/login/login.dart';
 
 void main() {
@@ -16,7 +15,7 @@ void main() {
 
     test('returns object with updated status when status is passed', () {
       expect(
-        const LoginState().copyWith(status: FormzStatus.pure),
+        const LoginState().copyWith(isValid: true),
         const LoginState(),
       );
     });

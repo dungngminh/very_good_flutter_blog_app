@@ -16,7 +16,7 @@ class LoginForm extends StatelessWidget {
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
+        if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -82,7 +82,7 @@ class _UsernameInput extends StatelessWidget {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.usernameHint,
-              errorText: state.username.invalid ? l10n.usernameEmpty : null,
+              errorText: state.username.isNotValid ? l10n.usernameEmpty : null,
             ),
             textInputAction: TextInputAction.next,
           ),
@@ -122,7 +122,7 @@ class _PasswordInputState extends State<_PasswordInput> {
               contentPadding: const EdgeInsets.only(left: 16, right: 16),
               border: InputBorder.none,
               hintText: l10n.passwordHint,
-              errorText: state.password.invalid
+              errorText: state.password.isNotValid
                   ? getErrorMessage(state.password.error!, l10n)
                   : null,
               suffixIcon: IconButton(
@@ -162,13 +162,13 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator(
                 color: AppPalette.primaryColor,
               )
             : ElevatedButton(
                 key: const Key('loginForm_continue_raisedButton'),
-                onPressed: state.status.isValidated
+                onPressed: state.status.isInitial
                     ? () {
                         context.read<LoginBloc>().add(const LoginSubmitted());
                       }

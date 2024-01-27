@@ -25,55 +25,46 @@ class ProfileView extends StatelessWidget {
           Fluttertoast.showToast(msg: 'Cập nhất thất bại, hãy thử lại!');
         }
       },
-      child: Builder(
-        builder: (context) {
-          final userBlogsLength = context.select(
-            (ProfileBloc profileBloc) => profileBloc.state.userBlogs.length,
-          );
-
-          return DraggableHome(
-            title: const _TitleTile(),
-            actions: const [
-              _SettingButton(
-                color: AppPalette.whiteBackgroundColor,
-              ),
-            ],
-            // physics: userBlogsLength > 0
-            //     ? const BouncingScrollPhysics()
-            //     : const NeverScrollableScrollPhysics(),
-            leading: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Builder(
-                  builder: (context) {
-                    final status = context.select(
-                      (ProfileBloc profileBloc) =>
-                          profileBloc.state.profileStatus,
-                    );
-                    return RotateIconButton(
-                      icon: Assets.icons.refresh.svg(
-                        color: AppPalette.whiteBackgroundColor,
-                        height: 28,
+      child: DraggableHome(
+        title: const _TitleTile(),
+        actions: const [
+          _SettingButton(
+            color: AppPalette.whiteBackgroundColor,
+          ),
+        ],
+        // physics: userBlogsLength > 0
+        //     ? const BouncingScrollPhysics()
+        //     : const NeverScrollableScrollPhysics(),
+        leading: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Builder(
+              builder: (context) {
+                final status = context.select(
+                  (ProfileBloc profileBloc) => profileBloc.state.profileStatus,
+                );
+                return RotateIconButton(
+                  icon: Assets.icons.refresh.svg(
+                    color: AppPalette.whiteBackgroundColor,
+                    height: 28,
+                  ),
+                  isLoading: status == ProfileStatus.loading,
+                  onPressed: () => context.read<ProfileBloc>().add(
+                        ProfileGetUserInformation(),
                       ),
-                      isLoading: status == ProfileStatus.loading,
-                      onPressed: () => context.read<ProfileBloc>().add(
-                            ProfileGetUserInformation(),
-                          ),
-                    );
-                  },
-                ),
-              ),
+                );
+              },
             ),
-            headerWidget: const _ProfilePanel(),
-            headerExpandedHeight: 0.54,
-            curvedBodyRadius: 40,
-            appBarColor: AppPalette.primaryColor,
-            body: const [
-              _BlogPanel(),
-            ],
-          );
-        },
+          ),
+        ),
+        headerWidget: const _ProfilePanel(),
+        headerExpandedHeight: 0.54,
+        curvedBodyRadius: 40,
+        appBarColor: AppPalette.primaryColor,
+        body: const [
+          _BlogPanel(),
+        ],
       ),
     );
   }
