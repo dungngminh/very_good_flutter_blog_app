@@ -22,6 +22,7 @@ dependencies:
   bookmark_repository:
     path: packages/bookmark_repository
   cached_network_image: ^3.2.3
+  chopper: ^7.1.1
   cloud_messaging_service:
     path: packages/cloud_messaging_service
   connectivity_plus: ^5.0.2
@@ -51,7 +52,9 @@ dependencies:
   http_client_handler:
     path: packages/http_client_handler
   image_picker: ^1.0.4
+  injectable: ^2.3.2
   intl: ^0.18.1
+  json_annotation: ^4.8.1
   lazy_load_indexed_stack: ^1.0.1
   models:
     path: packages/models
@@ -68,8 +71,12 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.0
+  build_runner: ^2.4.8
+  chopper_generator: ^7.1.1
   flutter_test:
     sdk: flutter
+  injectable_generator: ^2.4.1
+  json_serializable: ^6.7.1
   mocktail: ^1.0.1
   very_good_analysis: ^5.1.0
 
