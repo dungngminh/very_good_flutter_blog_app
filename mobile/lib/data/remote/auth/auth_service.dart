@@ -1,6 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_blog_app/data/remote/auth/requests/login_request_body.dart';
+import 'package:very_good_blog_app/data/remote/auth/requests/register_request_body.dart';
 import 'package:very_good_blog_app/data/remote/auth/responses/login_response.dart';
 
 part 'auth_service.chopper.dart';
@@ -15,4 +16,7 @@ abstract class AuthService extends ChopperService {
 
   @Post(path: 'login')
   Future<LoginResponse> login(@Body() LoginRequestBody body);
+
+  @Post(path: 'register')
+  Future<void> register(@Body() RegisterRequestBody body);
 }

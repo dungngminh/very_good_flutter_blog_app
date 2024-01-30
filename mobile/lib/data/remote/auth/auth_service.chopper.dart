@@ -31,4 +31,18 @@ final class _$AuthService extends AuthService {
         await client.send<LoginResponse, LoginResponse>($request);
     return $response.bodyOrThrow;
   }
+
+  @override
+  Future<void> register(RegisterRequestBody body) async {
+    final Uri $url = Uri.parse('api/auth/register');
+    final $body = body;
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      body: $body,
+    );
+    final Response $response = await client.send<void, void>($request);
+    return $response.bodyOrThrow;
+  }
 }
