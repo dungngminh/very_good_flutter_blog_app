@@ -41,6 +41,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_quill: ^9.2.10
+  flutter_secure_storage: ^7.0.1
   flutter_slidable: ^3.0.1
   flutter_svg: ^2.0.9
   fluttertoast: ^8.1.2
