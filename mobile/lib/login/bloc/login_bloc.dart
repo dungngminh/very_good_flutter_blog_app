@@ -1,7 +1,7 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:very_good_blog_app/domain/repositories/auth_repository.dart';
 import 'package:very_good_blog_app/login/model/models.dart';
 
 part 'login_event.dart';
@@ -9,28 +9,28 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
-    required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
+    required AuthRepository authRepository,
+  })  : _authRepository = authRepository,
         super(const LoginState()) {
-    on<LoginUsernameChanged>(_onUsernameChanged);
+    on<LoginEmailChanged>(_onEmailChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onSubmitted);
   }
 
-  final AuthenticationRepository _authenticationRepository;
+  final AuthRepository _authRepository;
 
-  void _onUsernameChanged(
-    LoginUsernameChanged event,
+  void _onEmailChanged(
+    LoginEmailChanged event,
     Emitter<LoginState> emit,
   ) {
-    final username = Username.dirty(event.username);
+    final email = Email.dirty(event.email);
     emit(
       state.copyWith(
-        username: username,
+        email: email,
         password: state.password,
         isValid: Formz.validate(
           [
-            username,
+            email,
             state.password,
           ],
         ),
@@ -45,9 +45,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final password = Password.dirty(event.password);
     emit(
       state.copyWith(
-        username: state.username,
+        email: state.email,
         password: password,
-        isValid: Formz.validate([state.username, password]),
+        isValid: Formz.validate([state.email, password]),
       ),
     );
   }
@@ -58,8 +58,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     if (!state.isValid) return;
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    return _authenticationRepository
-        .login(password: state.password.value, username: state.username.value)
+    await _authRepository
+        .login(password: state.password.value, email: state.email.value)
         .then(
           (_) => emit(state.copyWith(status: FormzSubmissionStatus.success)),
         )
