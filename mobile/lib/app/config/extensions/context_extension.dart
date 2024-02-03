@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,5 +17,9 @@ extension ContextExtension on BuildContext {
 
   String get currentLocation {
     return GoRouterState.of(this).uri.toString();
+  }
+
+  ThemeData get theme {
+    return Theme.of(this);
   }
 }

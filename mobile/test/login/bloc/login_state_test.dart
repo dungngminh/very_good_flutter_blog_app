@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_blog_app/login/login.dart';
 
 void main() {
-  const username = Username.dirty('username');
+  const username = Email.dirty('username');
   const password = Password.dirty('password');
   group('LoginState', () {
     test('supports value comparisons', () {
@@ -22,8 +22,8 @@ void main() {
 
     test('returns object with updated username when username is passed', () {
       expect(
-        const LoginState().copyWith(username: username),
-        const LoginState(username: username),
+        const LoginState().copyWith(email: username),
+        const LoginState(email: username),
       );
     });
 

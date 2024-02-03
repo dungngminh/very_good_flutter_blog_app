@@ -8,8 +8,8 @@ void main() {
     group('LoginUsernameChanged', () {
       test('supports value comparisons', () {
         expect(
-          const LoginUsernameChanged(username),
-          const LoginUsernameChanged(username),
+          const LoginEmailChanged(username),
+          const LoginEmailChanged(username),
         );
       });
     });

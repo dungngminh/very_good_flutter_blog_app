@@ -1,24 +1,23 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:formz/formz.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:very_good_blog_app/domain/repositories/auth_repository.dart';
 import 'package:very_good_blog_app/login/login.dart';
 
-class MockAuthenticationRepository extends Mock
-    implements AuthenticationRepository {}
+class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
-  late AuthenticationRepository authenticationRepository;
+  late AuthRepository authenticationRepository;
 
   setUp(() {
-    authenticationRepository = MockAuthenticationRepository();
+    authenticationRepository = MockAuthRepository();
   });
 
   group('LoginBloc', () {
     test('initial state is LoginState', () {
       final loginBloc = LoginBloc(
-        authenticationRepository: authenticationRepository,
+        authRepository: authenticationRepository,
       );
       expect(loginBloc.state, const LoginState());
     });
@@ -30,43 +29,43 @@ void main() {
         setUp: () {
           when(
             () => authenticationRepository.login(
-              username: 'username',
+              email: 'username',
               password: 'password',
             ),
             // ignore: void_checks
           ).thenAnswer((_) => Future.value('user'));
         },
         build: () => LoginBloc(
-          authenticationRepository: authenticationRepository,
+          authRepository: authenticationRepository,
         ),
         act: (bloc) {
           bloc
-            ..add(const LoginUsernameChanged('username'))
+            ..add(const LoginEmailChanged('username'))
             ..add(const LoginPasswordChanged('password'))
             ..add(const LoginSubmitted());
         },
         expect: () => const <LoginState>[
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             isValid: true,
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             isValid: true,
             status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             status: FormzSubmissionStatus.success,
           ),
@@ -78,37 +77,37 @@ void main() {
         setUp: () {
           when(
             () => authenticationRepository.login(
-              username: 'username',
+              email: 'username',
               password: 'password',
             ),
           ).thenThrow(Exception('oops'));
         },
         build: () => LoginBloc(
-          authenticationRepository: authenticationRepository,
+          authRepository: authenticationRepository,
         ),
         act: (bloc) {
           bloc
-            ..add(const LoginUsernameChanged('username'))
+            ..add(const LoginEmailChanged('username'))
             ..add(const LoginPasswordChanged('password'))
             ..add(const LoginSubmitted());
         },
         expect: () => const <LoginState>[
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             isValid: true,
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             isValid: true,
             status: FormzSubmissionStatus.inProgress,
           ),
           LoginState(
-            username: Username.dirty('username'),
+            email: Email.dirty('username'),
             password: Password.dirty('password'),
             isValid: true,
             status: FormzSubmissionStatus.failure,
