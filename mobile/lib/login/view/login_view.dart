@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +18,7 @@ class LoginView extends StatelessWidget {
     final l10n = context.l10n;
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
-        if (state.status == AuthenticationStatus.authenticated) {
+        if (state.status.isAuthenticated) {
           context.go(AppRoutes.home);
         }
       },
@@ -40,9 +39,7 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
+                const SizedBox(height: 24),
                 SizedBox(
                   height: context.screenHeight * 0.65,
                   child: BlocProvider<LoginBloc>(

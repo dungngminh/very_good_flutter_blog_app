@@ -129,3 +129,6 @@ app.*.map.json
 !.idea/runConfigurations/
 
 .mason
+
+
+**/config.json

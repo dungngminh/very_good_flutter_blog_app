@@ -22,4 +22,21 @@ enum AuthenticationStatus {
   /// A value that is used to indicate that the user
   /// is not successfully registered.
   unsuccessfullyRegistered;
+
+  bool get isUnknown => this == AuthenticationStatus.unknown;
+
+  bool get isAuthenticated => this == AuthenticationStatus.authenticated;
+
+  bool get isAuthenticatedOffline =>
+      this == AuthenticationStatus.authenticatedOffline;
+
+  bool get isUnauthenticated => this == AuthenticationStatus.unauthenticated;
+
+  bool get isSuccessfullyRegistered =>
+      this == AuthenticationStatus.successfullyRegistered;
+
+  bool get isExisted => this == AuthenticationStatus.existed;
+
+  bool get isUnsuccessfullyRegistered =>
+      this == AuthenticationStatus.unsuccessfullyRegistered;
 }

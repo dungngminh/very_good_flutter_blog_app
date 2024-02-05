@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class NetworkModule {
   @Named('baseUrl')
-  String get baseUrl => 'https://very-good-blog-app.up.railway.app';
+  String get baseUrl => const String.fromEnvironment('BASE_URL');
 
   @Named('unAuthClient')
   @lazySingleton
