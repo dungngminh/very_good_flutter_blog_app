@@ -1,5 +1,5 @@
 <!--
-  Thanks for contributing!
+  Thanks for your contribution!
 
   Provide a description of your changes below and a general summary in the title
 
@@ -9,6 +9,13 @@
 ## Description
 
 <!--- Describe your changes in detail -->
+
+## Project
+
+<!--- Put an `x` in all the boxes that apply: -->
+
+- [ ] 📱 Mobile
+- [ ] 📡 Backend
 
 ## Type of Change
 
