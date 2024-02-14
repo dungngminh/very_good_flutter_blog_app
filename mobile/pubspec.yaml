@@ -30,7 +30,7 @@ dependencies:
   draggable_home: ^1.0.5
   easy_debounce: ^2.0.3
   equatable: ^2.0.5
-  firebase_core: ^2.4.1
+  firebase_core: ^2.25.4
   firebase_storage: ^11.0.10
   firebase_storage_service:
     path: packages/firebase_storage_service
