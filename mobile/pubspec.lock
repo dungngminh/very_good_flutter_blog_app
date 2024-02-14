@@ -326,10 +326,10 @@ packages:
     dependency: transitive
     description:
       name: dart_quill_delta
-      sha256: "733eb31821ceb45f43c47bf7f8c5a8aaee39550c0985ed38ff440e8ea5353e2d"
+      sha256: "66b98298d1cbfb4df7d4d3ad39458daf409705034c6d44ed03387b775861615f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1"
+    version: "9.2.13"
   dart_style:
     dependency: transitive
     description:
@@ -671,10 +671,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_quill
-      sha256: da24b2119d2789291c057536721252f53bb9985ed011db137561453b4452d5d3
+      sha256: e0eca50a04047255e2f035650a4d9af6083e1424e7da944ddaa45f070e3c0fec
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.10"
+    version: "9.2.13"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -976,18 +976,18 @@ packages:
     dependency: transitive
     description:
       name: irondash_engine_context
-      sha256: "294a0e21c4358ff17264e6b811c615b664cebb33b49ad2ddb54f8110e7714510"
+      sha256: "4f5e2629296430cce08cdff42e47cef07b8f74a64fdbdfb0525d147bc1a969a2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.5.2"
   irondash_message_channel:
     dependency: transitive
     description:
       name: irondash_message_channel
-      sha256: "131d64d97a3612bc3617aefc878f3e3a8e23e0ce18b3bba8e78cb1930befcec1"
+      sha256: dd581214215dca054bd9873209d690ec3609288c28774cb509dbd86b21180cf8
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   js:
     dependency: transitive
     description:
@@ -1451,18 +1451,18 @@ packages:
     dependency: transitive
     description:
       name: super_clipboard
-      sha256: "77f044320934386e0b7a3911e05312426d7f33deb6e8cdb28886663430b0e5b0"
+      sha256: "15d25eb88df8e904e0c2ef77378c6010cc57bbfc0b6f91f2416d08fad5fcca92"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   super_native_extensions:
     dependency: transitive
     description:
       name: super_native_extensions
-      sha256: "4699f5b00320290475953c914f823a8b44e10ed8c1e38ce5c8e8426336d11c15"
+      sha256: f96db6b137a0b135e43034289bb55ca6447b65225076036e81f97ebb6381ffeb
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   synchronized:
     dependency: transitive
     description:
