@@ -73,7 +73,7 @@ dependencies:
     path: packages/user_repository
 
 dev_dependencies:
-  bloc_test: ^9.1.0
+  bloc_test: ^9.1.6
   build_runner: ^2.4.8
   chopper_generator: ^7.1.1
   flutter_test:
