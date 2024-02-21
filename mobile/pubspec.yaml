@@ -44,7 +44,7 @@ dependencies:
   flutter_quill: ^9.2.10
   flutter_secure_storage: ^7.0.1
   flutter_slidable: ^3.0.1
-  flutter_svg: ^2.0.9
+  flutter_svg: ^2.0.10+1
   fluttertoast: ^8.1.2
   formz: ^0.6.1
   gap: ^3.0.1
