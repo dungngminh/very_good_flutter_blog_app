@@ -55,7 +55,7 @@ dependencies:
   http_client_handler:
     path: packages/http_client_handler
   image_picker: ^1.0.4
-  injectable: ^2.3.2
+  injectable: ^2.3.5
   intl: ^0.18.1
   json_annotation: ^4.8.1
   lazy_load_indexed_stack: ^1.0.1
