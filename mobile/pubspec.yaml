@@ -22,7 +22,7 @@ dependencies:
   bookmark_repository:
     path: packages/bookmark_repository
   cached_network_image: ^3.2.3
-  chopper: ^7.1.1
+  chopper: ^7.2.0
   cloud_messaging_service:
     path: packages/cloud_messaging_service
   connectivity_plus: ^5.0.2
