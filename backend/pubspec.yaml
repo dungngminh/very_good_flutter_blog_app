@@ -19,7 +19,7 @@ dependencies:
   shelf_enforces_ssl: ^1.2.1
   stormberry: ^0.13.1
   string_validator: ^1.0.0
-  uuid: ^3.0.7
+  uuid: ^4.3.3
 
 dev_dependencies:
   build_runner: ^2.4.6
