@@ -74,7 +74,7 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
-  build_runner: ^2.4.8
+  build_runner: ^2.4.9
   chopper_generator: ^7.2.0
   flutter_test:
     sdk: flutter
