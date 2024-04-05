@@ -25,7 +25,7 @@ dependencies:
   chopper: ^7.1.1
   cloud_messaging_service:
     path: packages/cloud_messaging_service
-  connectivity_plus: ^5.0.2
+  connectivity_plus: ^6.0.1
   dartx: ^1.2.0
   draggable_home: ^1.0.5
   easy_debounce: ^2.0.3
