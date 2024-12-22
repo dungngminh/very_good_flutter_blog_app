@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloudinary/cloudinary.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dartx/dartx.dart';
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'package:stormberry/stormberry.dart';
 import 'package:very_good_blog_app_backend/models/user.dart';
 import 'package:very_good_blog_app_backend/util/jwt_handler.dart';
@@ -25,7 +26,7 @@ final cloudinary = Cloudinary.signedConfig(
 Handler middleware(Handler handler) {
   return handler
       .use(requestLogger())
-      // .use(fromShelfMiddleware(enforceSSL()))
+      .use(fromShelfMiddleware(corsHeaders()))
       .use(provider<Database>((_) => db))
       .use(provider((_) => JwtHandler(userRepository: db.users)))
       .use(provider((_) => cloudinary));

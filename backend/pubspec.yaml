@@ -16,6 +16,7 @@ dependencies:
   equatable: ^2.0.5
   http: ^1.2.1
   json_annotation: ^4.9.0
+  shelf_cors_headers: ^0.1.5
   shelf_enforces_ssl: ^1.2.1
   stormberry: ^0.14.0
   string_validator: ^1.0.2
