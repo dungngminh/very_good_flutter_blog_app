@@ -1,0 +1,23 @@
+version: "3"
+services:
+  backend:
+    image: dungngminh/server
+    ports:
+      - "1311:8080"
+    environment:
+      - PGDATABASE=blog_app
+      - PGUSER=user
+      - PGPASSWORD=password
+      - PGHOST=db
+      - PGPORT=5432
+
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: blog_app
