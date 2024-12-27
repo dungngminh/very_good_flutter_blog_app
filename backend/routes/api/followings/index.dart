@@ -63,5 +63,7 @@ Future<Response> _onFollowingPost(RequestContext context) async {
     return BadRequestResponse(e.message);
   } catch (e) {
     return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }

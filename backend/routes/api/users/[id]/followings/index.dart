@@ -39,5 +39,6 @@ Future<Response> _onFollowingsByIdGetRequest(
       )
       .then((result) => result.map(GetUserFollowingResponse.fromView))
       .then<Response>((res) => OkResponse(res.map((e) => e.toJson()).toList()))
-      .onError((e, _) => InternalServerErrorResponse(e.toString()));
+      .onError((e, _) => InternalServerErrorResponse(e.toString()))
+      .whenComplete(database.close);
 }

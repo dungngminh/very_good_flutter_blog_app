@@ -1,4 +1,3 @@
-
 import 'package:dart_frog/dart_frog.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:stormberry/stormberry.dart';
@@ -21,15 +20,15 @@ Future<Response> onRequest(RequestContext context) {
 
 Future<Response> _onFavoritesGetRequest(RequestContext context) {
   final userView = context.read<UserView>();
-  return context
-      .read<Database>()
-      .favoriteBlogsUserses
+  final db = context.read<Database>();
+  return db.favoriteBlogsUserses
       .queryFavoriteBlogsUserses(
         QueryParams(where: 'user_id=@id', values: {'id': userView.id}),
       )
       .then((r) => r.map(GetUserFavoriteBlogResponse.fromView).toList())
       .then<Response>((res) => OkResponse(res.map((e) => e.toJson()).toList()))
-      .onError((e, _) => InternalServerErrorResponse(e.toString()));
+      .onError((e, _) => InternalServerErrorResponse(e.toString()))
+      .whenComplete(db.close);
 }
 
 Future<Response> _onFavoritesPostRequest(RequestContext context) async {
@@ -84,5 +83,9 @@ Future<Response> _onFavoritesPostRequest(RequestContext context) async {
         .onError((e, _) => InternalServerErrorResponse(e.toString()));
   } on CheckedFromJsonException catch (e) {
     return BadRequestResponse(e.message);
+  } catch (e) {
+    return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }

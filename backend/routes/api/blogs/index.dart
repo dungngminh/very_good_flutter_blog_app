@@ -39,6 +39,8 @@ Future<Response> _onBlogsGetRequest(RequestContext context) async {
     return OkResponse(blogs.map((e) => e.toJson()).toList());
   } catch (e) {
     return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }
 
@@ -70,5 +72,7 @@ Future<Response> _onBlogsPostRequest(RequestContext context) async {
     return BadRequestResponse(e.message);
   } catch (e) {
     return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }

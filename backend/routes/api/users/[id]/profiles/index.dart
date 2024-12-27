@@ -1,4 +1,3 @@
-
 import 'package:dart_frog/dart_frog.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:stormberry/stormberry.dart';
@@ -60,11 +59,10 @@ Future<Response> _onUserByIdPatchRequest(
   if (body.isEmpty) {
     return BadRequestResponse();
   }
+  final db = context.read<Database>();
   try {
     final request = EditUserProfileRequest.fromJson(body.asJson());
-    return context
-        .read<Database>()
-        .users
+    return db.users
         .updateOne(
           UserUpdateRequest(
             id: userView.id,
@@ -76,5 +74,9 @@ Future<Response> _onUserByIdPatchRequest(
         .onError((e, _) => InternalServerErrorResponse(e.toString()));
   } on CheckedFromJsonException catch (e) {
     return BadRequestResponse(e.message);
+  } catch (e) {
+    return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }

@@ -84,6 +84,8 @@ Future<Response> _onBlogsPatchRequest(RequestContext context, String id) async {
     return BadRequestResponse(e.message);
   } catch (e) {
     return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }
 
@@ -103,5 +105,7 @@ Future<Response> _onBlogsDeleteRequest(
     return OkResponse();
   } catch (e) {
     return InternalServerErrorResponse(e.toString());
+  } finally {
+    await db.close();
   }
 }

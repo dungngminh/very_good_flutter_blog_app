@@ -29,18 +29,24 @@ Future<Response> _onLoginPostRequest(RequestContext context) async {
 
   return db.users
       .queryUsers(
-    QueryParams(
-      where: 'email=@email AND password=@password',
-      values: {'email': request.email, 'password': request.password.hashValue},
-    ),
-  )
+        QueryParams(
+          where: 'email=@email AND password=@password',
+          values: {
+            'email': request.email,
+            'password': request.password.hashValue,
+          },
+        ),
+      )
       .then<Response>((users) {
-    final user = users.firstOrNull;
-    return user == null
-        ? BadRequestResponse(ErrorMessageCode.notRegisterYet)
-        : OkResponse(
-            LoginResponse(id: user.id, token: createJwt(user.id)).toJson(),
-          );
-  }).onError(
-    (e, _) => InternalServerErrorResponse(ErrorMessageCode.unknownError));
+        final user = users.firstOrNull;
+        return user == null
+            ? BadRequestResponse(ErrorMessageCode.notRegisterYet)
+            : OkResponse(
+                LoginResponse(id: user.id, token: createJwt(user.id)).toJson(),
+              );
+      })
+      .onError(
+        (e, _) => InternalServerErrorResponse(ErrorMessageCode.unknownError),
+      )
+      .whenComplete(db.close);
 }

@@ -3,7 +3,7 @@ import 'package:stormberry/stormberry.dart';
 part 'user.schema.dart';
 
 @Model()
-abstract class User {
+abstract class  User {
   @PrimaryKey()
   String get id;
 
