@@ -5,7 +5,7 @@ import 'package:stormberry/stormberry.dart';
 import 'package:very_good_blog_app_backend/models/user.dart';
 
 Middleware authenticationValidator({
-  List<HttpMethod> expectMethods = const [],
+  List<HttpMethod> excludeMethods = const [],
 }) =>
     bearerAuthentication<UserView>(
       authenticator: (context, token) {
@@ -15,5 +15,5 @@ Middleware authenticationValidator({
         return db.users.queryUser(payload);
       },
       applies: (context) =>
-          Future.value(!expectMethods.contains(context.request.method)),
+          Future.value(!excludeMethods.contains(context.request.method)),
     );

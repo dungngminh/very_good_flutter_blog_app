@@ -44,7 +44,8 @@ Future<Response> _onUserByIdGetRequest(
                 ).toJson(),
               ),
       )
-      .catchError((_) => InternalServerErrorResponse());
+      .catchError((_) => InternalServerErrorResponse())
+      .whenComplete(db.close);
 }
 
 Future<Response> _onUserByIdPatchRequest(
