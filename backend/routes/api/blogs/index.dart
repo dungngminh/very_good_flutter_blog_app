@@ -30,6 +30,7 @@ Future<Response> _onBlogsGetRequest(RequestContext context) async {
   final queryParams = context.request.uri.queryParameters;
   final limit = int.tryParse(queryParams['limit'].orEmpty()) ?? 20;
   final currentPage = int.tryParse(queryParams['page'].orEmpty()) ?? 1;
+  final search = queryParams['search'];
   UserView? user;
   final bearerToken = context.request.headers.bearer();
   if (bearerToken != null) {
@@ -42,6 +43,10 @@ Future<Response> _onBlogsGetRequest(RequestContext context) async {
       QueryParams(
         limit: limit,
         offset: (currentPage - 1) * limit,
+        where: search == null
+            ? null
+            : 'title LIKE @search OR content LIKE @search',
+        values: search == null ? null : {'search': '%$search%'},
       ),
     );
     var favoriteBlogIds = <String>[];
