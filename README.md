@@ -1,5 +1,7 @@
 # Very Good Blog App - Blog sharing
 
+**Breaking**: I will have a new plan for open source Blog sharing app in nearly future, stay tune. This repository will be marked to read-only.
+
 [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-blue.svg)](https://flutter.dev/)
 
 ![VeryGoodBlogApp Landing](.github/screenshots/landing.png)
