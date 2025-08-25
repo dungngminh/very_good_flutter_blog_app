@@ -1,10 +1,11 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/authentication/authentication.dart';
+import 'package:very_good_blog_app/di/di.dart';
+import 'package:very_good_blog_app/domain/repositories/auth_repository.dart';
 import 'package:very_good_blog_app/l10n/l10n.dart';
 import 'package:very_good_blog_app/login/login.dart';
 import 'package:very_good_blog_app/widgets/dismiss_focus_keyboard.dart';
@@ -17,7 +18,7 @@ class LoginView extends StatelessWidget {
     final l10n = context.l10n;
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
-        if (state.status == AuthenticationStatus.authenticated) {
+        if (state.status.isAuthenticated) {
           context.go(AppRoutes.home);
         }
       },
@@ -38,15 +39,12 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
+                const SizedBox(height: 24),
                 SizedBox(
                   height: context.screenHeight * 0.65,
                   child: BlocProvider<LoginBloc>(
                     create: (context) => LoginBloc(
-                      authenticationRepository:
-                          context.read<AuthenticationRepository>(),
+                      authRepository: injector<AuthRepository>(),
                     ),
                     child: const LoginForm(),
                   ),
