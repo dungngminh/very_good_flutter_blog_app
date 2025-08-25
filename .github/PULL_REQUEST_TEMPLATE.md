@@ -1,5 +1,5 @@
 <!--
-  Thanks for contributing!
+  Thanks for your contribution!
 
   Provide a description of your changes below and a general summary in the title
 

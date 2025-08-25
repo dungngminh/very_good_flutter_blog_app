@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:gap/gap.dart';
 import 'package:very_good_blog_app/app/app.dart';
 import 'package:very_good_blog_app/authentication/authentication.dart';
 import 'package:very_good_blog_app/l10n/l10n.dart';
@@ -14,22 +15,21 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    void showSnackbarError(String message) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(message),
+          ),
+        );
+    }
+
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Builder(
-                  builder: (context) {
-                    final message =
-                        context.watch<AuthenticationBloc>().state.status;
-                    return Text(message.toString());
-                  },
-                ),
-              ),
-            );
+          final message = context.watch<AuthenticationBloc>().state.status;
+          showSnackbarError(message.toString());
         }
       },
       child: Padding(
@@ -38,13 +38,11 @@ class LoginForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TitleOfTextField(l10n.username),
-            _UsernameInput(),
-            const Padding(padding: EdgeInsets.all(12)),
+            _EmailInput(),
+            const Gap(24),
             TitleOfTextField(l10n.password),
             _PasswordInput(),
-            const SizedBox(
-              height: 24,
-            ),
+            const Gap(24),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -55,10 +53,8 @@ class LoginForm extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(padding: EdgeInsets.all(12)),
-            Center(
-              child: _LoginButton(),
-            ),
+            const Gap(24),
+            Center(child: _LoginButton()),
           ],
         ),
       ),
@@ -66,30 +62,26 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-class _UsernameInput extends StatelessWidget {
+class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.username != current.username,
-      builder: (context, state) {
-        return TextFieldDecoration(
-          child: TextField(
-            key: const Key('loginForm_usernameInput_textField'),
-            onChanged: (username) =>
-                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: l10n.usernameHint,
-              errorText: state.username.displayError != null
-                  ? l10n.usernameEmpty
-                  : null,
-            ),
-            textInputAction: TextInputAction.next,
-          ),
-        );
-      },
+    final email = context.select((LoginBloc bloc) => bloc.state.email);
+    return TextFieldDecoration(
+      child: TextField(
+        key: const Key('loginForm_usernameInput_textField'),
+        onChanged: (value) {
+          if (value.trim().isEmpty) return;
+          context.read<LoginBloc>().add(LoginEmailChanged(value));
+        },
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: l10n.usernameHint,
+          errorText: email.displayError != null ? l10n.usernameEmpty : null,
+        ),
+        textInputAction: TextInputAction.next,
+      ),
     );
   }
 }
@@ -100,47 +92,37 @@ class _PasswordInput extends StatefulWidget {
 }
 
 class _PasswordInputState extends State<_PasswordInput> {
-  late bool _isHidePassword;
-
-  @override
-  void initState() {
-    _isHidePassword = true;
-    super.initState();
-  }
+  bool _isHidePassword = true;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
-      builder: (context, state) {
-        return TextFieldDecoration(
-          child: TextField(
-            key: const Key('loginForm_passwordInput_textField'),
-            onChanged: (password) =>
-                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-            obscureText: _isHidePassword,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 16, right: 16),
-              border: InputBorder.none,
-              hintText: l10n.passwordHint,
-              errorText: getErrorMessage(state.password.displayError, l10n),
-              suffixIcon: IconButton(
-                icon: _isHidePassword
-                    ? Assets.icons.show.svg(color: AppPalette.primaryColor)
-                    : Assets.icons.hide.svg(color: AppPalette.primaryColor),
-                onPressed: () {
-                  setState(() {
-                    _isHidePassword = !_isHidePassword;
-                  });
-                },
-                splashRadius: 24,
-              ),
-            ),
-            textAlignVertical: TextAlignVertical.center,
+    final password = context.select((LoginBloc bloc) => bloc.state.password);
+    final showOrHideIcon =
+        _isHidePassword ? Assets.icons.show.svg() : Assets.icons.hide.svg();
+    return TextFieldDecoration(
+      child: TextField(
+        key: const Key('loginForm_passwordInput_textField'),
+        onChanged: (password) =>
+            context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+        obscureText: _isHidePassword,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 16, right: 16),
+          border: InputBorder.none,
+          hintText: l10n.passwordHint,
+          errorText: getErrorMessage(password.displayError, l10n),
+          suffixIcon: IconButton(
+            icon: showOrHideIcon,
+            onPressed: () {
+              setState(() {
+                _isHidePassword = !_isHidePassword;
+              });
+            },
+            splashRadius: 24,
           ),
-        );
-      },
+        ),
+        textAlignVertical: TextAlignVertical.center,
+      ),
     );
   }
 
@@ -160,38 +142,30 @@ class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final formStatus = context.select((LoginBloc bloc) => bloc.state.status);
+    if (formStatus.isInProgress) {
+      return const CircularProgressIndicator(
+        color: AppPalette.primaryColor,
+      );
+    }
+    void onLoginPressed() {
+      context.read<LoginBloc>().add(const LoginSubmitted());
+    }
 
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return state.status.isInProgress
-            ? const CircularProgressIndicator(
-                color: AppPalette.primaryColor,
-              )
-            : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
-                onPressed: state.status.isInitial
-                    ? () {
-                        context.read<LoginBloc>().add(const LoginSubmitted());
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(130, 50),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-                child: Text(
-                  l10n.login,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: AppPalette.whiteBackgroundColor,
-                  ),
-                ),
-              );
-      },
+    return ElevatedButton(
+      key: const Key('loginForm_continue_raisedButton'),
+      onPressed: onLoginPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: context.theme.primaryColor,
+      ),
+      child: Text(
+        l10n.login,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
+          color: AppPalette.whiteBackgroundColor,
+        ),
+      ),
     );
   }
 }
