@@ -18,6 +18,10 @@ defaults:
   run:
     working-directory: ./backend
 
+defaults:
+  run:
+    working-directory: /backend
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
